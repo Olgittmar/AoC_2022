@@ -1,0 +1,10 @@
+name: convoluted_build_check
+on:
+  push:
+    branches:
+      - main
+      - stable
+
+jobs:
+  try_build:
+    uses: Olgittmar/GithubWorkflow/.github/workflows/build_check_ubuntu.yml@main
