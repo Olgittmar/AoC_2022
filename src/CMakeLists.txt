@@ -1,0 +1,42 @@
+set(HELLO_LIB_SOURCES
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Hello/Hello.hpp>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Hello/Hello.cpp>"
+)
+
+add_library(Hello
+	STATIC ${HELLO_LIB_SOURCES}
+)
+
+set(FILES_TO_CPP_CHECK
+	${FILES_TO_CPP_CHECK}
+	${HELLO_LIB_SOURCES} PARENT_SCOPE
+)
+
+set(FILES_TO_TIDY
+	${FILES_TO_TIDY}
+	${HELLO_LIB_SOURCES} PARENT_SCOPE
+)
+
+set(FILES_TO_FORMAT
+	${FILES_TO_FORMAT}
+	${HELLO_LIB_SOURCES} PARENT_SCOPE
+)
+
+add_subdirectory(Utils)
+target_link_libraries(Hello PUBLIC Utils)
+get_target_property(UTILS_INCLUDE_DIRS Utils INTERFACE_INCLUDE_DIRECTORIES)
+message(STATUS "UTILS_INCLUDE_DIRS: ${UTILS_INCLUDE_DIRS}")
+target_include_directories(Hello INTERFACE ${UTILS_INCLUDE_DIRS})
+
+# Add Hello as a library for the main project to link against
+set_property(
+	TARGET ${MAIN_TARGET_NAME}
+	PROPERTY LINK_LIBRARIES
+	${LINK_LIBRARIES} Hello
+)
+
+target_include_directories(${MAIN_TARGET_NAME}
+	PRIVATE
+		"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Hello>"
+		"$<INSTALL_INTERFACE:lib/Hello>"
+)

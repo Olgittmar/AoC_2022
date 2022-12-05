@@ -1,0 +1,22 @@
+name: convoluted_merge_attempt
+on:
+  workflow_run:
+    workflows:
+      - 'convoluted_build_check'
+    types:
+      - 'completed'
+    branches:
+      - 'stable'
+
+jobs:
+  on_success:
+    if: ${{github.event.workflow_run.conclusion == 'success'}}
+    uses: Olgittmar/GithubWorkflow/.github/workflows/merge_stable_to_main.yml@main
+    with:
+      token: ${{secrets.GITHUB_TOKEN}}
+  on_failure:
+    if: ${{github.event.workflow_run.conclusion == 'failure'}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Will not attempt to merge automatically
+        run: echo "Nothing to do."
