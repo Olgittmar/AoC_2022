@@ -1,4 +1,8 @@
 #!/usr/bin/bash
+if [ ! -d build ] 
+then
+  mkdir build
+fi
 cd build/
 conan install ../conan/\
  -if=../build/\
@@ -21,7 +25,7 @@ cmake ..\
 ninja format_project || ( cd -; exit 1; )
 ninja run_clang_tidy || ( cd -; exit 1; )
 ninja run_cppcheck || ( cd -; exit 1; )
-ninja run_tests || ( cd -; exit 1; )
 ninja install || ( cd -; exit 1; )
+ninja run_tests || ( cd -; exit 1; )
 cd -
-./install/bin/ConvolutedBaseProject_main
+# ./install/bin/AoC_2022_main
