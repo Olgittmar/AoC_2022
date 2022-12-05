@@ -5,6 +5,7 @@
 
 #include <Utils.hpp>
 #include <cstdlib>
+#include <exception>
 #include <iostream>
 #include <span>
 #include <string>
@@ -13,17 +14,18 @@
 auto
 runSolution(int day, int problem, bool& success) -> std::string
 {
-    using enum utils::SolutionId;
     const auto solutionId = utils::SelectSolution(day, problem);
+    const auto input = utils::DataBroker::getSolutionData(solutionId); // get input from DataBroker
 
-    std::string_view input = utils::DataBroker::getSolutionData(solutionId); // get input from DataBroker
-
+    using enum utils::SolutionId;
     switch (solutionId) {
 	case FattestElfCalories:
 	{
 	    const auto calories = Solutions::GetCaloriesOfElfWithMostCalories(input, success);
-	    break;
+	    return std::to_string(calories);
 	}
+	case Invalid:
+	    return "Invalid solutionId";
     }
 }
 
@@ -58,13 +60,25 @@ main(int argCount, char* argv[]) -> int
     }
 
     bool success = false;
-    const auto result = runSolution(day, problem, success);
+    try {
+	const auto result = runSolution(day, problem, success);
 
-    if (success) {
-	// TODO: Gotta fix some kind of logging framework...
-	std::cout << result << std::endl;
-    } else {
-	std::cout << "Something went wrong!" << std::endl;
+	if (success) {
+	    // TODO: Gotta fix some kind of logging framework...
+	    std::cout << result << std::endl;
+	} else {
+	    std::cout << "Something went wrong!" << std::endl;
+	    return EXIT_FAILURE;
+	}
+
+    } catch (const std::invalid_argument& err) {
+	std::cout << err.what() << std::endl;
+	return EXIT_FAILURE;
+    } catch (const std::filesystem::filesystem_error& err) {
+	std::cout << err.what() << std::endl;
+	return EXIT_FAILURE;
+    } catch (const std::exception& err) {
+	std::cout << err.what() << std::endl;
 	return EXIT_FAILURE;
     }
 

@@ -1,11 +1,11 @@
 #include "SelectSolution.hpp"
-#include "Definitions.hpp"
+
 #include <stdexcept>
 #include <string>
 
 auto toErrorFormat(int day, int problem) -> std::string
 {
-	return "day: " + std::to_string(day) + " problem: " + std::to_string(problem);
+	return std::string("day: ") + std::to_string(day) + " problem: " + std::to_string(problem);
 }
 
 namespace utils {
