@@ -41,3 +41,5 @@
 /build
 /install
 /bazel_build
+/data
+/test/data
