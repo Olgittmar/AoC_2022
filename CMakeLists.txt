@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(ConvolutedBaseProject VERSION 0.1 LANGUAGES CXX)
+project(AoC_2022 VERSION 0.1 LANGUAGES CXX)
 
 set(MAIN_TARGET_NAME ${PROJECT_NAME}_main)
 
@@ -14,7 +14,14 @@ set(FILES_TO_FORMAT "")
 set(FILES_TO_TIDY "")
 set(FILES_TO_CPP_CHECK "")
 set(CONFIG_FILES "")
-set(DATA_FILES "")
+
+set(DATA_FILES
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data/FattestElfCalories.txt>"
+)
+
+set(TEST_DATA_FILES
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test/data/FattestElfCalories0.txt>"
+)
 
 add_executable(${MAIN_TARGET_NAME} $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main.cpp>)
 set(FILES_TO_TIDY ${FILES_TO_TIDY} "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main.cpp>")
@@ -53,4 +60,9 @@ install(
 install(
 	FILES ${DATA_FILES}
 	DESTINATION	"$<BUILD_INTERFACE:${CMAKE_INSTALL_PREFIX}/data>"
+)
+
+install(
+	FILES ${TEST_DATA_FILES}
+	DESTINATION	"$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/test/data>"
 )
