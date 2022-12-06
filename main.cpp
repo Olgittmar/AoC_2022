@@ -1,6 +1,7 @@
 #include "DataBroker/DataBroker.hpp"
 #include "Definitions.hpp"
 #include "ElfCalories.hpp"
+#include "RockPaperScissors.hpp"
 #include "SelectSolution/SelectSolution.hpp"
 
 #include <Utils.hpp>
@@ -29,6 +30,11 @@ runSolution(uint32_t day, uint32_t problem, bool& success) -> std::string
 		{
 		    const auto calories = Solutions::GetCaloriesOfTopThreeElvesWithMostCalories(input, success);
 		    return std::to_string(calories);
+		}
+	    case RockPaperScissors:
+		{
+		    const auto score = Solutions::GetScoreOfStrategyGuide(input, success);
+		    return std::to_string(score);
 		}
 	    case Invalid:
 		{

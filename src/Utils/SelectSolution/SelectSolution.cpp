@@ -23,6 +23,10 @@ SelectSolution(uint32_t day, uint32_t problem) -> SolutionId
 	    if (problem == 2) {
 		    return TopThreeFattestElfCalories;
 	    }
+    } else if (day == 1) {
+	    if (problem == 1) {
+		    return RockPaperScissors;
+	    }
     }
 
     throw std::invalid_argument("Invalid argument: " + toErrorFormat(day, problem));

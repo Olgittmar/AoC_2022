@@ -2,6 +2,8 @@
 set(SOLUTIONS_LIB_SOURCES
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/ElfCalories.hpp>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/ElfCalories.cpp>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/RockPaperScissors.hpp>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/RockPaperScissors.cpp>"
 )
 
 add_library(Solutions
