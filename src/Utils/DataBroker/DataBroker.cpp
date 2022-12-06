@@ -1,10 +1,12 @@
 #include "DataBroker.hpp"
 
 #include <Definitions.hpp>
-
 #include <filesystem>
 #include <fstream>
 #include <ios>
+#include <iostream>
+#include <iterator>
+#include <sstream>
 #include <string>
 #include <system_error>
 
@@ -35,8 +37,8 @@ DataBroker::getDataFileFullPath(SolutionId solutionId) -> std::filesystem::path
     path /= SolutionIdToString(solutionId);
     path += dataFileEnding;
 
-    if(std::filesystem::exists(path)) {
-        return path;
+    if (std::filesystem::exists(path)) {
+	    return path;
     }
 
     // Just throw an exception if we're trying to get a nonexisting file
@@ -53,8 +55,8 @@ DataBroker::getTestDataFileFullPath(SolutionId solutionId, int testCase) -> std:
     path += std::to_string(testCase);
     path += dataFileEnding;
 
-    if(std::filesystem::exists(path)) {
-        return path;
+    if (std::filesystem::exists(path)) {
+	    return path;
     }
 
     // Just throw an exception if we're trying to get a nonexisting file
@@ -62,15 +64,21 @@ DataBroker::getTestDataFileFullPath(SolutionId solutionId, int testCase) -> std:
     throw std::filesystem::filesystem_error("File not found: ", path, errc);
 }
 
-
 auto
 DataBroker::getDataFromFile(const std::filesystem::path& filePath) -> std::string
 {
     std::string data;
     std::ifstream fileStream(filePath);
-    
+    std::error_code errc;
+    const auto fileSize = std::filesystem::file_size(filePath, errc);
+    if (errc) {
+	    std::cout << filePath << " : " << errc.message() << std::endl;
+    } else {
+	    data.reserve(fileSize);
+	}
+
     if (fileStream.is_open()) {
-        fileStream >> data;
+	    data.assign((std::istreambuf_iterator<char>(fileStream)), (std::istreambuf_iterator<char>()));
     }
 
     fileStream.close();

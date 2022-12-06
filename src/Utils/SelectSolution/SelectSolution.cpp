@@ -3,31 +3,29 @@
 #include <stdexcept>
 #include <string>
 
-auto toErrorFormat(int day, int problem) -> std::string
+namespace {
+auto
+toErrorFormat(uint32_t day, uint32_t problem) -> std::string
 {
-	return std::string("day: ") + std::to_string(day) + " problem: " + std::to_string(problem);
+    return std::string("day: ") + std::to_string(day) + " problem: " + std::to_string(problem);
 }
-
+} // namespace
 namespace utils {
 
-auto SelectSolution(int day, int problem) -> SolutionId
+auto
+SelectSolution(uint32_t day, uint32_t problem) -> SolutionId
 {
-	using enum utils::SolutionId;
-	switch (day)
-	{
-	case 1:
-	{
-		if(problem == 1) {
-			return FattestElfCalories;
-		}
-		if(problem == 2) {
-			throw std::invalid_argument("Invalid argument: " + toErrorFormat(day, problem));
-		}
-		throw std::invalid_argument("Invalid argument: " + toErrorFormat(day, problem));
-	}
-	default:
-		throw std::invalid_argument("Invalid argument: " + toErrorFormat(day, problem));
-	}
+    using enum utils::SolutionId;
+    if (day == 1) {
+	    if (problem == 1) {
+		    return FattestElfCalories;
+	    }
+	    if (problem == 2) {
+		    return TopThreeFattestElfCalories;
+	    }
+    }
+
+    throw std::invalid_argument("Invalid argument: " + toErrorFormat(day, problem));
 }
 
 } // namespace utils

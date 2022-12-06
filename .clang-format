@@ -43,7 +43,7 @@ BraceWrapping:
   BeforeElse:      false
   BeforeLambdaBody: true
   BeforeWhile:     false
-  IndentBraces:    false
+  IndentBraces:    true
   SplitEmptyFunction: false
   SplitEmptyRecord: false
   SplitEmptyNamespace: true
