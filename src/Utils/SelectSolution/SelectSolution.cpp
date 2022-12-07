@@ -19,17 +19,21 @@ SelectSolution(uint32_t day, uint32_t problem) -> SolutionId
     if (day == 1) {
 	    if (problem == 1) {
 		    return FattestElfCalories;
-	    }
+		}
 	    if (problem == 2) {
 		    return TopThreeFattestElfCalories;
-	    }
-    } else if (day == 1) {
+		}
+	}
+    if (day == 2) {
 	    if (problem == 1) {
 		    return RockPaperScissors;
-	    }
-    }
+		}
+	    if (problem == 2) {
+		    return DecryptedRockPaperScissors;
+		}
+	}
 
-    throw std::invalid_argument("Invalid argument: " + toErrorFormat(day, problem));
+    throw std::invalid_argument("SelectSolution: " + toErrorFormat(day, problem));
 }
 
 } // namespace utils

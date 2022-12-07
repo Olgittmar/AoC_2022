@@ -56,9 +56,28 @@ TEST(SolutionsTest, RockPaperScissorsStrategyGuideScore_0) // NOLINT
 
     bool success = false;
 
-    std::cout << "Getting calories of top 3 elves with highest calories count..." << std::endl;
+    std::cout << "Getting resulting score from strategy guide..." << std::endl;
     const auto result = Solutions::GetScoreOfStrategyGuide(data, success);
-    std::cout << "Got " << result << " calories." << std::endl;
+    std::cout << "Got " << result << " points." << std::endl;
+
+    ASSERT_TRUE(success);
+    ASSERT_EQ(result, expectedResult);
+}
+
+TEST(SolutionsTest, RockPaperScissorsDecryptedStrategyGuideScore_0) // NOLINT
+{
+    std::cout << "In Solutions_test.RockPaperScissorsDecryptedStrategyGuideScore_0" << std::endl;
+    constexpr uint32_t expectedResult = 12;
+
+    std::cout << "Fetching test data..." << std::endl;
+    const auto data = utils::DataBroker::getSolutionTestData(utils::SolutionId::RockPaperScissors, 0);
+    std::cout << "Got test data." << std::endl;
+
+    bool success = false;
+
+    std::cout << "Getting resulting score from strategy guide..." << std::endl;
+    const auto result = Solutions::GetScoreOfDecryptedStrategyGuide(data, success);
+    std::cout << "Got " << result << " points." << std::endl;
 
     ASSERT_TRUE(success);
     ASSERT_EQ(result, expectedResult);

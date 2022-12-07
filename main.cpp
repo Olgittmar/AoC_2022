@@ -36,6 +36,11 @@ runSolution(uint32_t day, uint32_t problem, bool& success) -> std::string
 		    const auto score = Solutions::GetScoreOfStrategyGuide(input, success);
 		    return std::to_string(score);
 		}
+	    case DecryptedRockPaperScissors:
+		{
+		    const auto score = Solutions::GetScoreOfStrategyGuide(input, success);
+		    return std::to_string(score);
+		}
 	    case Invalid:
 		{
 		    return "Invalid solutionId";
@@ -50,7 +55,7 @@ main(int argCount, char* argv[]) -> int
     const auto args = std::span(argv, size_t(argCount));
     if (args.size() < 3) {
 	    return EXIT_FAILURE;
-    }
+	}
 
     uint32_t day = 0;
     uint32_t problem = 0;
@@ -66,13 +71,13 @@ main(int argCount, char* argv[]) -> int
 	    if (day < 1 || day > utils::daysSolved) {
 		    std::cout << "Invalid day index:" << dayStr << std::endl;
 		    return EXIT_FAILURE;
-	    }
+		}
 
 	    problem = std::stoul(problemStr);
 	    if (problem < 1 || problem > utils::problemsPerDay) {
 		    std::cout << "Invalid problem index: " << problemStr << std::endl;
 		    return EXIT_FAILURE;
-	    }
+		}
 
 	    for (const auto& arg : args.subspan(3)) {
 		    // whatever arguments are left
@@ -84,7 +89,8 @@ main(int argCount, char* argv[]) -> int
 	    if (success) {
 		    // TODO: Gotta fix some kind of logging framework...
 		    std::cout << result << std::endl;
-	    } else {
+		}
+	    else {
 		    std::cout << "Something went wrong!" << std::endl;
 		    return EXIT_FAILURE;
 		}

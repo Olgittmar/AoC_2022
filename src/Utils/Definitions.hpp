@@ -13,6 +13,7 @@ enum class SolutionId : uint32_t
     FattestElfCalories = 1,
     TopThreeFattestElfCalories = 2,
     RockPaperScissors = 3,
+    DecryptedRockPaperScissors = 4,
     Invalid = 0
 };
 
@@ -31,6 +32,7 @@ SolutionIdToString(SolutionId solutionId) -> std::string_view
 		    return SolutionIdStrings::FattestElfCalories;
 		}
 	    case SolutionId::RockPaperScissors:
+	    case SolutionId::DecryptedRockPaperScissors:
 		{
 		    return SolutionIdStrings::RockPaperScissors;
 		}

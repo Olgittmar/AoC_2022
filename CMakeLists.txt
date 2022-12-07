@@ -17,10 +17,13 @@ set(CONFIG_FILES "")
 
 set(DATA_FILES
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data/FattestElfCalories.txt>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data/RockPaperScissors.txt>"
 )
 
+# Should be part of the test module...
 set(TEST_DATA_FILES
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test/data/FattestElfCalories0.txt>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test/data/RockPaperScissors0.txt>"
 )
 
 add_executable(${MAIN_TARGET_NAME} $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main.cpp>)

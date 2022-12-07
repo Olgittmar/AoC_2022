@@ -5,6 +5,9 @@ include(CTest)
 find_package(GTest REQUIRED)
 
 set(MY_TESTS "")
+set(TEST_SOURCE_FILES
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/test_Solutions.cpp>"
+)
 
 # Solutions test
 add_executable(test_Solutions $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/test_Solutions.cpp>)
@@ -31,17 +34,17 @@ set(MY_TESTS ${MY_TESTS} test_Solutions)
 
 # Add all test files for cppcheck analysis and formatting
 set(FILES_TO_CPP_CHECK ${FILES_TO_CPP_CHECK}
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/test_Solutions.cpp>"
+	${TEST_SOURCE_FILES}
 	PARENT_SCOPE
 )
 
 set(FILES_TO_TIDY ${FILES_TO_TIDY}
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/test_Solutions.cpp>"
+	${TEST_SOURCE_FILES}
 	PARENT_SCOPE
 )
 
 set(FILES_TO_FORMAT ${FILES_TO_FORMAT}
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/test_Solutions.cpp>"
+	${TEST_SOURCE_FILES}
 	PARENT_SCOPE
 )
 

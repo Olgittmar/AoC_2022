@@ -32,7 +32,7 @@ class ElfInventory
 			    std::cout << "WARNING: unable to convert " << caloriesStr << " to caloriesCount (uint32_t)."
 				      << std::endl;
 			    continue;
-		    }
+			}
 
 		    m_calories.emplace_back(caloriesCount);
 		}
@@ -77,7 +77,7 @@ parseInput(const std::string_view& input) -> std::vector<ElfInventory>
 
 	    if (inventoryStr.empty()) {
 		    continue;
-	    }
+		}
 
 	    _ret.emplace_back(inventoryStr);
 	}
