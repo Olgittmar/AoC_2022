@@ -1,53 +1,19 @@
-#include "DataBroker/DataBroker.hpp"
-#include "Definitions.hpp"
-#include "ElfCalories.hpp"
-#include "RockPaperScissors.hpp"
+// Internal utils
 #include "SelectSolution/SelectSolution.hpp"
 
 #include <Utils.hpp>
+
+// Internal Solutions
+#include <ElfCalories.hpp>
+#include <RockPaperScissors.hpp>
+#include <RunSolution.hpp>
+// Std
 #include <cstdlib>
 #include <exception>
 #include <iostream>
 #include <span>
 #include <string>
 #include <string_view>
-
-namespace {
-auto
-runSolution(uint32_t day, uint32_t problem, bool& success) -> std::string
-{
-    const auto solutionId = utils::SelectSolution(day, problem);
-    const auto input = utils::DataBroker::getSolutionData(solutionId); // get input from DataBroker
-
-    using enum utils::SolutionId;
-    switch (solutionId) {
-	    case FattestElfCalories:
-		{
-		    const auto calories = Solutions::GetCaloriesOfElfWithMostCalories(input, success);
-		    return std::to_string(calories);
-		}
-	    case TopThreeFattestElfCalories:
-		{
-		    const auto calories = Solutions::GetCaloriesOfTopThreeElvesWithMostCalories(input, success);
-		    return std::to_string(calories);
-		}
-	    case RockPaperScissors:
-		{
-		    const auto score = Solutions::GetScoreOfStrategyGuide(input, success);
-		    return std::to_string(score);
-		}
-	    case DecryptedRockPaperScissors:
-		{
-		    const auto score = Solutions::GetScoreOfStrategyGuide(input, success);
-		    return std::to_string(score);
-		}
-	    case Invalid:
-		{
-		    return "Invalid solutionId";
-		}
-	}
-}
-} // namespace
 
 auto
 main(int argCount, char* argv[]) -> int
@@ -84,7 +50,10 @@ main(int argCount, char* argv[]) -> int
 		}
 
 	    bool success = false;
-	    const auto result = runSolution(day, problem, success);
+	    const auto solutionId = utils::SelectSolution(day, problem);
+	    const auto solutionDataId = utils::SelectSolutionData(solutionId);
+	    const auto input = utils::DataBroker::getSolutionData(solutionDataId);
+	    const auto result = Solutions::runSolution(solutionId, input, success);
 
 	    if (success) {
 		    // TODO: Gotta fix some kind of logging framework...

@@ -19,26 +19,35 @@ enum class SolutionId : uint32_t
 
 namespace SolutionIdStrings {
     constexpr auto FattestElfCalories = "FattestElfCalories";
+    constexpr auto TopThreeFattestElfCalories = "TopThreeFattestElfCalories";
     constexpr auto RockPaperScissors = "RockPaperScissors";
+    constexpr auto DecryptedRockPaperScissors = "DecryptedRockPaperScissors";
+    constexpr auto Invalid = "InvalidSolutionId";
 } // namespace SolutionIdStrings
 
 constexpr auto
-SolutionIdToString(SolutionId solutionId) -> std::string_view
+SolutionIdToString(SolutionId solutionId) noexcept -> const char*
 {
     switch (solutionId) {
 	    case SolutionId::FattestElfCalories:
-	    case SolutionId::TopThreeFattestElfCalories:
 		{
 		    return SolutionIdStrings::FattestElfCalories;
 		}
+	    case SolutionId::TopThreeFattestElfCalories:
+		{
+		    return SolutionIdStrings::TopThreeFattestElfCalories;
+		}
 	    case SolutionId::RockPaperScissors:
-	    case SolutionId::DecryptedRockPaperScissors:
 		{
 		    return SolutionIdStrings::RockPaperScissors;
 		}
+	    case SolutionId::DecryptedRockPaperScissors:
+		{
+		    return SolutionIdStrings::DecryptedRockPaperScissors;
+		}
 	    case SolutionId::Invalid:
 		{
-		    return "";
+		    return SolutionIdStrings::Invalid;
 		}
 	}
 }
