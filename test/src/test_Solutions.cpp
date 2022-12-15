@@ -1,4 +1,7 @@
 // GTest
+#include "Definitions.hpp"
+
+#include <gtest/gtest-message.h>
 #include <gtest/gtest-param-test.h>
 #include <gtest/gtest.h>
 #include <gtest/internal/gtest-param-util.h>
@@ -20,6 +23,15 @@ struct TestParams
 	uint32_t testCase{};
 	uint32_t expectedResult{};
 	const char* name{};
+
+	friend auto
+	operator<<(std::ostream& outStream, const TestParams& params) -> std::ostream&
+	{
+	    return outStream << "\n{\n\ttest name: " << params.name
+			     << ",\n\tSolutionId: " << utils::SolutionIdToString(params.solutionId)
+			     << ",\n\ttestCase: " << params.testCase
+			     << ",\n\texpected result: " << params.expectedResult << "\n}\n";
+	}
 };
 
 class SolutionTestFixture : public ::testing::TestWithParam<TestParams>
@@ -37,10 +49,8 @@ class SolutionTestFixture : public ::testing::TestWithParam<TestParams>
 	void
 	SetUp() override
 	{
-	    std::cout << "Fetching test data..." << std::endl;
 	    const auto solutionDataId = utils::SelectSolutionData(m_solutionId);
 	    m_data = utils::DataBroker::getSolutionTestData(solutionDataId, m_testCase);
-	    std::cout << "Got test data." << std::endl;
 	}
 
 	utils::SolutionId m_solutionId; // NOLINT

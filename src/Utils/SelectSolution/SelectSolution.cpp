@@ -35,7 +35,7 @@ SelectSolution(uint32_t day, uint32_t problem) -> SolutionId
 		}
 	}
 
-    throw std::invalid_argument("SelectSolution: " + toErrorFormat(day, problem));
+    return Invalid;
 }
 
 auto

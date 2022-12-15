@@ -1,4 +1,5 @@
 // Internal utils
+#include "Definitions.hpp"
 #include "SelectSolution/SelectSolution.hpp"
 
 #include <Utils.hpp>
@@ -51,6 +52,10 @@ main(int argCount, char* argv[]) -> int
 
 	    bool success = false;
 	    const auto solutionId = utils::SelectSolution(day, problem);
+	    if (solutionId == utils::SolutionId::Invalid) {
+		    std::cout << "Invalid solution id: " << uint32_t(solutionId) << std::endl;
+		    return EXIT_FAILURE;
+		}
 	    const auto solutionDataId = utils::SelectSolutionData(solutionId);
 	    const auto input = utils::DataBroker::getSolutionData(solutionDataId);
 	    const auto result = Solutions::runSolution(solutionId, input, success);

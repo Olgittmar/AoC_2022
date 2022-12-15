@@ -1,5 +1,6 @@
 #include "RockPaperScissors.hpp"
 
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <exception>
@@ -43,19 +44,28 @@ charToShape(char shapeChar) -> Shape
 	    case 'X':
 	    case 'a':
 	    case 'x':
-		return Rock;
+		{
+		    return Rock;
+		}
 	    case 'B':
 	    case 'Y':
 	    case 'b':
 	    case 'y':
-		return Paper;
+		{
+		    return Paper;
+		}
 	    case 'C':
 	    case 'Z':
 	    case 'c':
 	    case 'z':
-		return Scissors;
+		{
+		    return Scissors;
+		}
 	    default:
-		throw std::invalid_argument(std::string("No known conversion rule from ") + shapeChar + " to Shape.");
+		{
+		    throw std::invalid_argument(std::string("No known conversion rule from ") + shapeChar +
+						" to Shape.");
+		}
 	}
 };
 
@@ -66,16 +76,24 @@ charToOutcome(char outcomeChar) -> Outcome
     switch (outcomeChar) {
 	    case 'X':
 	    case 'x':
-		return Loss;
+		{
+		    return Loss;
+		}
 	    case 'Y':
 	    case 'y':
-		return Draw;
+		{
+		    return Draw;
+		}
 	    case 'Z':
 	    case 'z':
-		return Win;
+		{
+		    return Win;
+		}
 	    default:
-		throw std::invalid_argument(std::string("No known conversion rule from ") + outcomeChar +
-					    " to Outcome.");
+		{
+		    throw std::invalid_argument(std::string("No known conversion rule from ") + outcomeChar +
+						" to Outcome.");
+		}
 	}
 };
 
@@ -180,6 +198,7 @@ class Round
 		{
 		    // Sum 7, 5, 3
 		    m_playerShape = Shape::Paper;
+		    return;
 		}
 	}
 
@@ -197,8 +216,9 @@ template<>
 parseInput<UnknownOutcome>(const std::string_view& input) -> std::vector<Round>
 {
     constexpr auto delimiter = '\n';
+    const auto numLines = std::count(input.cbegin(), input.cend(), delimiter) + 1;
     std::vector<Round> _ret;
-    // _ret.reserve(input.count(delimiter));
+    _ret.reserve(numLines);
     size_t pos = 0;
 
     while (pos < input.size()) {
@@ -220,8 +240,9 @@ template<>
 parseInput<UnknownPlayerShape>(const std::string_view& input) -> std::vector<Round>
 {
     constexpr auto delimiter = '\n';
+    const auto numLines = std::count(input.cbegin(), input.cend(), delimiter) + 1;
     std::vector<Round> _ret{};
-    // _ret.reserve(input.count(delimiter));
+    _ret.reserve(numLines);
     size_t pos = 0;
 
     while (pos < input.size()) {

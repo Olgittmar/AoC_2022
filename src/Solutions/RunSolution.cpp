@@ -26,7 +26,7 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
 		}
 	    case DecryptedRockPaperScissors:
 		{
-		    const auto score = Solutions::GetScoreOfStrategyGuide(input, success);
+		    const auto score = Solutions::GetScoreOfDecryptedStrategyGuide(input, success);
 		    return score;
 		}
 	    case Invalid:
