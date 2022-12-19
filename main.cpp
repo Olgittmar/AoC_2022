@@ -7,6 +7,7 @@
 // Internal Solutions
 #include <ElfCalories.hpp>
 #include <RockPaperScissors.hpp>
+#include <RuckSack.hpp>
 #include <RunSolution.hpp>
 // Std
 #include <cstdlib>
@@ -30,8 +31,8 @@ main(int argCount, char* argv[]) -> int
     try {
 	    const auto problemIndex = args.subspan(1, 2);
 	    // TODO: Don't allow wierd input
-	    std::string dayStr = problemIndex.front();
-	    std::string problemStr = problemIndex.back();
+	    auto* const dayStr = problemIndex.front();
+	    auto* const problemStr = problemIndex.back();
 
 	    // TODO: Safe?
 	    day = std::stoul(dayStr);

@@ -14,6 +14,7 @@ enum class SolutionId : uint32_t
     TopThreeFattestElfCalories = 2,
     RockPaperScissors = 3,
     DecryptedRockPaperScissors = 4,
+    RucksackReorganization = 5,
     Invalid = 0
 };
 
@@ -22,6 +23,7 @@ namespace SolutionIdStrings {
     constexpr auto TopThreeFattestElfCalories = "TopThreeFattestElfCalories";
     constexpr auto RockPaperScissors = "RockPaperScissors";
     constexpr auto DecryptedRockPaperScissors = "DecryptedRockPaperScissors";
+    constexpr auto RucksackReorganization = "RucksackReorganization";
     constexpr auto Invalid = "InvalidSolutionId";
 } // namespace SolutionIdStrings
 
@@ -44,6 +46,10 @@ SolutionIdToString(SolutionId solutionId) noexcept -> const char*
 	    case SolutionId::DecryptedRockPaperScissors:
 		{
 		    return SolutionIdStrings::DecryptedRockPaperScissors;
+		}
+	    case SolutionId::RucksackReorganization:
+		{
+		    return SolutionIdStrings::RucksackReorganization;
 		}
 	    case SolutionId::Invalid:
 		{

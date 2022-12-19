@@ -2,6 +2,7 @@
 
 #include "ElfCalories.hpp"
 #include "RockPaperScissors.hpp"
+#include "RuckSack.hpp"
 
 namespace Solutions {
 auto
@@ -28,6 +29,11 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
 		{
 		    const auto score = Solutions::GetScoreOfDecryptedStrategyGuide(input, success);
 		    return score;
+		}
+	    case RucksackReorganization:
+		{
+		    const auto sum = Solutions::GetSumOfCompartmentItemTypePriority(input, success);
+		    return sum;
 		}
 	    case Invalid:
 		{

@@ -17,7 +17,7 @@ namespace utils {
 auto
 SelectSolution(uint32_t day, uint32_t problem) -> SolutionId
 {
-    using enum utils::SolutionId;
+    using enum SolutionId;
     if (day == 1) {
 	    if (problem == 1) {
 		    return FattestElfCalories;
@@ -34,14 +34,23 @@ SelectSolution(uint32_t day, uint32_t problem) -> SolutionId
 		    return DecryptedRockPaperScissors;
 		}
 	}
+    if (day == 3) {
+	    if (problem == 1) {
+		    return RucksackReorganization;
+		}
+	    // if (problem == 2) {
+	    //     return DecryptedRockPaperScissors;
+	    // }
+	}
 
     return Invalid;
 }
 
+// Workaround for re-using same data for different solutions
 auto
 SelectSolutionData(SolutionId solutionId) -> SolutionId
 {
-    using enum utils::SolutionId;
+    using enum SolutionId;
     switch (solutionId) {
 	    case FattestElfCalories:
 	    case TopThreeFattestElfCalories:
@@ -52,6 +61,11 @@ SelectSolutionData(SolutionId solutionId) -> SolutionId
 	    case DecryptedRockPaperScissors:
 		{
 		    return RockPaperScissors;
+		}
+	    case RucksackReorganization:
+		// case DecryptedRockPaperScissors:
+		{
+		    return RucksackReorganization;
 		}
 	    case Invalid:
 		{

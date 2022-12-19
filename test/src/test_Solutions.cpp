@@ -73,7 +73,7 @@ TEST_P(SolutionTestFixture, TestSolution) // NOLINT
     ASSERT_EQ(m_result.resultValue, m_expectedResult);
 }
 
-const std::array<TestParams, 4> testParameters = {
+const std::array<TestParams, 5> testParameters = {
   TestParams{.solutionId = utils::SolutionId::FattestElfCalories,
 	     .testCase = 0,
 	     .expectedResult = 24000,
@@ -93,6 +93,11 @@ const std::array<TestParams, 4> testParameters = {
 	     .testCase = 0,
 	     .expectedResult = 12,
 	     .name = utils::SolutionIdToString(utils::SolutionId::DecryptedRockPaperScissors)},
+
+  TestParams{.solutionId = utils::SolutionId::RucksackReorganization,
+	     .testCase = 0,
+	     .expectedResult = 157,
+	     .name = utils::SolutionIdToString(utils::SolutionId::RucksackReorganization)},
 };
 
 INSTANTIATE_TEST_SUITE_P( // NOLINT
