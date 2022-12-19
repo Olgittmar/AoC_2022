@@ -1,10 +1,10 @@
 #include "ElfCalories.hpp"
-
+// Own
 #include <Utils.hpp>
+
+// std
 #include <algorithm>
 #include <charconv>
-#include <cstddef>
-#include <cstdint>
 #include <iostream>
 #include <numeric>
 #include <string>
@@ -20,6 +20,7 @@ class ElfInventory
 	{
 	    size_t pos = 0;
 	    uint32_t caloriesCount = 0;
+
 	    while (pos < inventoryStr.size()) {
 		    const auto nextPos = inventoryStr.find('\n', pos);
 		    const auto caloriesStr = inventoryStr.substr(pos, nextPos - pos);

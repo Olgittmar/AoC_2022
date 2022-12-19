@@ -8,7 +8,7 @@
 
 namespace Solutions {
 
-auto runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& success) -> uint32_t;
+auto runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& success) -> std::string;
 
 } // namespace Solutions
 #endif

@@ -1,8 +1,6 @@
 #include "RockPaperScissors.hpp"
 
 #include <algorithm>
-#include <cstddef>
-#include <cstdint>
 #include <exception>
 #include <iostream>
 #include <stdexcept>

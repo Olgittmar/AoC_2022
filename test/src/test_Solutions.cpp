@@ -21,13 +21,13 @@ struct TestParams
 {
 	utils::SolutionId solutionId{};
 	uint32_t testCase{};
-	uint32_t expectedResult{};
+	const char* const expectedResult{};
 	const char* name{};
 
 	friend auto
 	operator<<(std::ostream& outStream, const TestParams& params) -> std::ostream&
 	{
-	    return outStream << "\n{\n\ttest name: " << params.name
+	    return outStream << "{\n\ttest name: " << params.name
 			     << ",\n\tSolutionId: " << utils::SolutionIdToString(params.solutionId)
 			     << ",\n\ttestCase: " << params.testCase
 			     << ",\n\texpected result: " << params.expectedResult << "\n}\n";
@@ -56,11 +56,11 @@ class SolutionTestFixture : public ::testing::TestWithParam<TestParams>
 	utils::SolutionId m_solutionId; // NOLINT
 	uint32_t m_testCase;            // NOLINT
 	std::string m_data;             // NOLINT
-	uint32_t m_expectedResult;      // NOLINT
+	std::string m_expectedResult;   // NOLINT
 
 	struct
 	{
-		std::uint32_t resultValue = 0;
+		std::string resultValue;
 		bool success = false;
 	} m_result{}; // NOLINT
 };
@@ -76,27 +76,27 @@ TEST_P(SolutionTestFixture, TestSolution) // NOLINT
 const std::array<TestParams, 5> testParameters = {
   TestParams{.solutionId = utils::SolutionId::FattestElfCalories,
 	     .testCase = 0,
-	     .expectedResult = 24000,
+	     .expectedResult = "24000",
 	     .name = utils::SolutionIdToString(utils::SolutionId::FattestElfCalories)},
 
   TestParams{.solutionId = utils::SolutionId::TopThreeFattestElfCalories,
 	     .testCase = 0,
-	     .expectedResult = 45000,
+	     .expectedResult = "45000",
 	     .name = utils::SolutionIdToString(utils::SolutionId::TopThreeFattestElfCalories)},
 
   TestParams{.solutionId = utils::SolutionId::RockPaperScissors,
 	     .testCase = 0,
-	     .expectedResult = 15,
+	     .expectedResult = "15",
 	     .name = utils::SolutionIdToString(utils::SolutionId::RockPaperScissors)},
 
   TestParams{.solutionId = utils::SolutionId::DecryptedRockPaperScissors,
 	     .testCase = 0,
-	     .expectedResult = 12,
+	     .expectedResult = "12",
 	     .name = utils::SolutionIdToString(utils::SolutionId::DecryptedRockPaperScissors)},
 
   TestParams{.solutionId = utils::SolutionId::RucksackReorganization,
 	     .testCase = 0,
-	     .expectedResult = 157,
+	     .expectedResult = "157",
 	     .name = utils::SolutionIdToString(utils::SolutionId::RucksackReorganization)},
 };
 

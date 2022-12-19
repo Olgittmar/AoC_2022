@@ -38,6 +38,7 @@ set(FILES_TO_CPP_CHECK ${FILES_TO_CPP_CHECK}
 	PARENT_SCOPE
 )
 
+# can't figure out how to get clang-tidy to ignore GTest headers...
 set(FILES_TO_TIDY ${FILES_TO_TIDY}
 	${TEST_SOURCE_FILES}
 	PARENT_SCOPE

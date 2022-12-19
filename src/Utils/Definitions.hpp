@@ -5,7 +5,7 @@
 #include <string_view>
 namespace utils {
 
-constexpr int daysSolved = 2;
+constexpr int daysSolved = 3;
 constexpr int problemsPerDay = 2;
 
 enum class SolutionId : uint32_t
