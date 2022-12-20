@@ -53,16 +53,16 @@ class SolutionTestFixture : public ::testing::TestWithParam<TestParams>
 	    m_data = utils::DataBroker::getSolutionTestData(solutionDataId, m_testCase);
 	}
 
-	utils::SolutionId m_solutionId; // NOLINT
-	uint32_t m_testCase;            // NOLINT
-	std::string m_data;             // NOLINT
-	std::string m_expectedResult;   // NOLINT
+	utils::SolutionId m_solutionId; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
+	uint32_t m_testCase;            // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
+	std::string m_data;             // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
+	std::string m_expectedResult;   // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 
 	struct
 	{
 		std::string resultValue;
 		bool success = false;
-	} m_result{}; // NOLINT
+	} m_result{}; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 };
 
 TEST_P(SolutionTestFixture, TestSolution) // NOLINT
@@ -73,7 +73,7 @@ TEST_P(SolutionTestFixture, TestSolution) // NOLINT
     ASSERT_EQ(m_result.resultValue, m_expectedResult);
 }
 
-const std::array<TestParams, 5> testParameters = {
+const std::array<TestParams, 8> testParameters = {
   TestParams{.solutionId = utils::SolutionId::FattestElfCalories,
 	     .testCase = 0,
 	     .expectedResult = "24000",
@@ -98,6 +98,21 @@ const std::array<TestParams, 5> testParameters = {
 	     .testCase = 0,
 	     .expectedResult = "157",
 	     .name = utils::SolutionIdToString(utils::SolutionId::RucksackReorganization)},
+
+  TestParams{.solutionId = utils::SolutionId::RucksackBadges,
+	     .testCase = 0,
+	     .expectedResult = "70",
+	     .name = utils::SolutionIdToString(utils::SolutionId::RucksackBadges)},
+
+  TestParams{.solutionId = utils::SolutionId::CampCleanup,
+	     .testCase = 0,
+	     .expectedResult = "2",
+	     .name = utils::SolutionIdToString(utils::SolutionId::CampCleanup)},
+
+  TestParams{.solutionId = utils::SolutionId::PartialCampCleanup,
+	     .testCase = 0,
+	     .expectedResult = "4",
+	     .name = utils::SolutionIdToString(utils::SolutionId::PartialCampCleanup)},
 };
 
 INSTANTIATE_TEST_SUITE_P( // NOLINT

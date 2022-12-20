@@ -1,5 +1,6 @@
 #include "RunSolution.hpp"
 
+#include "CampCleanup.hpp"
 #include "ElfCalories.hpp"
 #include "RockPaperScissors.hpp"
 #include "RuckSack.hpp"
@@ -35,6 +36,21 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
 	    case RucksackReorganization:
 		{
 		    const auto sum = Solutions::GetSumOfCompartmentItemTypePriority(input, success);
+		    return std::to_string(sum);
+		}
+	    case RucksackBadges:
+		{
+		    const auto sum = Solutions::GetSumOfAuthenticityBadges(input, success);
+		    return std::to_string(sum);
+		}
+	    case CampCleanup:
+		{
+		    const auto sum = Solutions::GetNumRedundantAssignmentPairs(input, success);
+		    return std::to_string(sum);
+		}
+	    case PartialCampCleanup:
+		{
+		    const auto sum = Solutions::GetNumPartiallyRedundantAssignmentPairs(input, success);
 		    return std::to_string(sum);
 		}
 	    case Invalid:

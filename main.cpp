@@ -36,29 +36,22 @@ main(int argCount, char* argv[]) -> int
 
 	    // TODO: Safe?
 	    day = std::stoul(dayStr);
-	    if (day < 1 || day > utils::daysSolved) {
-		    std::cout << "Invalid day index:" << dayStr << std::endl;
-		    return EXIT_FAILURE;
-		}
-
 	    problem = std::stoul(problemStr);
-	    if (problem < 1 || problem > utils::problemsPerDay) {
-		    std::cout << "Invalid problem index: " << problemStr << std::endl;
-		    return EXIT_FAILURE;
-		}
 
-	    for (const auto& arg : args.subspan(3)) {
-		    // whatever arguments are left
-		}
+	    // for (const auto& arg : args.subspan(3)) {
+	    //     // whatever arguments are left
+	    // }
 
-	    bool success = false;
 	    const auto solutionId = utils::SelectSolution(day, problem);
 	    if (solutionId == utils::SolutionId::Invalid) {
 		    std::cout << "Invalid solution id: " << uint32_t(solutionId) << std::endl;
 		    return EXIT_FAILURE;
 		}
+
 	    const auto solutionDataId = utils::SelectSolutionData(solutionId);
 	    const auto input = utils::DataBroker::getSolutionData(solutionDataId);
+
+	    bool success = false;
 	    const auto result = Solutions::runSolution(solutionId, input, success);
 
 	    if (success) {

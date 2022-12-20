@@ -5,9 +5,6 @@
 #include <string_view>
 namespace utils {
 
-constexpr int daysSolved = 3;
-constexpr int problemsPerDay = 2;
-
 enum class SolutionId : uint32_t
 {
     FattestElfCalories = 1,
@@ -15,6 +12,9 @@ enum class SolutionId : uint32_t
     RockPaperScissors = 3,
     DecryptedRockPaperScissors = 4,
     RucksackReorganization = 5,
+    RucksackBadges = 6,
+    CampCleanup = 7,
+    PartialCampCleanup = 8,
     Invalid = 0
 };
 
@@ -24,6 +24,9 @@ namespace SolutionIdStrings {
     constexpr auto RockPaperScissors = "RockPaperScissors";
     constexpr auto DecryptedRockPaperScissors = "DecryptedRockPaperScissors";
     constexpr auto RucksackReorganization = "RucksackReorganization";
+    constexpr auto RucksackBadges = "RucksackBadges";
+    constexpr auto CampCleanup = "CampCleanup";
+    constexpr auto PartialCampCleanup = "PartialCampCleanup";
     constexpr auto Invalid = "InvalidSolutionId";
 } // namespace SolutionIdStrings
 
@@ -50,6 +53,18 @@ SolutionIdToString(SolutionId solutionId) noexcept -> const char*
 	    case SolutionId::RucksackReorganization:
 		{
 		    return SolutionIdStrings::RucksackReorganization;
+		}
+	    case SolutionId::RucksackBadges:
+		{
+		    return SolutionIdStrings::RucksackBadges;
+		}
+	    case SolutionId::CampCleanup:
+		{
+		    return SolutionIdStrings::CampCleanup;
+		}
+	    case SolutionId::PartialCampCleanup:
+		{
+		    return SolutionIdStrings::PartialCampCleanup;
 		}
 	    case SolutionId::Invalid:
 		{

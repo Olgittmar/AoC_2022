@@ -38,9 +38,17 @@ SelectSolution(uint32_t day, uint32_t problem) -> SolutionId
 	    if (problem == 1) {
 		    return RucksackReorganization;
 		}
-	    // if (problem == 2) {
-	    //     return DecryptedRockPaperScissors;
-	    // }
+	    if (problem == 2) {
+		    return RucksackBadges;
+		}
+	}
+    if (day == 4) {
+	    if (problem == 1) {
+		    return CampCleanup;
+		}
+	    if (problem == 2) {
+		    return PartialCampCleanup;
+		}
 	}
 
     return Invalid;
@@ -63,9 +71,14 @@ SelectSolutionData(SolutionId solutionId) -> SolutionId
 		    return RockPaperScissors;
 		}
 	    case RucksackReorganization:
-		// case DecryptedRockPaperScissors:
+	    case RucksackBadges:
 		{
 		    return RucksackReorganization;
+		}
+	    case CampCleanup:
+	    case PartialCampCleanup:
+		{
+		    return CampCleanup;
 		}
 	    case Invalid:
 		{
