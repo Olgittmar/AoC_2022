@@ -1,5 +1,6 @@
 # Don't format 3rd party code.
 set(FILES_TMP ${FILES_TO_FORMAT})
+# message(STATUS "FILES_TO_FORMAT: ${FILES_TMP}")
 foreach(source_file ${FILES_TMP})
 	string(FIND ${source_file} ${THIRD_PARTY_DIR} source_is_third_party)
 	if(NOT ${source_is_third_party} EQUAL -1)

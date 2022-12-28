@@ -31,7 +31,7 @@ BinPackParameters: true
 BraceWrapping:
   AfterCaseLabel:  true
   AfterClass:      true
-  AfterControlStatement: MultiLine
+  AfterControlStatement: Always
   AfterEnum:       true
   AfterFunction:   true
   AfterNamespace:  false
@@ -40,12 +40,12 @@ BraceWrapping:
   AfterUnion:      true
   AfterExternBlock: false
   BeforeCatch:     false
-  BeforeElse:      true
+  BeforeElse:      false
   BeforeLambdaBody: true
   BeforeWhile:     false
   IndentBraces:    true
-  SplitEmptyFunction: false
-  SplitEmptyRecord: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
   SplitEmptyNamespace: true
 BreakBeforeBinaryOperators: None
 BreakBeforeConceptDeclarations: true

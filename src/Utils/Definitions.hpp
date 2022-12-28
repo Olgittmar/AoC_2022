@@ -2,6 +2,8 @@
 #define DEFINITIONS_HPP
 
 // Project wide definitions
+#include <cstdint>
+#include <ranges>
 #include <string_view>
 namespace utils {
 
@@ -15,6 +17,8 @@ enum class SolutionId : uint32_t
     RucksackBadges = 6,
     CampCleanup = 7,
     PartialCampCleanup = 8,
+    RearrangeSupplyStacks = 9,
+    RearrangeSupplyStacksWithAdvancedCrane = 10,
     Invalid = 0
 };
 
@@ -27,13 +31,16 @@ namespace SolutionIdStrings {
     constexpr auto RucksackBadges = "RucksackBadges";
     constexpr auto CampCleanup = "CampCleanup";
     constexpr auto PartialCampCleanup = "PartialCampCleanup";
+    constexpr auto RearrangeSupplyStacks = "RearrangeSupplyStacks";
+    constexpr auto RearrangeSupplyStacksWithAdvancedCrane = "RearrangeSupplyStacksWithAdvancedCrane";
     constexpr auto Invalid = "InvalidSolutionId";
 } // namespace SolutionIdStrings
 
 constexpr auto
 SolutionIdToString(SolutionId solutionId) noexcept -> const char*
 {
-    switch (solutionId) {
+    switch (solutionId)
+	{
 	    case SolutionId::FattestElfCalories:
 		{
 		    return SolutionIdStrings::FattestElfCalories;
@@ -65,6 +72,14 @@ SolutionIdToString(SolutionId solutionId) noexcept -> const char*
 	    case SolutionId::PartialCampCleanup:
 		{
 		    return SolutionIdStrings::PartialCampCleanup;
+		}
+	    case SolutionId::RearrangeSupplyStacks:
+		{
+		    return SolutionIdStrings::RearrangeSupplyStacks;
+		}
+	    case SolutionId::RearrangeSupplyStacksWithAdvancedCrane:
+		{
+		    return SolutionIdStrings::RearrangeSupplyStacksWithAdvancedCrane;
 		}
 	    case SolutionId::Invalid:
 		{

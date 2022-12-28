@@ -21,7 +21,8 @@ class ElfInventory
 	    size_t pos = 0;
 	    uint32_t caloriesCount = 0;
 
-	    while (pos < inventoryStr.size()) {
+	    while (pos < inventoryStr.size())
+		{
 		    const auto nextPos = inventoryStr.find('\n', pos);
 		    const auto caloriesStr = inventoryStr.substr(pos, nextPos - pos);
 
@@ -29,11 +30,12 @@ class ElfInventory
 
 		    const auto conversionResult =
 		      std::from_chars(caloriesStr.data(), caloriesStr.data() + caloriesStr.size(), caloriesCount);
-		    if (conversionResult.ec == std::errc::invalid_argument) {
+		    if (conversionResult.ec == std::errc::invalid_argument)
+			{
 			    std::cout << "WARNING: unable to convert " << caloriesStr << " to caloriesCount (uint32_t)."
 				      << std::endl;
 			    continue;
-			}
+		    }
 
 		    m_calories.emplace_back(caloriesCount);
 		}
@@ -71,14 +73,16 @@ parseInput(const std::string_view& input) -> std::vector<ElfInventory>
     size_t pos = 0;
     const std::string delimiter = "\n\n";
 
-    while (pos < input.size()) {
+    while (pos < input.size())
+	{
 	    const auto nextPos = input.find(delimiter, pos);
 	    const auto inventoryStr = input.substr(pos, nextPos - pos);
 	    pos = nextPos + size_t(nextPos != std::string_view::npos) * delimiter.size();
 
-	    if (inventoryStr.empty()) {
+	    if (inventoryStr.empty())
+		{
 		    continue;
-		}
+	    }
 
 	    _ret.emplace_back(inventoryStr);
 	}
@@ -93,18 +97,21 @@ namespace Solutions {
 auto
 GetCaloriesOfElfWithMostCalories(const std::string_view& input, bool& success) -> std::uint32_t
 {
-    try {
+    try
+	{
 	    const auto inventories = parseInput(input);
 	    uint32_t highestCaloriesCount = 0;
 
-	    for (const auto& inventory : inventories) {
+	    for (const auto& inventory : inventories)
+		{
 		    const auto totCals = inventory.getTotalCalories();
 		    highestCaloriesCount = (totCals > highestCaloriesCount ? totCals : highestCaloriesCount);
 		}
 
 	    success = true;
 	    return highestCaloriesCount;
-    } catch (const std::exception& err) {
+    } catch (const std::exception& err)
+	{
 	    std::cout << err.what() << std::endl;
     }
 
@@ -117,7 +124,8 @@ GetCaloriesOfTopThreeElvesWithMostCalories(const std::string_view& input, bool& 
     auto hasHigherCalorieCount = [](const ElfInventory& first, const ElfInventory& second) -> bool
     { return first.getTotalCalories() > second.getTotalCalories(); };
 
-    try {
+    try
+	{
 	    auto inventories = parseInput(input);
 	    std::sort(inventories.begin(), inventories.end(), hasHigherCalorieCount);
 
@@ -127,7 +135,8 @@ GetCaloriesOfTopThreeElvesWithMostCalories(const std::string_view& input, bool& 
 
 	    success = true;
 	    return sumOfTopThreeCaloriesCount;
-    } catch (const std::exception& err) {
+    } catch (const std::exception& err)
+	{
 	    std::cout << err.what() << std::endl;
     }
 

@@ -27,10 +27,9 @@ struct TestParams
 	friend auto
 	operator<<(std::ostream& outStream, const TestParams& params) -> std::ostream&
 	{
-	    return outStream << "{\n\ttest name: " << params.name
-			     << ",\n\tSolutionId: " << utils::SolutionIdToString(params.solutionId)
-			     << ",\n\ttestCase: " << params.testCase
-			     << ",\n\texpected result: " << params.expectedResult << "\n}\n";
+	    return outStream << "{SolutionId: " << utils::SolutionIdToString(params.solutionId)
+			     << ", testCase: " << params.testCase << ", expected result: " << params.expectedResult
+			     << "}";
 	}
 };
 
@@ -67,13 +66,13 @@ class SolutionTestFixture : public ::testing::TestWithParam<TestParams>
 
 TEST_P(SolutionTestFixture, TestSolution) // NOLINT
 {
-    m_result.resultValue = Solutions::runSolution(m_solutionId, m_data, m_result.success);
+    m_result.resultValue = Solutions::runSolution<true>(m_solutionId, m_data, m_result.success);
 
     ASSERT_TRUE(m_result.success);
     ASSERT_EQ(m_result.resultValue, m_expectedResult);
 }
 
-const std::array<TestParams, 8> testParameters = {
+const std::array<TestParams, 10> testParameters = {
   TestParams{.solutionId = utils::SolutionId::FattestElfCalories,
 	     .testCase = 0,
 	     .expectedResult = "24000",
@@ -113,6 +112,16 @@ const std::array<TestParams, 8> testParameters = {
 	     .testCase = 0,
 	     .expectedResult = "4",
 	     .name = utils::SolutionIdToString(utils::SolutionId::PartialCampCleanup)},
+
+  TestParams{.solutionId = utils::SolutionId::RearrangeSupplyStacks,
+	     .testCase = 0,
+	     .expectedResult = "CMZ",
+	     .name = utils::SolutionIdToString(utils::SolutionId::RearrangeSupplyStacks)},
+
+  TestParams{.solutionId = utils::SolutionId::RearrangeSupplyStacksWithAdvancedCrane,
+	     .testCase = 0,
+	     .expectedResult = "MCD",
+	     .name = utils::SolutionIdToString(utils::SolutionId::RearrangeSupplyStacksWithAdvancedCrane)},
 };
 
 INSTANTIATE_TEST_SUITE_P( // NOLINT

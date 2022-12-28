@@ -20,6 +20,7 @@ set(DATA_FILES
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data/RockPaperScissors.txt>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data/RucksackReorganization.txt>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data/CampCleanup.txt>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data/RearrangeSupplyStacks.txt>"
 )
 
 # Should be part of the test module...
@@ -28,6 +29,7 @@ set(TEST_DATA_FILES
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test/data/RockPaperScissors0.txt>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test/data/RucksackReorganization0.txt>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test/data/CampCleanup0.txt>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test/data/RearrangeSupplyStacks0.txt>"
 )
 
 add_executable(${MAIN_TARGET_NAME} $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main.cpp>)
@@ -64,6 +66,7 @@ install(
 	DESTINATION "$<BUILD_INTERFACE:${CMAKE_INSTALL_PREFIX}/config>"
 )
 
+# TODO: Install symlink to data files instead?
 install(
 	FILES ${DATA_FILES}
 	DESTINATION	"$<BUILD_INTERFACE:${CMAKE_INSTALL_PREFIX}/data>"

@@ -91,7 +91,8 @@ parseInput(const std::string_view& input) -> std::vector<AssignmentPair>
 
     size_t pos = 0;
 
-    while (pos < input.size()) {
+    while (pos < input.size())
+	{
 	    const auto nextPos = input.find(delimiter, pos);
 	    const auto line = input.substr(pos, nextPos - pos);
 	    pos = nextPos + size_t(nextPos != std::string_view::npos);
@@ -110,14 +111,17 @@ auto
 GetNumRedundantAssignmentPairs(const std::string_view& input, bool& success) -> std::uint32_t
 {
     uint32_t sum = 0;
-    try {
+    try
+	{
 	    const auto assignmentPairs = parseInput(input);
 	    sum =
 	      std::ranges::count_if(assignmentPairs, [](const AssignmentPair& pair) { return pair.fullyOverlaps(); });
 	    success = true;
-    } catch (const std::exception& err) {
+    } catch (const std::exception& err)
+	{
 	    std::cout << err.what() << std::endl;
-    } catch (...) {
+    } catch (...)
+	{
 	    std::cout << "Unhandled exception!" << std::endl;
     }
 
@@ -128,14 +132,17 @@ auto
 GetNumPartiallyRedundantAssignmentPairs(const std::string_view& input, bool& success) -> std::uint32_t
 {
     uint32_t sum = 0;
-    try {
+    try
+	{
 	    const auto assignmentPairs = parseInput(input);
 	    sum = std::ranges::count_if(assignmentPairs,
 					[](const AssignmentPair& pair) { return pair.partiallyOverlaps(); });
 	    success = true;
-    } catch (const std::exception& err) {
+    } catch (const std::exception& err)
+	{
 	    std::cout << err.what() << std::endl;
-    } catch (...) {
+    } catch (...)
+	{
 	    std::cout << "Unhandled exception!" << std::endl;
     }
 

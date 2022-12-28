@@ -37,7 +37,8 @@ auto
 charToShape(char shapeChar) -> Shape
 {
     using enum Shape;
-    switch (shapeChar) {
+    switch (shapeChar)
+	{
 	    case 'A':
 	    case 'X':
 	    case 'a':
@@ -71,7 +72,8 @@ auto
 charToOutcome(char outcomeChar) -> Outcome
 {
     using enum Outcome;
-    switch (outcomeChar) {
+    switch (outcomeChar)
+	{
 	    case 'X':
 	    case 'x':
 		{
@@ -152,20 +154,23 @@ class Round
 
 	    const auto difference = int32_t(m_playerShape) - int32_t(m_opponentShape);
 
-	    if (difference == 0) {
+	    if (difference == 0)
+		{
 		    m_outcome = Draw;
 		    return;
-		}
+	    }
 
-	    if (difference == -1 || difference == 2) {
+	    if (difference == -1 || difference == 2)
+		{
 		    m_outcome = Loss;
 		    return;
-		}
+	    }
 
-	    if (difference == 1 || difference == -2) {
+	    if (difference == 1 || difference == -2)
+		{
 		    m_outcome = Win;
 		    return;
-		}
+	    }
 	}
 
 	void
@@ -179,7 +184,7 @@ class Round
 		    // Sum 1, 8, 6
 		    m_playerShape = Shape::Scissors;
 		    return;
-		}
+	    }
 
 	    if ((m_opponentShape == Shape::Rock && m_outcome == Outcome::Draw) ||
 		(m_opponentShape == Shape::Paper && m_outcome == Outcome::Loss) ||
@@ -188,7 +193,7 @@ class Round
 		    // Sum 4, 2, 9
 		    m_playerShape = Shape::Rock;
 		    return;
-		}
+	    }
 
 	    if ((m_opponentShape == Shape::Rock && m_outcome == Outcome::Win) ||
 		(m_opponentShape == Shape::Paper && m_outcome == Outcome::Draw) ||
@@ -197,7 +202,7 @@ class Round
 		    // Sum 7, 5, 3
 		    m_playerShape = Shape::Paper;
 		    return;
-		}
+	    }
 	}
 
 	Shape m_playerShape = Shape::Unknown;
@@ -219,7 +224,8 @@ parseInput<UnknownOutcome>(const std::string_view& input) -> std::vector<Round>
     _ret.reserve(numLines);
     size_t pos = 0;
 
-    while (pos < input.size()) {
+    while (pos < input.size())
+	{
 	    const auto nextPos = input.find(delimiter, pos);
 	    const auto roundStr = input.substr(pos, nextPos - pos);
 	    pos = nextPos + size_t(nextPos != std::string_view::npos);
@@ -243,7 +249,8 @@ parseInput<UnknownPlayerShape>(const std::string_view& input) -> std::vector<Rou
     _ret.reserve(numLines);
     size_t pos = 0;
 
-    while (pos < input.size()) {
+    while (pos < input.size())
+	{
 	    const auto nextPos = input.find(delimiter, pos);
 	    const auto roundStr = input.substr(pos, nextPos - pos);
 	    pos = nextPos + size_t(nextPos != std::string_view::npos);
@@ -265,17 +272,21 @@ auto
 GetScoreOfStrategyGuide(const std::string_view& input, bool& success) -> uint32_t
 {
     uint32_t totalScore = 0;
-    try {
+    try
+	{
 	    const auto rounds = parseInput<UnknownOutcome>(input);
 
-	    for (const auto& round : rounds) {
+	    for (const auto& round : rounds)
+		{
 		    totalScore += round.getScore();
 		}
 
 	    success = true;
-    } catch (const std::invalid_argument& errc) {
+    } catch (const std::invalid_argument& errc)
+	{
 	    std::cout << errc.what() << std::endl;
-    } catch (const std::exception& errc) {
+    } catch (const std::exception& errc)
+	{
 	    std::cout << errc.what() << std::endl;
     }
 
@@ -286,17 +297,21 @@ auto
 GetScoreOfDecryptedStrategyGuide(const std::string_view& input, bool& success) -> uint32_t
 {
     uint32_t totalScore = 0;
-    try {
+    try
+	{
 	    const auto rounds = parseInput<UnknownPlayerShape>(input);
 
-	    for (const auto& round : rounds) {
+	    for (const auto& round : rounds)
+		{
 		    totalScore += round.getScore();
 		}
 
 	    success = true;
-    } catch (const std::invalid_argument& errc) {
+    } catch (const std::invalid_argument& errc)
+	{
 	    std::cout << errc.what() << std::endl;
-    } catch (const std::exception& errc) {
+    } catch (const std::exception& errc)
+	{
 	    std::cout << errc.what() << std::endl;
     }
 

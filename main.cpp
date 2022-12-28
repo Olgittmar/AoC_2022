@@ -1,7 +1,4 @@
 // Internal utils
-#include "Definitions.hpp"
-#include "SelectSolution/SelectSolution.hpp"
-
 #include <Utils.hpp>
 
 // Internal Solutions
@@ -9,6 +6,7 @@
 #include <RockPaperScissors.hpp>
 #include <RuckSack.hpp>
 #include <RunSolution.hpp>
+
 // Std
 #include <cstdlib>
 #include <exception>
@@ -17,18 +15,23 @@
 #include <string>
 #include <string_view>
 
+using utils::SelectSolution;
+using utils::SelectSolutionData;
+
 auto
 main(int argCount, char* argv[]) -> int
 {
     const auto args = std::span(argv, size_t(argCount));
-    if (args.size() < 3) {
+    if (args.size() < 3)
+	{
 	    return EXIT_FAILURE;
-	}
+    }
 
     uint32_t day = 0;
     uint32_t problem = 0;
 
-    try {
+    try
+	{
 	    const auto problemIndex = args.subspan(1, 2);
 	    // TODO: Don't allow wierd input
 	    auto* const dayStr = problemIndex.front();
@@ -42,34 +45,39 @@ main(int argCount, char* argv[]) -> int
 	    //     // whatever arguments are left
 	    // }
 
-	    const auto solutionId = utils::SelectSolution(day, problem);
-	    if (solutionId == utils::SolutionId::Invalid) {
+	    const auto solutionId = SelectSolution(day, problem);
+	    if (solutionId == utils::SolutionId::Invalid)
+		{
 		    std::cout << "Invalid solution id: " << uint32_t(solutionId) << std::endl;
 		    return EXIT_FAILURE;
-		}
+	    }
 
-	    const auto solutionDataId = utils::SelectSolutionData(solutionId);
+	    const auto solutionDataId = SelectSolutionData(solutionId);
 	    const auto input = utils::DataBroker::getSolutionData(solutionDataId);
 
 	    bool success = false;
 	    const auto result = Solutions::runSolution(solutionId, input, success);
 
-	    if (success) {
+	    if (success)
+		{
 		    // TODO: Gotta fix some kind of logging framework...
 		    std::cout << result << std::endl;
-		}
-	    else {
+	    } else
+		{
 		    std::cout << "Something went wrong!" << std::endl;
 		    return EXIT_FAILURE;
 		}
 
-    } catch (const std::invalid_argument& err) {
+    } catch (const std::invalid_argument& err)
+	{
 	    std::cout << err.what() << std::endl;
 	    return EXIT_FAILURE;
-    } catch (const std::filesystem::filesystem_error& err) {
+    } catch (const std::filesystem::filesystem_error& err)
+	{
 	    std::cout << err.what() << std::endl;
 	    return EXIT_FAILURE;
-    } catch (const std::exception& err) {
+    } catch (const std::exception& err)
+	{
 	    std::cout << err.what() << std::endl;
 	    return EXIT_FAILURE;
     }

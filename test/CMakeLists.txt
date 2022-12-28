@@ -32,17 +32,7 @@ target_include_directories(test_Solutions
 
 set(MY_TESTS ${MY_TESTS} test_Solutions)
 
-# Add all test files for cppcheck analysis and formatting
-set(FILES_TO_CPP_CHECK ${FILES_TO_CPP_CHECK}
-	${TEST_SOURCE_FILES}
-	PARENT_SCOPE
-)
-
-# can't figure out how to get clang-tidy to ignore GTest headers...
-set(FILES_TO_TIDY ${FILES_TO_TIDY}
-	${TEST_SOURCE_FILES}
-	PARENT_SCOPE
-)
+#Static analysis for tests are Disabled since I can't figure out how to get clang-tidy and cppcheck to ignore GTest headers...
 
 set(FILES_TO_FORMAT ${FILES_TO_FORMAT}
 	${TEST_SOURCE_FILES}

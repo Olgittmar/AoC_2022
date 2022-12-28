@@ -18,40 +18,66 @@ auto
 SelectSolution(uint32_t day, uint32_t problem) -> SolutionId
 {
     using enum SolutionId;
-    if (day == 1) {
-	    if (problem == 1) {
-		    return FattestElfCalories;
+    switch (day)
+	{
+	    case 1:
+		{
+		    if (problem == 1)
+			{
+			    return FattestElfCalories;
+		    }
+		    if (problem == 2)
+			{
+			    return TopThreeFattestElfCalories;
+		    }
 		}
-	    if (problem == 2) {
-		    return TopThreeFattestElfCalories;
+	    case 2:
+		{
+		    if (problem == 1)
+			{
+			    return RockPaperScissors;
+		    }
+		    if (problem == 2)
+			{
+			    return DecryptedRockPaperScissors;
+		    }
 		}
+	    case 3:
+		{
+		    if (problem == 1)
+			{
+			    return RucksackReorganization;
+		    }
+		    if (problem == 2)
+			{
+			    return RucksackBadges;
+		    }
+		}
+	    case 4:
+		{
+		    if (problem == 1)
+			{
+			    return CampCleanup;
+		    }
+		    if (problem == 2)
+			{
+			    return PartialCampCleanup;
+		    }
+		}
+	    case 5: // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
+		{
+		    if (problem == 1)
+			{
+			    return RearrangeSupplyStacks;
+		    }
+		    if (problem == 2)
+			{
+			    return RearrangeSupplyStacksWithAdvancedCrane;
+		    }
+		}
+	    default:
+		return Invalid;
 	}
-    if (day == 2) {
-	    if (problem == 1) {
-		    return RockPaperScissors;
-		}
-	    if (problem == 2) {
-		    return DecryptedRockPaperScissors;
-		}
-	}
-    if (day == 3) {
-	    if (problem == 1) {
-		    return RucksackReorganization;
-		}
-	    if (problem == 2) {
-		    return RucksackBadges;
-		}
-	}
-    if (day == 4) {
-	    if (problem == 1) {
-		    return CampCleanup;
-		}
-	    if (problem == 2) {
-		    return PartialCampCleanup;
-		}
-	}
-
-    return Invalid;
 }
 
 // Workaround for re-using same data for different solutions
@@ -59,7 +85,8 @@ auto
 SelectSolutionData(SolutionId solutionId) -> SolutionId
 {
     using enum SolutionId;
-    switch (solutionId) {
+    switch (solutionId)
+	{
 	    case FattestElfCalories:
 	    case TopThreeFattestElfCalories:
 		{
@@ -79,6 +106,11 @@ SelectSolutionData(SolutionId solutionId) -> SolutionId
 	    case PartialCampCleanup:
 		{
 		    return CampCleanup;
+		}
+	    case RearrangeSupplyStacks:
+	    case RearrangeSupplyStacksWithAdvancedCrane:
+		{
+		    return RearrangeSupplyStacks;
 		}
 	    case Invalid:
 		{

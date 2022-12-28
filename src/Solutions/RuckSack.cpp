@@ -106,9 +106,10 @@ template<size_t N> class RuckSackGroup
 				      from_intersection = to_intersection;
 				  });
 
-	    if (from_intersection.size() != 1) {
+	    if (from_intersection.size() != 1)
+		{
 		    std::cout << "Warning, unexpected intersection size: " << from_intersection.size() << std::endl;
-		}
+	    }
 
 	    return RuckSack::charToPriority(from_intersection.front());
 	}
@@ -129,7 +130,8 @@ parseInput(const std::string_view& input) -> std::vector<RuckSack>
 
     size_t pos = 0;
 
-    while (pos < input.size()) {
+    while (pos < input.size())
+	{
 	    const auto nextPos = input.find(delimiter, pos);
 	    const auto line = input.substr(pos, nextPos - pos);
 	    pos = nextPos + size_t(nextPos != std::string_view::npos);
@@ -147,7 +149,8 @@ parseInputAsGroups(const std::string_view& input) -> std::vector<RuckSackGroup<n
     const auto ruckSacks = parseInput(input);
 
     auto ruckSack = ruckSacks.begin();
-    while (ruckSack != ruckSacks.end()) {
+    while (ruckSack != ruckSacks.end())
+	{
 	    auto nextRuckSack = std::next(ruckSack, numRucksacksInGroup);
 	    _ret.emplace_back(ruckSack, nextRuckSack);
 	    ruckSack = nextRuckSack;
@@ -164,15 +167,18 @@ auto
 GetSumOfCompartmentItemTypePriority(const std::string_view& input, bool& success) -> uint32_t
 {
     uint32_t sum = 0;
-    try {
+    try
+	{
 	    const auto ruckSacks = parseInput(input);
 	    sum = std::accumulate(ruckSacks.cbegin(), ruckSacks.cend(), 0U,
 				  [](uint32_t sum, const RuckSack& ruckSack) -> uint32_t
 				  { return sum + ruckSack.getPriority(); });
 	    success = true;
-    } catch (const std::exception& err) {
+    } catch (const std::exception& err)
+	{
 	    std::cout << err.what() << std::endl;
-    } catch (...) {
+    } catch (...)
+	{
 	    std::cout << "Unhandled exception!" << std::endl;
     }
 
@@ -184,15 +190,18 @@ GetSumOfAuthenticityBadges(const std::string_view& input, bool& success) -> std:
 {
     uint32_t sum = 0;
 
-    try {
+    try
+	{
 	    const auto ruckSackGroups = parseInputAsGroups(input);
 	    sum = std::accumulate(ruckSackGroups.begin(), ruckSackGroups.end(), 0U,
 				  [](uint32_t sum, const RuckSackGroup<numRucksacksInGroup>& ruckSackGroup)
 				  { return sum + ruckSackGroup.getPriorityOfAuthenticityBadge(); });
 	    success = true;
-    } catch (const std::exception& err) {
+    } catch (const std::exception& err)
+	{
 	    std::cout << err.what() << std::endl;
-    } catch (...) {
+    } catch (...)
+	{
 	    std::cout << "Unhandled exception!" << std::endl;
     }
 
