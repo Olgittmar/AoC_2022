@@ -79,6 +79,11 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
 		    const auto numChars = GetNumCharactersBeforeStartOfPacket(input, success);
 		    return std::to_string(numChars);
 		}
+	    case MessageTuningTrouble:
+		{
+		    const auto numChars = GetNumCharactersBeforeStartOfMessage(input, success);
+		    return std::to_string(numChars);
+		}
 	    case Invalid:
 		{
 		    return "runSolution(): Invalid solutionId";

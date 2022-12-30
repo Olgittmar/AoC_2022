@@ -12,7 +12,36 @@
 #include <string_view>
 
 namespace {
-// Implementation specific to this days problem
+template<size_t SizeOfMarker>
+auto
+getMarkerEndPos(const std::string_view& data) -> std::uint32_t
+{
+    constexpr auto duplicateCharsFound = [](const std::string_view& subStr) -> bool
+    {
+	const auto numDuplicates = std::ranges::count_if(subStr, [&subStr](char character)
+							 { return !(1 == std::ranges::count(subStr, character)); });
+
+	return (0 < numDuplicates);
+    };
+
+    uint32_t beforeSequencePos = SizeOfMarker;
+
+    while (beforeSequencePos < data.size())
+	{
+	    // take a span of SizeOfMarker chars from the buffer
+	    const auto sequence = data.substr(beforeSequencePos - SizeOfMarker, SizeOfMarker);
+
+	    if (!duplicateCharsFound(sequence))
+		{
+		    return beforeSequencePos;
+	    }
+
+	    ++beforeSequencePos;
+	}
+
+    return data.size();
+}
+
 } // namespace
 
 namespace Solutions {
@@ -20,45 +49,35 @@ namespace Solutions {
 auto
 GetNumCharactersBeforeStartOfPacket(const std::string_view& input, bool& success) -> std::uint32_t
 {
-    constexpr auto duplicateCharsFound = [](const std::string_view& subStr) -> bool
-    {
-	if (subStr.size() < 4)
-	    {
-		return false;
-	}
-
-	const auto first = subStr.at(0);
-	const auto second = subStr.at(1);
-	const auto third = subStr.at(2);
-
-	const auto firstIsUnique = (1 == std::ranges::count(subStr, first));
-	const auto secondIsUnique = (1 == std::ranges::count(subStr, second));
-	const auto thirdIsUnique = (1 == std::ranges::count(subStr, third));
-
-	return !(firstIsUnique && secondIsUnique && thirdIsUnique);
-    };
-
+    constexpr size_t numCharsInStartOfPacketMarker = 4UL;
     uint32_t _ret = 0;
 
     try
 	{
-	    uint32_t beforeSequencePos = 4;
+	    _ret = getMarkerEndPos<numCharsInStartOfPacketMarker>(input);
 
-	    while (beforeSequencePos < input.size())
-		{
-		    // take a span of 4 chars from the buffer
-		    const auto sequence = input.substr(beforeSequencePos - 4, 4);
+	    success = (_ret != input.size());
+    } catch (const std::exception& err)
+	{
+	    std::cout << err.what() << std::endl;
+    } catch (...)
+	{
+	    std::cout << "Unhandled exception!" << std::endl;
+    }
+    return _ret;
+}
 
-		    if (!duplicateCharsFound(sequence))
-			{
-			    _ret = beforeSequencePos;
-			    break;
-		    }
+auto
+GetNumCharactersBeforeStartOfMessage(const std::string_view& input, bool& success) -> std::uint32_t
+{
+    constexpr size_t numCharsInStartOfMessageMarker = 14UL;
+    uint32_t _ret = 0;
 
-		    ++beforeSequencePos;
-		}
+    try
+	{
+	    _ret = getMarkerEndPos<numCharsInStartOfMessageMarker>(input);
 
-	    success = true;
+	    success = (_ret != input.size());
     } catch (const std::exception& err)
 	{
 	    std::cout << err.what() << std::endl;

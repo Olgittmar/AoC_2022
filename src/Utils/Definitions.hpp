@@ -20,6 +20,7 @@ enum class SolutionId : uint32_t
     RearrangeSupplyStacks = 9,
     RearrangeSupplyStacksWithAdvancedCrane = 10,
     TuningTrouble = 11,
+    MessageTuningTrouble = 12,
     Invalid = 0
 };
 
@@ -35,6 +36,7 @@ namespace SolutionIdStrings {
     constexpr auto RearrangeSupplyStacks = "RearrangeSupplyStacks";
     constexpr auto RearrangeSupplyStacksWithAdvancedCrane = "RearrangeSupplyStacksWithAdvancedCrane";
     constexpr auto TuningTrouble = "TuningTrouble";
+    constexpr auto MessageTuningTrouble = "MessageTuningTrouble";
     constexpr auto Invalid = "InvalidSolutionId";
 } // namespace SolutionIdStrings
 
@@ -87,6 +89,10 @@ SolutionIdToString(SolutionId solutionId) noexcept -> const char*
 	    case TuningTrouble:
 		{
 		    return SolutionIdStrings::TuningTrouble;
+		}
+	    case MessageTuningTrouble:
+		{
+		    return SolutionIdStrings::MessageTuningTrouble;
 		}
 	    case Invalid:
 		{

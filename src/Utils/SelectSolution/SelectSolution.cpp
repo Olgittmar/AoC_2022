@@ -81,10 +81,10 @@ SelectSolution(uint32_t day, uint32_t problem) -> SolutionId
 			{
 			    return TuningTrouble;
 		    }
-		    // if (problem == 2)
-		    // {
-		    //     return RearrangeSupplyStacksWithAdvancedCrane;
-		    // }
+		    if (problem == 2)
+			{
+			    return MessageTuningTrouble;
+		    }
 		}
 	    default:
 		return Invalid;
@@ -124,7 +124,7 @@ SelectSolutionData(SolutionId solutionId) -> SolutionId
 		    return RearrangeSupplyStacks;
 		}
 	    case TuningTrouble:
-		// case TuningTrouble:
+	    case MessageTuningTrouble:
 		{
 		    return TuningTrouble;
 		}
