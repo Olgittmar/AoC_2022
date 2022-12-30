@@ -75,6 +75,17 @@ SelectSolution(uint32_t day, uint32_t problem) -> SolutionId
 			    return RearrangeSupplyStacksWithAdvancedCrane;
 		    }
 		}
+	    case 6: // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
+		{
+		    if (problem == 1)
+			{
+			    return TuningTrouble;
+		    }
+		    // if (problem == 2)
+		    // {
+		    //     return RearrangeSupplyStacksWithAdvancedCrane;
+		    // }
+		}
 	    default:
 		return Invalid;
 	}
@@ -111,6 +122,11 @@ SelectSolutionData(SolutionId solutionId) -> SolutionId
 	    case RearrangeSupplyStacksWithAdvancedCrane:
 		{
 		    return RearrangeSupplyStacks;
+		}
+	    case TuningTrouble:
+		// case TuningTrouble:
+		{
+		    return TuningTrouble;
 		}
 	    case Invalid:
 		{

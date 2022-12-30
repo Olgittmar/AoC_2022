@@ -10,6 +10,7 @@
 #include "RockPaperScissors.hpp"
 #include "RuckSack.hpp"
 #include "SupplyStacks.hpp"
+#include "TuningTrouble.hpp"
 
 // Std
 #include <string>
@@ -72,6 +73,11 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
 		{
 		    const auto crateIds = GetCratesAtTopOfEachStackWithAdvancedCrane<testRun>(input, success);
 		    return crateIds;
+		}
+	    case TuningTrouble:
+		{
+		    const auto numChars = GetNumCharactersBeforeStartOfPacket(input, success);
+		    return std::to_string(numChars);
 		}
 	    case Invalid:
 		{

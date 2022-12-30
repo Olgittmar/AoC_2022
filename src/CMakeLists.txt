@@ -10,6 +10,8 @@ set(SOLUTIONS_LIB_SOURCES
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/CampCleanup.cpp>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/SupplyStacks.hpp>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/SupplyStacks.cpp>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/TuningTrouble.hpp>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/TuningTrouble.cpp>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/RunSolution.hpp>"
 )
 
@@ -33,9 +35,12 @@ set(FILES_TO_FORMAT
 )
 
 add_subdirectory(Utils)
+
 target_link_libraries(Solutions PUBLIC Utils)
+
 get_target_property(UTILS_INCLUDE_DIRS Utils INTERFACE_INCLUDE_DIRECTORIES)
 message(STATUS "UTILS_INCLUDE_DIRS: ${UTILS_INCLUDE_DIRS}")
+
 target_include_directories(Solutions INTERFACE ${UTILS_INCLUDE_DIRS})
 
 # Add Solutions as a library for the main project to link against

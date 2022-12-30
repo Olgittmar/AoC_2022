@@ -7,4 +7,5 @@ on:
 
 jobs:
   try_build:
+    # Test structure requires files specific to this project, how to generalize?
     uses: Olgittmar/GithubWorkflow/.github/workflows/build_check_ubuntu.yml@main

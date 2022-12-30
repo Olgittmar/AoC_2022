@@ -72,7 +72,7 @@ TEST_P(SolutionTestFixture, TestSolution) // NOLINT
     ASSERT_EQ(m_result.resultValue, m_expectedResult);
 }
 
-const std::array<TestParams, 10> testParameters = {
+const std::array<TestParams, 15> testParameters = {
   TestParams{.solutionId = utils::SolutionId::FattestElfCalories,
 	     .testCase = 0,
 	     .expectedResult = "24000",
@@ -122,11 +122,37 @@ const std::array<TestParams, 10> testParameters = {
 	     .testCase = 0,
 	     .expectedResult = "MCD",
 	     .name = utils::SolutionIdToString(utils::SolutionId::RearrangeSupplyStacksWithAdvancedCrane)},
+
+  TestParams{.solutionId = utils::SolutionId::TuningTrouble,
+	     .testCase = 0,
+	     .expectedResult = "7",
+	     .name = utils::SolutionIdToString(utils::SolutionId::TuningTrouble)},
+
+  TestParams{.solutionId = utils::SolutionId::TuningTrouble,
+	     .testCase = 1,
+	     .expectedResult = "5",
+	     .name = utils::SolutionIdToString(utils::SolutionId::TuningTrouble)},
+
+  TestParams{.solutionId = utils::SolutionId::TuningTrouble,
+	     .testCase = 2,
+	     .expectedResult = "6",
+	     .name = utils::SolutionIdToString(utils::SolutionId::TuningTrouble)},
+
+  TestParams{.solutionId = utils::SolutionId::TuningTrouble,
+	     .testCase = 3,
+	     .expectedResult = "10",
+	     .name = utils::SolutionIdToString(utils::SolutionId::TuningTrouble)},
+
+  TestParams{.solutionId = utils::SolutionId::TuningTrouble,
+	     .testCase = 4,
+	     .expectedResult = "11",
+	     .name = utils::SolutionIdToString(utils::SolutionId::TuningTrouble)},
 };
 
 INSTANTIATE_TEST_SUITE_P( // NOLINT
   AoC2022, SolutionTestFixture, testing::ValuesIn(testParameters),
-  [](const testing::TestParamInfo<SolutionTestFixture::ParamType>& info) { return info.param.name; });
+  [](const testing::TestParamInfo<SolutionTestFixture::ParamType>& info)
+  { return std::string(info.param.name) + "_" + std::to_string(info.index); });
 
 } // namespace SolutionTests
 

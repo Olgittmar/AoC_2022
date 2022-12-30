@@ -1,6 +1,7 @@
 configure_file(Utils.pc.in Utils.pc @ONLY)
 
 # Add sources as needed
+set(UTILS_LIB_PCH "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Definitions.hpp>")
 set(UTILS_LIB_SOURCES
 	# TODO: Definitions should be included as a precompiled header for utils
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Definitions.hpp>"
@@ -16,6 +17,7 @@ set(UTILS_INTERFACE_SOURCES
 
 # Static source lib
 add_library(Utils_lib STATIC ${UTILS_LIB_SOURCES})
+target_precompile_headers(Utils_lib PUBLIC ${UTILS_LIB_PCH})
 
 # Add lib files for static analysis
 set(FILES_TO_CPP_CHECK ${FILES_TO_CPP_CHECK} ${UTILS_LIB_SOURCES} PARENT_SCOPE)
@@ -33,7 +35,7 @@ add_library(Utils SHARED ${UTILS_INTERFACE_SOURCES})
 set_target_properties(
 	Utils
 	PROPERTIES
-	PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/Utils.hpp"
+	PUBLIC_HEADER ${UTILS_INTERFACE_SOURCES}
 )
 
 target_include_directories(

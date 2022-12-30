@@ -19,6 +19,7 @@ enum class SolutionId : uint32_t
     PartialCampCleanup = 8,
     RearrangeSupplyStacks = 9,
     RearrangeSupplyStacksWithAdvancedCrane = 10,
+    TuningTrouble = 11,
     Invalid = 0
 };
 
@@ -33,55 +34,61 @@ namespace SolutionIdStrings {
     constexpr auto PartialCampCleanup = "PartialCampCleanup";
     constexpr auto RearrangeSupplyStacks = "RearrangeSupplyStacks";
     constexpr auto RearrangeSupplyStacksWithAdvancedCrane = "RearrangeSupplyStacksWithAdvancedCrane";
+    constexpr auto TuningTrouble = "TuningTrouble";
     constexpr auto Invalid = "InvalidSolutionId";
 } // namespace SolutionIdStrings
 
 constexpr auto
 SolutionIdToString(SolutionId solutionId) noexcept -> const char*
 {
+    using enum SolutionId;
     switch (solutionId)
 	{
-	    case SolutionId::FattestElfCalories:
+	    case FattestElfCalories:
 		{
 		    return SolutionIdStrings::FattestElfCalories;
 		}
-	    case SolutionId::TopThreeFattestElfCalories:
+	    case TopThreeFattestElfCalories:
 		{
 		    return SolutionIdStrings::TopThreeFattestElfCalories;
 		}
-	    case SolutionId::RockPaperScissors:
+	    case RockPaperScissors:
 		{
 		    return SolutionIdStrings::RockPaperScissors;
 		}
-	    case SolutionId::DecryptedRockPaperScissors:
+	    case DecryptedRockPaperScissors:
 		{
 		    return SolutionIdStrings::DecryptedRockPaperScissors;
 		}
-	    case SolutionId::RucksackReorganization:
+	    case RucksackReorganization:
 		{
 		    return SolutionIdStrings::RucksackReorganization;
 		}
-	    case SolutionId::RucksackBadges:
+	    case RucksackBadges:
 		{
 		    return SolutionIdStrings::RucksackBadges;
 		}
-	    case SolutionId::CampCleanup:
+	    case CampCleanup:
 		{
 		    return SolutionIdStrings::CampCleanup;
 		}
-	    case SolutionId::PartialCampCleanup:
+	    case PartialCampCleanup:
 		{
 		    return SolutionIdStrings::PartialCampCleanup;
 		}
-	    case SolutionId::RearrangeSupplyStacks:
+	    case RearrangeSupplyStacks:
 		{
 		    return SolutionIdStrings::RearrangeSupplyStacks;
 		}
-	    case SolutionId::RearrangeSupplyStacksWithAdvancedCrane:
+	    case RearrangeSupplyStacksWithAdvancedCrane:
 		{
 		    return SolutionIdStrings::RearrangeSupplyStacksWithAdvancedCrane;
 		}
-	    case SolutionId::Invalid:
+	    case TuningTrouble:
+		{
+		    return SolutionIdStrings::TuningTrouble;
+		}
+	    case Invalid:
 		{
 		    return SolutionIdStrings::Invalid;
 		}

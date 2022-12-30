@@ -4,13 +4,15 @@ project(${TEST_PROJECT_NAME} CXX)
 include(CTest)
 find_package(GTest REQUIRED)
 
+# List of all tests to run, currently only GTest main is used, but hoping to add benchmarks as part of the test command
 set(MY_TESTS "")
-set(TEST_SOURCE_FILES
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/test_Solutions.cpp>"
-)
+set(TEST_MAIN_SOURCE_FILES "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/test_Solutions.cpp>")
+# This project only uses a single source file for tests atm,
+#  but if unit tests are later added they should be in separate source files.
+set(TEST_SOURCE_FILES ${TEST_MAIN_SOURCE_FILES})
 
 # Solutions test
-add_executable(test_Solutions $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/test_Solutions.cpp>)
+add_executable(test_Solutions ${TEST_MAIN_SOURCE_FILES})
 target_compile_features(test_Solutions PUBLIC cxx_std_20)
 
 add_dependencies(test_Solutions Solutions)
@@ -21,8 +23,8 @@ target_link_libraries(test_Solutions
 
 target_include_directories(test_Solutions
 	PUBLIC
-	$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/Solutions>
-	$<INSTALL_INTERFACE:lib/Solutions>
+	"$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/Solutions>"
+	"$<INSTALL_INTERFACE:lib/Solutions>"
 )
 
 target_include_directories(test_Solutions

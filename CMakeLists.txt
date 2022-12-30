@@ -4,75 +4,58 @@ project(AoC_2022 VERSION 0.1 LANGUAGES CXX)
 
 set(MAIN_TARGET_NAME ${PROJECT_NAME}_main)
 
+# Set project global settings
 include(cmake/project_settings.cmake)
 
-# QoL stuff to keep track of source and header files
-# TODO: This has got to be possible to do prettier with CMAKE internals.
-set(MAIN_SOURCE_FILES "")
-set(MAIN_HEADER_FILES "")
-set(FILES_TO_FORMAT "")
-set(FILES_TO_TIDY "")
-set(FILES_TO_CPP_CHECK "")
+# Debug message to double check that paths are as expected
+message("Build dir: ${CMAKE_CURRENT_BINARY_DIR}")
+message("Install dir: ${CMAKE_INSTALL_PREFIX}")
+
+# QoL stuff to keep track of file paths and destinations
+set(MAIN_SOURCE_FILES "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main.cpp>")
+set(MAIN_BIN_DESTINATION "$<BUILD_INTERFACE:${CMAKE_INSTALL_PREFIX}/bin>")
+set(MAIN_DATA_FILES "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data/>")
+set(MAIN_DATA_FILES_DESTINATION "$<BUILD_INTERFACE:${CMAKE_INSTALL_PREFIX}/data>")
+
 set(CONFIG_FILES "")
+set(CONFIG_FILES_DESTINATION "$<BUILD_INTERFACE:${CMAKE_INSTALL_PREFIX}/config>")
 
-set(DATA_FILES
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data/FattestElfCalories.txt>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data/RockPaperScissors.txt>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data/RucksackReorganization.txt>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data/CampCleanup.txt>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data/RearrangeSupplyStacks.txt>"
-)
+set(TEST_DATA_FILES "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test/data/>")
+# Test data files are needed in build dir, I think that's the current binary dir during build time.
+set(TEST_DATA_FILES_DESTINATION "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/test/data>")
 
-# Should be part of the test module...
-set(TEST_DATA_FILES
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test/data/FattestElfCalories0.txt>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test/data/RockPaperScissors0.txt>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test/data/RucksackReorganization0.txt>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test/data/CampCleanup0.txt>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test/data/RearrangeSupplyStacks0.txt>"
-)
+# Create main target
+add_executable(${MAIN_TARGET_NAME} ${MAIN_SOURCE_FILES})
+set(FILES_TO_TIDY ${FILES_TO_TIDY} ${MAIN_SOURCE_FILES})
+set(FILES_TO_CPP_CHECK ${FILES_TO_CPP_CHECK} ${MAIN_SOURCE_FILES})
+set(FILES_TO_FORMAT ${FILES_TO_FORMAT} ${MAIN_SOURCE_FILES})
 
-add_executable(${MAIN_TARGET_NAME} $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main.cpp>)
-set(FILES_TO_TIDY ${FILES_TO_TIDY} "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main.cpp>")
-set(FILES_TO_CPP_CHECK ${FILES_TO_CPP_CHECK} "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main.cpp>")
-set(FILES_TO_FORMAT ${FILES_TO_FORMAT} "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main.cpp>")
-
+# Include source files
 add_subdirectory(src)
 
-target_precompile_headers(${MAIN_TARGET_NAME} PUBLIC ${MAIN_HEADER_FILES})
-
-target_sources(${MAIN_TARGET_NAME}
-	PRIVATE ${MAIN_HEADER_FILES}
-	PRIVATE ${MAIN_SOURCE_FILES}
-)
-
+# Add test target if enabled
 if(${PROJECT_NAME}_ENABLE_TESTING)
 	add_subdirectory(test)
 endif()
 
+# Static analysis and formatting
 include(cmake/formatting.cmake)
 include(cmake/clang_tidy.cmake)
 include(cmake/cppcheck.cmake)
 
-message("Install dir: ${CMAKE_INSTALL_PREFIX}")
+# Install
+install(TARGETS ${MAIN_TARGET_NAME} DESTINATION ${MAIN_BIN_DESTINATION})
+install(FILES ${CONFIG_FILES} DESTINATION ${CONFIG_FILES_DESTINATION})
 
+# TODO: Install symlink to data files instead of copying files?
 install(
-	TARGETS ${MAIN_TARGET_NAME}
-	DESTINATION "$<BUILD_INTERFACE:${CMAKE_INSTALL_PREFIX}/bin>"
+	DIRECTORY ${MAIN_DATA_FILES}
+	DESTINATION	${MAIN_DATA_FILES_DESTINATION}
+	FILE_PERMISSIONS OWNER_READ
 )
 
 install(
-	FILES ${CONFIG_FILES}
-	DESTINATION "$<BUILD_INTERFACE:${CMAKE_INSTALL_PREFIX}/config>"
-)
-
-# TODO: Install symlink to data files instead?
-install(
-	FILES ${DATA_FILES}
-	DESTINATION	"$<BUILD_INTERFACE:${CMAKE_INSTALL_PREFIX}/data>"
-)
-
-install(
-	FILES ${TEST_DATA_FILES}
-	DESTINATION	"$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/test/data>"
+	DIRECTORY ${TEST_DATA_FILES}
+	DESTINATION	${TEST_DATA_FILES_DESTINATION}
+	FILE_PERMISSIONS OWNER_READ
 )

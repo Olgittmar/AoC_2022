@@ -19,6 +19,8 @@ GetCratesAtTopOfEachStack(const std::string_view& input, bool& success) -> std::
 {
     if constexpr (testRun)
 	{
+	    // Why is it ok to instantiate the template within the scope of another template, but not at namespace
+	    // scope?
 	    return GetCratesAtTopOfStacksAfterMoveOperations<numStacksInTestDataSet>(input, success);
     } else
 	{
@@ -26,12 +28,6 @@ GetCratesAtTopOfEachStack(const std::string_view& input, bool& success) -> std::
 	}
 }
 
-// These should be separated per build target, but I can't be bothered right now.
-template auto GetCratesAtTopOfEachStack<true>(const std::string_view& input, bool& success) -> std::string;
-template auto GetCratesAtTopOfEachStack<false>(const std::string_view& input, bool& success) -> std::string;
-
-// Recurring pattern, can I maybe do a template-based header only selector for choosing which solution and restrictions
-// to run?
 template<size_t NumStacksInSupply>
 auto GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane(const std::string_view& input, bool& success)
   -> std::string;
@@ -48,6 +44,10 @@ GetCratesAtTopOfEachStackWithAdvancedCrane(const std::string_view& input, bool& 
 	    return GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane<numStacksInDataSet>(input, success);
 	}
 }
+
+// These should be separated per build target, but I can't be bothered right now.
+template auto GetCratesAtTopOfEachStack<true>(const std::string_view& input, bool& success) -> std::string;
+template auto GetCratesAtTopOfEachStack<false>(const std::string_view& input, bool& success) -> std::string;
 
 template auto GetCratesAtTopOfEachStackWithAdvancedCrane<true>(const std::string_view& input, bool& success)
   -> std::string;
