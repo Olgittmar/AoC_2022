@@ -31,7 +31,7 @@ BinPackParameters: true
 BraceWrapping:
   AfterCaseLabel:  true
   AfterClass:      true
-  AfterControlStatement: MultiLine
+  AfterControlStatement: Always
   AfterEnum:       true
   AfterFunction:   true
   AfterNamespace:  false
@@ -43,9 +43,9 @@ BraceWrapping:
   BeforeElse:      false
   BeforeLambdaBody: true
   BeforeWhile:     false
-  IndentBraces:    false
-  SplitEmptyFunction: false
-  SplitEmptyRecord: false
+  IndentBraces:    true
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
   SplitEmptyNamespace: true
 BreakBeforeBinaryOperators: None
 BreakBeforeConceptDeclarations: true
@@ -95,7 +95,7 @@ IncludeIsMainRegex: '(Test)?$'
 IncludeIsMainSourceRegex: ''
 IndentAccessModifiers: true
 IndentCaseLabels: true
-IndentCaseBlocks: false
+IndentCaseBlocks: true
 IndentGotoLabels: true
 IndentPPDirectives: None
 IndentExternBlock: AfterExternBlock

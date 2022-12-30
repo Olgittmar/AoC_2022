@@ -22,10 +22,7 @@ cmake ..\
  -S..\
  -B.\
  || ( cd -; exit 1; )
-ninja format_project || ( cd -; exit 1; )
 ninja install || ( cd -; exit 1; )
 ninja run_tests || ( cd -; exit 1; )
-ninja run_clang_tidy || ( cd -; exit 1; )
-ninja run_cppcheck || ( cd -; exit 1; )
 cd -
 # ./install/bin/AoC_2022_main

@@ -1,6 +1,11 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
-#include "GetUserName/GetUserName.hpp"
+// Static definitions
+#include "Definitions.hpp"
+
+// Util classes
+#include <DataBroker/DataBroker.hpp>
+#include <SelectSolution/SelectSolution.hpp>
 
 #endif

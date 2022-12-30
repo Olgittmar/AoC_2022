@@ -5,43 +5,37 @@ include(CTest)
 find_package(GTest REQUIRED)
 
 set(MY_TESTS "")
+set(TEST_SOURCE_FILES
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/test_Solutions.cpp>"
+)
 
-# Hello test
-add_executable(test_Hello $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/test_Hello.cpp>)
-target_compile_features(test_Hello PUBLIC cxx_std_20)
+# Solutions test
+add_executable(test_Solutions $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/test_Solutions.cpp>)
+target_compile_features(test_Solutions PUBLIC cxx_std_20)
 
-add_dependencies(test_Hello Hello)
-target_link_libraries(test_Hello
+add_dependencies(test_Solutions Solutions)
+target_link_libraries(test_Solutions
 	gtest::gtest
-	Hello
+	Solutions
 )
 
-target_include_directories(test_Hello
+target_include_directories(test_Solutions
 	PUBLIC
-	$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/Hello>
-	$<INSTALL_INTERFACE:lib/Hello>
+	$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/Solutions>
+	$<INSTALL_INTERFACE:lib/Solutions>
 )
 
-target_include_directories(test_Hello
+target_include_directories(test_Solutions
 	SYSTEM BEFORE
 	PRIVATE ${GTest_INCLUDE_DIRS}
 )
 
-set(MY_TESTS ${MY_TESTS} test_Hello)
+set(MY_TESTS ${MY_TESTS} test_Solutions)
 
-# Add all test files for cppcheck analysis and formatting
-set(FILES_TO_CPP_CHECK ${FILES_TO_CPP_CHECK}
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/test_Hello.cpp>"
-	PARENT_SCOPE
-)
-
-set(FILES_TO_TIDY ${FILES_TO_TIDY}
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/test_Hello.cpp>"
-	PARENT_SCOPE
-)
+#Static analysis for tests are Disabled since I can't figure out how to get clang-tidy and cppcheck to ignore GTest headers...
 
 set(FILES_TO_FORMAT ${FILES_TO_FORMAT}
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/test_Hello.cpp>"
+	${TEST_SOURCE_FILES}
 	PARENT_SCOPE
 )
 
