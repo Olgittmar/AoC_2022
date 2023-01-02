@@ -7,22 +7,59 @@
 #include <string_view>
 namespace utils {
 
-enum class SolutionId : uint32_t
+constexpr ulong uintWidth = 32;
+enum class SolutionId : ulong;
+
+// Is this safe?
+template<SolutionId... Values> class SolutionIdCheck
 {
-    FattestElfCalories = 1,
-    TopThreeFattestElfCalories = 2,
-    RockPaperScissors = 3,
-    DecryptedRockPaperScissors = 4,
-    RucksackReorganization = 5,
-    RucksackBadges = 6,
-    CampCleanup = 7,
-    PartialCampCleanup = 8,
-    RearrangeSupplyStacks = 9,
-    RearrangeSupplyStacksWithAdvancedCrane = 10,
-    TuningTrouble = 11,
-    MessageTuningTrouble = 12,
+    public:
+
+	template<typename IntType> static auto constexpr valueExists(IntType /*unused*/) -> bool { return false; }
+};
+
+template<SolutionId V, SolutionId... Next> class SolutionIdCheck<V, Next...> : private SolutionIdCheck<Next...>
+{
+	using super = SolutionIdCheck<Next...>;
+
+    public:
+
+	template<typename IntType> static auto constexpr valueExists(IntType val) -> bool
+	{
+	    return val == static_cast<IntType>(V) || super::valueExists(val);
+	}
+};
+
+constexpr auto
+dayAndProblemToComposite(uint32_t day, uint32_t problem) -> ulong
+{
+    return (ulong(day) << uintWidth) + ulong(problem);
+}
+
+enum class SolutionId : ulong
+{
+    FattestElfCalories = dayAndProblemToComposite(1, 1),
+    TopThreeFattestElfCalories = dayAndProblemToComposite(1, 2),
+    RockPaperScissors = dayAndProblemToComposite(2, 1),
+    DecryptedRockPaperScissors = dayAndProblemToComposite(2, 2),
+    RucksackReorganization = dayAndProblemToComposite(3, 1),
+    RucksackBadges = dayAndProblemToComposite(3, 2),
+    CampCleanup = dayAndProblemToComposite(4, 1),
+    PartialCampCleanup = dayAndProblemToComposite(4, 2),
+    RearrangeSupplyStacks = dayAndProblemToComposite(5, 1),
+    RearrangeSupplyStacksWithAdvancedCrane = dayAndProblemToComposite(5, 2),
+    TuningTrouble = dayAndProblemToComposite(6, 1),
+    MessageTuningTrouble = dayAndProblemToComposite(6, 2),
+    NoSpace = dayAndProblemToComposite(7, 1),
     Invalid = 0
 };
+
+using IsValidSolution =
+  SolutionIdCheck<SolutionId::FattestElfCalories, SolutionId::TopThreeFattestElfCalories, SolutionId::RockPaperScissors,
+		  SolutionId::DecryptedRockPaperScissors, SolutionId::RucksackReorganization,
+		  SolutionId::RucksackBadges, SolutionId::CampCleanup, SolutionId::PartialCampCleanup,
+		  SolutionId::RearrangeSupplyStacks, SolutionId::RearrangeSupplyStacksWithAdvancedCrane,
+		  SolutionId::TuningTrouble, SolutionId::MessageTuningTrouble, SolutionId::NoSpace>;
 
 namespace SolutionIdStrings {
     constexpr auto FattestElfCalories = "FattestElfCalories";
@@ -37,6 +74,7 @@ namespace SolutionIdStrings {
     constexpr auto RearrangeSupplyStacksWithAdvancedCrane = "RearrangeSupplyStacksWithAdvancedCrane";
     constexpr auto TuningTrouble = "TuningTrouble";
     constexpr auto MessageTuningTrouble = "MessageTuningTrouble";
+    constexpr auto NoSpace = "NoSpace";
     constexpr auto Invalid = "InvalidSolutionId";
 } // namespace SolutionIdStrings
 
@@ -93,6 +131,10 @@ SolutionIdToString(SolutionId solutionId) noexcept -> const char*
 	    case MessageTuningTrouble:
 		{
 		    return SolutionIdStrings::MessageTuningTrouble;
+		}
+	    case NoSpace:
+		{
+		    return SolutionIdStrings::NoSpace;
 		}
 	    case Invalid:
 		{

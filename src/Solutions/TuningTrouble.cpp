@@ -18,6 +18,7 @@ getMarkerEndPos(const std::string_view& data) -> std::uint32_t
 {
     constexpr auto duplicateCharsFound = [](const std::string_view& subStr) -> bool
     {
+	// There is probably a more efficient way to do this
 	const auto numDuplicates = std::ranges::count_if(subStr, [&subStr](char character)
 							 { return !(1 == std::ranges::count(subStr, character)); });
 

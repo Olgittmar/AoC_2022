@@ -7,6 +7,7 @@
 // Internal
 #include "CampCleanup.hpp"
 #include "ElfCalories.hpp"
+#include "NoSpace.hpp"
 #include "RockPaperScissors.hpp"
 #include "RuckSack.hpp"
 #include "SupplyStacks.hpp"
@@ -83,6 +84,11 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
 		{
 		    const auto numChars = GetNumCharactersBeforeStartOfMessage(input, success);
 		    return std::to_string(numChars);
+		}
+	    case NoSpace:
+		{
+		    const auto totalSize = GetTotalSizeOfDirectories(input, success);
+		    return std::to_string(totalSize);
 		}
 	    case Invalid:
 		{

@@ -2,6 +2,7 @@
 
 #include "Definitions.hpp"
 
+#include <cstdint>
 #include <stdexcept>
 #include <string>
 
@@ -13,83 +14,6 @@ toErrorFormat(uint32_t day, uint32_t problem) -> std::string
 }
 } // namespace
 namespace utils {
-
-auto
-SelectSolution(uint32_t day, uint32_t problem) -> SolutionId
-{
-    using enum SolutionId;
-    switch (day)
-	{
-	    case 1:
-		{
-		    if (problem == 1)
-			{
-			    return FattestElfCalories;
-		    }
-		    if (problem == 2)
-			{
-			    return TopThreeFattestElfCalories;
-		    }
-		}
-	    case 2:
-		{
-		    if (problem == 1)
-			{
-			    return RockPaperScissors;
-		    }
-		    if (problem == 2)
-			{
-			    return DecryptedRockPaperScissors;
-		    }
-		}
-	    case 3:
-		{
-		    if (problem == 1)
-			{
-			    return RucksackReorganization;
-		    }
-		    if (problem == 2)
-			{
-			    return RucksackBadges;
-		    }
-		}
-	    case 4:
-		{
-		    if (problem == 1)
-			{
-			    return CampCleanup;
-		    }
-		    if (problem == 2)
-			{
-			    return PartialCampCleanup;
-		    }
-		}
-	    case 5: // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
-		{
-		    if (problem == 1)
-			{
-			    return RearrangeSupplyStacks;
-		    }
-		    if (problem == 2)
-			{
-			    return RearrangeSupplyStacksWithAdvancedCrane;
-		    }
-		}
-	    case 6: // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
-		{
-		    if (problem == 1)
-			{
-			    return TuningTrouble;
-		    }
-		    if (problem == 2)
-			{
-			    return MessageTuningTrouble;
-		    }
-		}
-	    default:
-		return Invalid;
-	}
-}
 
 // Workaround for re-using same data for different solutions
 auto
@@ -127,6 +51,11 @@ SelectSolutionData(SolutionId solutionId) -> SolutionId
 	    case MessageTuningTrouble:
 		{
 		    return TuningTrouble;
+		}
+	    case NoSpace:
+		// case NoSpace:
+		{
+		    return NoSpace;
 		}
 	    case Invalid:
 		{

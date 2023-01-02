@@ -2,9 +2,6 @@
 #include <Utils.hpp>
 
 // Internal Solutions
-#include <ElfCalories.hpp>
-#include <RockPaperScissors.hpp>
-#include <RuckSack.hpp>
 #include <RunSolution.hpp>
 
 // Std
@@ -46,6 +43,7 @@ main(int argCount, char* argv[]) -> int
 	    // }
 
 	    const auto solutionId = SelectSolution(day, problem);
+	    const auto otherSolutionId = SelectSolution(8, 2);
 	    if (solutionId == utils::SolutionId::Invalid)
 		{
 		    std::cout << "Invalid solution id: " << uint32_t(solutionId) << std::endl;

@@ -6,7 +6,19 @@
 
 namespace utils {
 
-auto SelectSolution(uint32_t day, uint32_t problem) -> SolutionId;
+constexpr auto
+SelectSolution(uint32_t day, uint32_t problem) -> SolutionId
+{
+    const auto _tmp = dayAndProblemToComposite(day, problem);
+
+    if (!IsValidSolution::valueExists(_tmp))
+	{
+	    return SolutionId::Invalid;
+    }
+
+    return SolutionId(_tmp);
+}
+
 // Workaround for reusing same data for multiple tests without having the same name correlated to the enum
 auto SelectSolutionData(SolutionId) -> SolutionId;
 

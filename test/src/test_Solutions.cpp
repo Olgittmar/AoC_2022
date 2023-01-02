@@ -72,7 +72,7 @@ TEST_P(SolutionTestFixture, TestSolution) // NOLINT
     ASSERT_EQ(m_result.resultValue, m_expectedResult);
 }
 
-const std::array<TestParams, 20> testParameters = {
+const std::array<TestParams, 21> testParameters = {
   TestParams{.solutionId = utils::SolutionId::FattestElfCalories,
 	     .testCase = 0,
 	     .expectedResult = "24000",
@@ -172,6 +172,11 @@ const std::array<TestParams, 20> testParameters = {
 	     .testCase = 4,
 	     .expectedResult = "26",
 	     .name = utils::SolutionIdToString(utils::SolutionId::MessageTuningTrouble)},
+
+  TestParams{.solutionId = utils::SolutionId::NoSpace,
+	     .testCase = 0,
+	     .expectedResult = "95437",
+	     .name = utils::SolutionIdToString(utils::SolutionId::NoSpace)},
 };
 
 INSTANTIATE_TEST_SUITE_P( // NOLINT
