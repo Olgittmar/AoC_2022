@@ -9,6 +9,8 @@ set(UTILS_LIB_SOURCES
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/DataBroker/DataBroker.cpp>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/SelectSolution/SelectSolution.hpp>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/SelectSolution/SelectSolution.cpp>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/PrettyPrint/PrettyPrint.hpp>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/PrettyPrint/PrettyPrint.cpp>"
 )
 
 set(UTILS_INTERFACE_SOURCES

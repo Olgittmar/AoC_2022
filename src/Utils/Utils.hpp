@@ -6,6 +6,7 @@
 
 // Util classes
 #include <DataBroker/DataBroker.hpp>
+#include <PrettyPrint/PrettyPrint.hpp>
 #include <SelectSolution/SelectSolution.hpp>
 
 #endif
