@@ -1,11 +1,13 @@
 #include "NoSpace.hpp"
 
 #include <algorithm>
+#include <bits/ranges_algo.h>
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
 #include <deque>
 #include <exception>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <memory>
@@ -13,23 +15,53 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
+#include <type_traits>
+#include <typeinfo>
 #include <utility>
 #include <vector>
 
 namespace {
 
-struct File;
-struct Directory;
+template<typename SizeType> struct File;
+template<typename SizeType> struct Directory;
 
-struct File
+template<typename SizeType>
+void executeCommand(const std::string_view& line, std::shared_ptr<Directory<SizeType>>& currentWorkingDirectory);
+
+template<typename SizeType> class Command
 {
-	File(std::string name, size_t size, const std::shared_ptr<Directory>& parent)
+    public:
+
+	Command() = default;
+	Command(const Command& other) = default;
+	Command(Command&& other) noexcept = default;
+
+	virtual ~Command() = default;
+
+	auto operator=(const Command& other) -> Command& = default;
+	auto operator=(Command&& other) noexcept -> Command& = default;
+
+	static constexpr auto commandIdentifier = "$ ";
+
+	virtual auto
+	execute(std::shared_ptr<Directory<SizeType>>& currentWorkingDirectory) -> bool
+	{
+	    return false;
+	}
+
+    protected:
+    private:
+};
+
+template<typename SizeType> struct File
+{
+	File(std::string name, size_t size, const std::shared_ptr<Directory<SizeType>>& parent)
 	  : m_name{std::move(name)}, m_size(size), m_parent(parent)
 	{
 	}
 
 	[[nodiscard]] auto
-	getSize() const -> size_t
+	getSize() const -> SizeType
 	{
 	    return m_size;
 	}
@@ -41,24 +73,26 @@ struct File
 	}
 
 	auto
-	getParent() const -> std::shared_ptr<Directory>
+	getParent() const -> std::shared_ptr<Directory<SizeType>>
 	{
 	    return m_parent.lock();
 	}
 
     private:
 
-	std::weak_ptr<Directory> m_parent;
+	std::weak_ptr<Directory<SizeType>> m_parent;
 	const std::string m_name;
-	const size_t m_size;
+	const SizeType m_size;
 };
 
-struct Directory : public File
+template<typename SizeType> struct Directory : public File<SizeType>
 {
-	Directory(const std::string& name, const std::shared_ptr<Directory>& parent) : File(name, 0UL, parent) {}
+	Directory(const std::string& name, const std::shared_ptr<Directory>& parent) : File<SizeType>(name, 0UL, parent)
+	{
+	}
 
 	[[nodiscard]] auto
-	getSize() -> size_t
+	getSize() -> SizeType
 	{
 	    if (!sizeCalculated)
 		{
@@ -81,15 +115,16 @@ struct Directory : public File
 	    return m_totalSize;
 	}
 
-	template<size_t MaxSize>
 	static void
-	gatherDirsWithSizeLessThan(std::deque<std::shared_ptr<Directory>>& dirsToCheck,
-				   std::vector<std::shared_ptr<Directory>>& gatheredDirs)
+	gatherDirsIf(std::deque<std::shared_ptr<Directory>>& dirsToCheck,
+		     std::vector<std::shared_ptr<Directory>>& gatheredDirs, std::function<SizeType(SizeType)> compare)
 	{
-	    const auto cwd = dirsToCheck.front();
-	    const auto cwdSize = cwd->getSize();
+	    // Condition isApplicable;
 
-	    if (MaxSize >= cwdSize && cwdSize > 0)
+	    const auto cwd = dirsToCheck.front();
+	    const SizeType cwdSize = cwd->getSize();
+
+	    if (compare(cwdSize))
 		{
 		    gatheredDirs.emplace_back(cwd);
 	    }
@@ -104,23 +139,46 @@ struct Directory : public File
 
 	friend auto operator<<(std::ostream& out, const Directory& dir) -> std::ostream&;
 
-	std::vector<File> files = {};
+	std::vector<File<SizeType>> files = {};
 	std::vector<std::shared_ptr<Directory>> dirs = {};
 	bool sizeCalculated = false;
-	size_t m_totalSize = 0;
+	SizeType m_totalSize = 0;
 };
 
-struct Root : public Directory
+template<typename SizeType> struct Root : public Directory<SizeType>
 {
 	// Should in principle be a "singleton" for the scope of the instance of the solution function call
 	static constexpr auto name = "/";
-	Root() : Directory(name, nullptr) {}
+	Root() : Directory<SizeType>(name, nullptr) {}
+
+	[[nodiscard]] static auto
+	makeRoot(const std::string_view& input) -> std::shared_ptr<Root>
+	{
+	    auto root = std::make_shared<Root>();
+	    std::shared_ptr<Directory<SizeType>> currentWorkingDirectory = root;
+
+	    // Find first command
+	    size_t pos = 0;
+
+	    pos = input.find(Command<SizeType>::commandIdentifier) + strlen(Command<SizeType>::commandIdentifier);
+
+	    while (pos < input.size())
+		{
+		    const auto nextPos = input.find(Command<SizeType>::commandIdentifier, pos);
+		    const auto commandData = input.substr(pos, nextPos - pos);
+		    pos = nextPos + strlen(Command<SizeType>::commandIdentifier) * size_t(nextPos < input.size());
+
+		    executeCommand(commandData, currentWorkingDirectory);
+		}
+
+	    return root;
+	}
 };
 
+template<typename SizeType>
 auto
-operator<<(std::ostream& out, const Directory& dir) -> std::ostream&
+operator<<(std::ostream& out, const Directory<SizeType>& dir) -> std::ostream&
 {
-    const auto dirSize = dir.m_totalSize;
     out << dir.getName() << ' ' << dir.m_totalSize << '\n';
 
     for (const auto& file : dir.files)
@@ -129,54 +187,26 @@ operator<<(std::ostream& out, const Directory& dir) -> std::ostream&
 	}
 
     out << '\n';
-    const auto oldW = out.width();
-    out.width(oldW + 1);
     for (const auto& subDir : dir.dirs)
 	{
-	    out << std::right << std::setfill(' ') << *subDir;
+	    out << std::setfill(' ') << *subDir;
 	}
-    out.width(oldW);
 
     return out;
 }
 
-class Command
-{
-    public:
-
-	Command() = default;
-	Command(const Command& other) = default;
-	Command(Command&& other) = default;
-
-	virtual ~Command() = default;
-
-	auto operator=(const Command& other) -> Command& = default;
-	auto operator=(Command&& other) -> Command& = default;
-
-	static constexpr auto commandIdentifier = "$ ";
-
-	virtual auto
-	execute(std::shared_ptr<Directory>& currentWorkingDirectory) -> bool
-	{
-	    return false;
-	}
-
-    protected:
-    private:
-};
-
-class List : public Command
+template<typename SizeType> class List : public Command<SizeType>
 {
     public:
 
 	explicit List(const std::string_view& data) : m_data(data) {}
 
 	auto
-	execute(std::shared_ptr<Directory>& currentWorkingDirectory) -> bool override
+	execute(std::shared_ptr<Directory<SizeType>>& currentWorkingDirectory) -> bool override
 	{
 	    parseData(currentWorkingDirectory);
 
-	    size_t cwdSize = 0;
+	    SizeType cwdSize = 0;
 	    for (const auto& file : m_filesToAdd)
 		{
 		    currentWorkingDirectory->files.emplace_back(file);
@@ -199,14 +229,15 @@ class List : public Command
 	static constexpr auto dirIdentifier = "dir ";
 
 	void
-	parseDir(const std::string_view& line, const std::shared_ptr<Directory>& currentWorkingDirectory)
+	parseDir(const std::string_view& line, const std::shared_ptr<Directory<SizeType>>& currentWorkingDirectory)
 	{
 	    const auto dirName = std::string{line.substr(strlen(dirIdentifier))};
-	    m_dirsToAdd.push_back(std::make_shared<Directory>(dirName, currentWorkingDirectory));
+	    m_dirsToAdd.push_back(std::make_shared<Directory<SizeType>>(dirName, currentWorkingDirectory));
 	}
 
 	void
-	parseRegularFile(const std::string_view& line, const std::shared_ptr<Directory>& currentWorkingDirectory)
+	parseRegularFile(const std::string_view& line,
+			 const std::shared_ptr<Directory<SizeType>>& currentWorkingDirectory)
 	{
 	    const auto nameStart = line.rfind(argDelimiter);
 	    const auto filename = std::string(line.substr(nameStart + 1));
@@ -217,7 +248,7 @@ class List : public Command
 	}
 
 	void
-	parseData(const std::shared_ptr<Directory>& currentWorkingDirectory)
+	parseData(const std::shared_ptr<Directory<SizeType>>& currentWorkingDirectory)
 	{
 	    size_t pos = 0;
 	    // TODO: Make a getLines() function to replace this while(pos < data.size()) pattern
@@ -243,30 +274,30 @@ class List : public Command
 	}
 
 	std::string_view m_data;
-	std::vector<File> m_filesToAdd;
-	std::vector<std::shared_ptr<Directory>> m_dirsToAdd;
+	std::vector<File<SizeType>> m_filesToAdd;
+	std::vector<std::shared_ptr<Directory<SizeType>>> m_dirsToAdd;
 };
 
-class ChangeDirectory : public Command
+template<typename SizeType> class ChangeDirectory : public Command<SizeType>
 {
     public:
 
 	ChangeDirectory(const std::string_view& data) : m_destinationName{data} {}
 
 	ChangeDirectory(const ChangeDirectory& other) = default;
-	ChangeDirectory(ChangeDirectory&& other) = default;
+	ChangeDirectory(ChangeDirectory&& other) noexcept = default;
 
 	~ChangeDirectory() override = default;
 
 	auto operator=(const ChangeDirectory& other) -> ChangeDirectory& = default;
-	auto operator=(ChangeDirectory&& other) -> ChangeDirectory& = default;
+	auto operator=(ChangeDirectory&& other) noexcept -> ChangeDirectory& = default;
 
 	auto
-	execute(std::shared_ptr<Directory>& currentWorkingDirectory) -> bool override
+	execute(std::shared_ptr<Directory<SizeType>>& currentWorkingDirectory) -> bool override
 	{
-	    if (Root::name == m_destinationName)
+	    if (Root<SizeType>::name == m_destinationName)
 		{
-		    while (!!currentWorkingDirectory && Root::name != currentWorkingDirectory->getName())
+		    while (!!currentWorkingDirectory && Root<SizeType>::name != currentWorkingDirectory->getName())
 			{
 			    currentWorkingDirectory = currentWorkingDirectory->getParent();
 			}
@@ -279,9 +310,9 @@ class ChangeDirectory : public Command
 		    return true;
 	    }
 
-	    auto destination =
-	      std::ranges::find_if(currentWorkingDirectory->dirs, [this](const std::shared_ptr<Directory>& file)
-				   { return m_destinationName == file->getName(); });
+	    auto destination = std::ranges::find_if(currentWorkingDirectory->dirs,
+						    [this](const std::shared_ptr<Directory<SizeType>>& file)
+						    { return m_destinationName == file->getName(); });
 
 	    if (currentWorkingDirectory->dirs.end() != destination)
 		{
@@ -298,8 +329,9 @@ class ChangeDirectory : public Command
 	std::string m_destinationName;
 };
 
+template<typename SizeType>
 void
-executeCommand(const std::string_view& line, std::shared_ptr<Directory>& currentWorkingDirectory)
+executeCommand(const std::string_view& line, std::shared_ptr<Directory<SizeType>>& currentWorkingDirectory)
 {
     constexpr auto changeDirIdentifier = "cd ";
     constexpr auto listIdentifier = "ls\n";
@@ -312,7 +344,7 @@ executeCommand(const std::string_view& line, std::shared_ptr<Directory>& current
 	    const auto cdEndPos = line.find(lineDelimiter, cdStartPos);
 	    const auto cdData = line.substr(cdStartPos, cdEndPos - cdStartPos);
 
-	    ChangeDirectory cdCommand{cdData};
+	    ChangeDirectory<SizeType> cdCommand{cdData};
 	    cdCommand.execute(currentWorkingDirectory);
     }
 
@@ -323,90 +355,84 @@ executeCommand(const std::string_view& line, std::shared_ptr<Directory>& current
 	    const auto lsEndPos = line.rfind(lineDelimiter);
 	    const auto lsData = line.substr(lsStartPos, lsEndPos - lsStartPos);
 
-	    List lsCommand{lsData};
+	    List<SizeType> lsCommand{lsData};
 	    lsCommand.execute(currentWorkingDirectory);
     }
-}
-
-[[nodiscard]] auto
-parseInput(const std::string_view& input) -> std::shared_ptr<Root>
-{
-    auto root = std::make_shared<Root>();
-    std::shared_ptr<Directory> currentWorkingDirectory = root;
-
-    // Find first command
-    size_t pos = input.find(Command::commandIdentifier) + strlen(Command::commandIdentifier);
-
-    while (pos < input.size())
-	{
-	    const auto nextPos = input.find(Command::commandIdentifier, pos);
-	    const auto commandData = input.substr(pos, nextPos - pos);
-	    pos = nextPos + strlen(Command::commandIdentifier) * size_t(nextPos < input.size());
-
-	    executeCommand(commandData, currentWorkingDirectory);
-	}
-
-    return root;
 }
 
 } // namespace
 
 namespace Solutions {
 
-template<size_t MaxDirSize>
+template<typename SizeType, SizeType MaxDirSize>
 auto
 GetTotalSizeOfDirectories(const std::string_view& input, bool& success) -> std::uint64_t
 {
     std::uint64_t _ret = 0;
+    auto isSmallEnough = [](SizeType dirSize) -> bool { return dirSize <= MaxDirSize; };
 
-    try
+    auto root = Root<SizeType>::makeRoot(input);
+
+    std::deque<std::shared_ptr<Directory<SizeType>>> dirsToCheck{root};
+    std::vector<std::shared_ptr<Directory<SizeType>>> gatheredDirs{};
+
+    while (!dirsToCheck.empty())
 	{
-	    auto root = parseInput(input);
+	    Directory<SizeType>::gatherDirsIf(dirsToCheck, gatheredDirs, isSmallEnough);
+	}
 
-	    std::deque<std::shared_ptr<Directory>> dirsToCheck{root};
-	    std::vector<std::shared_ptr<Directory>> gatheredDirs{};
-
-	    while (!dirsToCheck.empty())
-		{
-		    Directory::gatherDirsWithSizeLessThan<MaxDirSize>(dirsToCheck, gatheredDirs);
-		}
-
-	    for (const auto& dir : gatheredDirs)
-		{
-		    _ret += dir->getSize();
-		}
-
-	    success = true;
-    } catch (const std::exception& err)
+    for (const auto& dir : gatheredDirs)
 	{
-	    std::cout << err.what() << std::endl;
-    } catch (...)
-	{
-	    std::cout << "Unhandled exception!" << std::endl;
-	    // throw std::logic_error("Unhandled exception"); // Bad idea?
-    }
+	    _ret += dir->getSize();
+	}
 
+    success = true;
     return _ret;
 }
 
-template<size_t totalDiskSize, size_t diskSizeNeeded>
+template<typename SizeType, SizeType TotalDiskSize, SizeType DiskSpaceNeeded>
 auto
 GetSizeOfDirectoryToDelete(const std::string_view& input, bool& success) -> std::uint64_t
 {
     std::uint64_t _ret = 0;
 
-    try
+    auto root = Root<SizeType>::makeRoot(input);
+    const SizeType usedDiskSpace = root->getSize();
+
+    auto largeEnoughToDelete = [&usedDiskSpace](SizeType dirSize) -> bool
+    {
+	const auto availableSpace = TotalDiskSize - usedDiskSpace;
+	const auto requiredFolderSize = (DiskSpaceNeeded - availableSpace);
+	return dirSize >= requiredFolderSize;
+    };
+
+    std::deque<std::shared_ptr<Directory<SizeType>>> dirsToCheck{root};
+    std::vector<std::shared_ptr<Directory<SizeType>>> gatheredDirs{};
+
+    while (!dirsToCheck.empty())
 	{
-	    success = true;
-    } catch (const std::exception& err)
+	    Directory<SizeType>::gatherDirsIf(dirsToCheck, gatheredDirs, largeEnoughToDelete);
+	}
+
+    if (gatheredDirs.empty())
 	{
-	    std::cout << err.what() << std::endl;
-    } catch (...)
-	{
-	    std::cout << "Unhandled exception!" << std::endl;
+	    return _ret;
     }
 
+    auto smallestDir = std::ranges::min_element(
+      gatheredDirs.cbegin(), gatheredDirs.cend(),
+      [](const auto& dir1, const auto& dir2) constexpr { return dir1->getSize() < dir2->getSize(); });
+
+    _ret = (*smallestDir)->getSize(); // ew
+
+    success = true;
     return _ret;
 }
+
+template auto GetTotalSizeOfDirectories<size_t, dirSizeLimit>(const std::string_view& input, bool& success)
+  -> std::uint64_t;
+
+template auto GetSizeOfDirectoryToDelete<size_t, availableSpaceOnFilesystem, spaceOnFilesystemRequired>(
+  const std::string_view& input, bool& success) -> std::uint64_t;
 
 } // namespace Solutions

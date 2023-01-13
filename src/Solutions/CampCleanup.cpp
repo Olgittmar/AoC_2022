@@ -111,19 +111,10 @@ auto
 GetNumRedundantAssignmentPairs(const std::string_view& input, bool& success) -> std::uint32_t
 {
     uint32_t sum = 0;
-    try
-	{
-	    const auto assignmentPairs = parseInput(input);
-	    sum =
-	      std::ranges::count_if(assignmentPairs, [](const AssignmentPair& pair) { return pair.fullyOverlaps(); });
-	    success = true;
-    } catch (const std::exception& err)
-	{
-	    std::cout << err.what() << std::endl;
-    } catch (...)
-	{
-	    std::cout << "Unhandled exception!" << std::endl;
-    }
+
+    const auto assignmentPairs = parseInput(input);
+    sum = std::ranges::count_if(assignmentPairs, [](const AssignmentPair& pair) { return pair.fullyOverlaps(); });
+    success = true;
 
     return sum;
 }
@@ -132,20 +123,11 @@ auto
 GetNumPartiallyRedundantAssignmentPairs(const std::string_view& input, bool& success) -> std::uint32_t
 {
     uint32_t sum = 0;
-    try
-	{
-	    const auto assignmentPairs = parseInput(input);
-	    sum = std::ranges::count_if(assignmentPairs,
-					[](const AssignmentPair& pair) { return pair.partiallyOverlaps(); });
-	    success = true;
-    } catch (const std::exception& err)
-	{
-	    std::cout << err.what() << std::endl;
-    } catch (...)
-	{
-	    std::cout << "Unhandled exception!" << std::endl;
-    }
 
+    const auto assignmentPairs = parseInput(input);
+    sum = std::ranges::count_if(assignmentPairs, [](const AssignmentPair& pair) { return pair.partiallyOverlaps(); });
+
+    success = true;
     return sum;
 }
 } // namespace Solutions

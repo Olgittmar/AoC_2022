@@ -17,6 +17,9 @@
 #include <sstream>
 
 namespace SolutionTests {
+
+constexpr ulong numTests = 22;
+
 struct TestParams
 {
 	utils::SolutionId solutionId{};
@@ -72,7 +75,7 @@ TEST_P(SolutionTestFixture, TestSolution) // NOLINT
     ASSERT_EQ(m_result.resultValue, m_expectedResult);
 }
 
-const std::array<TestParams, 21> testParameters = {
+const std::array<TestParams, numTests> testParameters = {
   TestParams{.solutionId = utils::SolutionId::FattestElfCalories,
 	     .testCase = 0,
 	     .expectedResult = "24000",
@@ -177,6 +180,11 @@ const std::array<TestParams, 21> testParameters = {
 	     .testCase = 0,
 	     .expectedResult = "95437",
 	     .name = utils::SolutionIdToString(utils::SolutionId::NoSpace)},
+
+  TestParams{.solutionId = utils::SolutionId::YesSpace,
+	     .testCase = 0,
+	     .expectedResult = "24933642",
+	     .name = utils::SolutionIdToString(utils::SolutionId::YesSpace)},
 };
 
 INSTANTIATE_TEST_SUITE_P( // NOLINT

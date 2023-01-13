@@ -364,39 +364,35 @@ GetCratesAtTopOfStacksAfterMoveOperations(const std::string_view& input, bool& s
 {
     std::string _ret;
 
-    try
-	{
-	    const auto [supplyStackInitialState, moveCommands] = parseInput<NumStacksInSupply>(input);
-	    auto supplyStack = supplyStackInitialState;
+    const auto [supplyStackInitialState, moveCommands] = parseInput<NumStacksInSupply>(input);
+    auto supplyStack = supplyStackInitialState;
 
-	    std::ranges::for_each(
-	      moveCommands,
-	      [&supplyStack](const MoveCommand& command)
-	      {
-		  // What is up with clang-format and lambdas?
-		  for (int numCratesMoved = 0; numCratesMoved < command.getNumCrates(); ++numCratesMoved)
-		      {
-			  if (!supplyStack.moveN(command.fromPos(), command.toPos(), 1))
-			      {
-				  auto sstrm = std::stringstream();
-				  sstrm << command;
-				  throw std::out_of_range("Failed to execute move command: " + sstrm.str());
-			  }
-		      }
-	      });
+    std::ranges::for_each(moveCommands,
+			  [&supplyStack](const MoveCommand& command)
+			  {
+			      // What is up with clang-format and lambdas?
+			      for (int numCratesMoved = 0; numCratesMoved < command.getNumCrates(); ++numCratesMoved)
+				  {
+				      if (!supplyStack.moveN(command.fromPos(), command.toPos(), 1))
+					  {
+					      auto sstrm = std::stringstream();
+					      sstrm << command;
+					      throw std::out_of_range("Failed to execute move command: " + sstrm.str());
+				      }
+				  }
+			  });
 
-	    _ret = supplyStack.getTops();
+    _ret = supplyStack.getTops();
 
-	    success = true;
-    } catch (const std::exception& err)
-	{
-	    std::cout << err.what() << std::endl;
-    } catch (...)
-	{
-	    std::cout << "Unhandled exception!" << std::endl;
-    }
+    success = true;
+
     return _ret;
 }
+
+template auto GetCratesAtTopOfStacksAfterMoveOperations<numStacksInDataSet>(const std::string_view& input,
+									    bool& success) -> std::string;
+template auto GetCratesAtTopOfStacksAfterMoveOperations<numStacksInTestDataSet>(const std::string_view& input,
+										bool& success) -> std::string;
 
 template<size_t NumStacksInSupply>
 auto
@@ -404,35 +400,32 @@ GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane(const std::string_vie
 {
     std::string _ret;
 
-    try
-	{
-	    const auto [supplyStackInitialState, moveCommands] = parseInput<NumStacksInSupply>(input);
-	    auto supplyStack = supplyStackInitialState;
+    const auto [supplyStackInitialState, moveCommands] = parseInput<NumStacksInSupply>(input);
+    auto supplyStack = supplyStackInitialState;
 
-	    std::ranges::for_each(
-	      moveCommands,
-	      [&supplyStack](const MoveCommand& command)
-	      {
-		  if (!supplyStack.moveN(command.fromPos(), command.toPos(), command.getNumCrates()))
-		      {
-			  auto sstrm = std::stringstream();
-			  sstrm << command;
-			  throw std::out_of_range("Failed to execute move command: " + sstrm.str());
-		  }
-	      });
+    std::ranges::for_each(moveCommands,
+			  [&supplyStack](const MoveCommand& command)
+			  {
+			      if (!supplyStack.moveN(command.fromPos(), command.toPos(), command.getNumCrates()))
+				  {
+				      auto sstrm = std::stringstream();
+				      sstrm << command;
+				      throw std::out_of_range("Failed to execute move command: " + sstrm.str());
+			      }
+			  });
 
-	    _ret = supplyStack.getTops();
+    _ret = supplyStack.getTops();
 
-	    success = true;
-    } catch (const std::exception& err)
-	{
-	    std::cout << err.what() << std::endl;
-    } catch (...)
-	{
-	    std::cout << "Unhandled exception!" << std::endl;
-    }
+    success = true;
 
     return _ret;
 }
+
+template auto
+GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane<numStacksInTestDataSet>(const std::string_view& input,
+										   bool& success) -> std::string;
+template auto
+GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane<numStacksInDataSet>(const std::string_view& input,
+									       bool& success) -> std::string;
 
 } // namespace Solutions

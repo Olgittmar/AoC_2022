@@ -167,20 +167,12 @@ auto
 GetSumOfCompartmentItemTypePriority(const std::string_view& input, bool& success) -> uint32_t
 {
     uint32_t sum = 0;
-    try
-	{
-	    const auto ruckSacks = parseInput(input);
-	    sum = std::accumulate(ruckSacks.cbegin(), ruckSacks.cend(), 0U,
-				  [](uint32_t sum, const RuckSack& ruckSack) -> uint32_t
-				  { return sum + ruckSack.getPriority(); });
-	    success = true;
-    } catch (const std::exception& err)
-	{
-	    std::cout << err.what() << std::endl;
-    } catch (...)
-	{
-	    std::cout << "Unhandled exception!" << std::endl;
-    }
+
+    const auto ruckSacks = parseInput(input);
+    sum =
+      std::accumulate(ruckSacks.cbegin(), ruckSacks.cend(), 0U,
+		      [](uint32_t sum, const RuckSack& ruckSack) -> uint32_t { return sum + ruckSack.getPriority(); });
+    success = true;
 
     return sum;
 }
@@ -190,20 +182,11 @@ GetSumOfAuthenticityBadges(const std::string_view& input, bool& success) -> std:
 {
     uint32_t sum = 0;
 
-    try
-	{
-	    const auto ruckSackGroups = parseInputAsGroups(input);
-	    sum = std::accumulate(ruckSackGroups.begin(), ruckSackGroups.end(), 0U,
-				  [](uint32_t sum, const RuckSackGroup<numRucksacksInGroup>& ruckSackGroup)
-				  { return sum + ruckSackGroup.getPriorityOfAuthenticityBadge(); });
-	    success = true;
-    } catch (const std::exception& err)
-	{
-	    std::cout << err.what() << std::endl;
-    } catch (...)
-	{
-	    std::cout << "Unhandled exception!" << std::endl;
-    }
+    const auto ruckSackGroups = parseInputAsGroups(input);
+    sum = std::accumulate(ruckSackGroups.begin(), ruckSackGroups.end(), 0U,
+			  [](uint32_t sum, const RuckSackGroup<numRucksacksInGroup>& ruckSackGroup)
+			  { return sum + ruckSackGroup.getPriorityOfAuthenticityBadge(); });
+    success = true;
 
     return sum;
 }

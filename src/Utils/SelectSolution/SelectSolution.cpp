@@ -53,7 +53,7 @@ SelectSolutionData(SolutionId solutionId) -> SolutionId
 		    return TuningTrouble;
 		}
 	    case NoSpace:
-		// case NoSpace:
+	    case YesSpace:
 		{
 		    return NoSpace;
 		}

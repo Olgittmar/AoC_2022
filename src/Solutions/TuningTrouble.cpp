@@ -50,42 +50,26 @@ namespace Solutions {
 auto
 GetNumCharactersBeforeStartOfPacket(const std::string_view& input, bool& success) -> std::uint32_t
 {
-    constexpr size_t numCharsInStartOfPacketMarker = 4UL;
+    constexpr size_t numCharsInStartOfPacketMarker = 4UL; // TODO: Move to template arg
     uint32_t _ret = 0;
 
-    try
-	{
-	    _ret = getMarkerEndPos<numCharsInStartOfPacketMarker>(input);
+    _ret = getMarkerEndPos<numCharsInStartOfPacketMarker>(input);
 
-	    success = (_ret != input.size());
-    } catch (const std::exception& err)
-	{
-	    std::cout << err.what() << std::endl;
-    } catch (...)
-	{
-	    std::cout << "Unhandled exception!" << std::endl;
-    }
+    success = (_ret != input.size());
+
     return _ret;
 }
 
 auto
 GetNumCharactersBeforeStartOfMessage(const std::string_view& input, bool& success) -> std::uint32_t
 {
-    constexpr size_t numCharsInStartOfMessageMarker = 14UL;
+    constexpr size_t numCharsInStartOfMessageMarker = 14UL; // TODO: Same as above
     uint32_t _ret = 0;
 
-    try
-	{
-	    _ret = getMarkerEndPos<numCharsInStartOfMessageMarker>(input);
+    _ret = getMarkerEndPos<numCharsInStartOfMessageMarker>(input);
 
-	    success = (_ret != input.size());
-    } catch (const std::exception& err)
-	{
-	    std::cout << err.what() << std::endl;
-    } catch (...)
-	{
-	    std::cout << "Unhandled exception!" << std::endl;
-    }
+    success = (_ret != input.size());
+
     return _ret;
 }
 

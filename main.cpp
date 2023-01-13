@@ -9,6 +9,7 @@
 #include <exception>
 #include <iostream>
 #include <span>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 
@@ -30,7 +31,6 @@ main(int argCount, char* argv[]) -> int
     try
 	{
 	    const auto problemIndex = args.subspan(1, 2);
-	    // TODO: Don't allow wierd input
 	    auto* const dayStr = problemIndex.front();
 	    auto* const problemStr = problemIndex.back();
 
@@ -43,10 +43,10 @@ main(int argCount, char* argv[]) -> int
 	    // }
 
 	    const auto solutionId = SelectSolution(day, problem);
-	    const auto otherSolutionId = SelectSolution(8, 2);
 	    if (solutionId == utils::SolutionId::Invalid)
 		{
-		    std::cout << "Invalid solution id: " << uint32_t(solutionId) << std::endl;
+		    std::cout << "Invalid solution id: " << uint32_t(solutionId) << " from day: " << day
+			      << " and problem: " << problem << std::endl;
 		    return EXIT_FAILURE;
 	    }
 
@@ -68,15 +68,23 @@ main(int argCount, char* argv[]) -> int
 
     } catch (const std::invalid_argument& err)
 	{
-	    std::cout << err.what() << std::endl;
+	    std::cout << "Invalid argument: " << err.what() << std::endl;
+	    return EXIT_FAILURE;
+    } catch (const std::out_of_range& err)
+	{
+	    std::cout << "Out of range exception: " << err.what() << std::endl;
 	    return EXIT_FAILURE;
     } catch (const std::filesystem::filesystem_error& err)
 	{
-	    std::cout << err.what() << std::endl;
+	    std::cout << "Filesystem exception: " << err.what() << std::endl;
 	    return EXIT_FAILURE;
     } catch (const std::exception& err)
 	{
-	    std::cout << err.what() << std::endl;
+	    std::cout << "Unknown exception: " << err.what() << std::endl;
+	    return EXIT_FAILURE;
+    } catch (...)
+	{
+	    std::cout << "Unhandled exception!" << std::endl;
 	    return EXIT_FAILURE;
     }
 
