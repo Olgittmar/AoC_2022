@@ -11,6 +11,7 @@
 #include "RockPaperScissors.hpp"
 #include "RuckSack.hpp"
 #include "SupplyStacks.hpp"
+#include "TreetopTreeHouse.hpp"
 #include "TuningTrouble.hpp"
 
 // Std
@@ -132,6 +133,25 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
 			      GetSizeOfDirectoryToDelete<size_t, availableSpaceOnFilesystem, spaceOnFilesystemRequired>(
 				input, success);
 			    result = std::to_string(sizeOfDirToDelete);
+			    break;
+			}
+		    case TreetopTreeHouse:
+			{
+			    if constexpr (testRun)
+				{
+				    const auto numTreesVisible =
+				      GetNumTreesVisibleFromOutsideForest<size_t, NumTreeRowsInTest,
+									  NumTreeColumnsInTest>(input, success);
+
+				    result = std::to_string(numTreesVisible);
+			    } else
+				{
+				    const auto numTreesVisible =
+				      GetNumTreesVisibleFromOutsideForest<size_t, NumTreeRows, NumTreeColumns>(input,
+													       success);
+
+				    result = std::to_string(numTreesVisible);
+				}
 			    break;
 			}
 		    case Invalid:

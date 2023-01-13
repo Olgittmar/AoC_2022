@@ -137,7 +137,7 @@ template<typename SizeType> struct Directory : public File<SizeType>
 	    dirsToCheck.pop_front();
 	}
 
-	friend auto operator<<(std::ostream& out, const Directory& dir) -> std::ostream&;
+	// friend auto operator<<(std::ostream& out, const Directory& dir) -> std::ostream&;
 
 	std::vector<File<SizeType>> files = {};
 	std::vector<std::shared_ptr<Directory>> dirs = {};

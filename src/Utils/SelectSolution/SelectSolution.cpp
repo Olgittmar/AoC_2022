@@ -57,6 +57,11 @@ SelectSolutionData(SolutionId solutionId) -> SolutionId
 		{
 		    return NoSpace;
 		}
+	    case TreetopTreeHouse:
+		// case TreetopTreeHoush:
+		{
+		    return TreetopTreeHouse;
+		}
 	    case Invalid:
 		{
 		    return Invalid;

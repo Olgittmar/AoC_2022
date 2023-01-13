@@ -52,6 +52,7 @@ enum class SolutionId : ulong
     MessageTuningTrouble = dayAndProblemToComposite(6, 2),
     NoSpace = dayAndProblemToComposite(7, 1),
     YesSpace = dayAndProblemToComposite(7, 2),
+    TreetopTreeHouse = dayAndProblemToComposite(8, 1),
     Invalid = 0
 };
 
@@ -61,7 +62,7 @@ using IsValidSolution =
 		  SolutionId::RucksackBadges, SolutionId::CampCleanup, SolutionId::PartialCampCleanup,
 		  SolutionId::RearrangeSupplyStacks, SolutionId::RearrangeSupplyStacksWithAdvancedCrane,
 		  SolutionId::TuningTrouble, SolutionId::MessageTuningTrouble, SolutionId::NoSpace,
-		  SolutionId::YesSpace>;
+		  SolutionId::YesSpace, SolutionId::TreetopTreeHouse>;
 
 namespace SolutionIdStrings {
     constexpr auto FattestElfCalories = "FattestElfCalories";
@@ -78,6 +79,7 @@ namespace SolutionIdStrings {
     constexpr auto MessageTuningTrouble = "MessageTuningTrouble";
     constexpr auto NoSpace = "NoSpace";
     constexpr auto YesSpace = "YesSpace";
+    constexpr auto TreetopTreeHouse = "TreetopTreeHouse";
     constexpr auto Invalid = "InvalidSolutionId";
 } // namespace SolutionIdStrings
 
@@ -142,6 +144,10 @@ SolutionIdToString(SolutionId solutionId) noexcept -> const char*
 	    case YesSpace:
 		{
 		    return SolutionIdStrings::YesSpace;
+		}
+	    case TreetopTreeHouse:
+		{
+		    return SolutionIdStrings::TreetopTreeHouse;
 		}
 	    case Invalid:
 		{

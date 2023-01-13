@@ -18,7 +18,7 @@
 
 namespace SolutionTests {
 
-constexpr ulong numTests = 22;
+constexpr ulong numTests = 23;
 
 struct TestParams
 {
@@ -185,6 +185,11 @@ const std::array<TestParams, numTests> testParameters = {
 	     .testCase = 0,
 	     .expectedResult = "24933642",
 	     .name = utils::SolutionIdToString(utils::SolutionId::YesSpace)},
+
+  TestParams{.solutionId = utils::SolutionId::TreetopTreeHouse,
+	     .testCase = 0,
+	     .expectedResult = "21",
+	     .name = utils::SolutionIdToString(utils::SolutionId::TreetopTreeHouse)},
 };
 
 INSTANTIATE_TEST_SUITE_P( // NOLINT
