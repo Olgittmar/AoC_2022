@@ -7,7 +7,6 @@
 #include <gtest/internal/gtest-param-util.h>
 
 // Internal
-#include <ElfCalories.hpp>
 #include <RunSolution.hpp>
 #include <Utils.hpp>
 

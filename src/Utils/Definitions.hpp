@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <ranges>
 #include <string_view>
+
 namespace utils {
 
 constexpr ulong uintWidth = 32;
@@ -157,5 +158,34 @@ SolutionIdToString(SolutionId solutionId) noexcept -> const char*
 }
 
 } // namespace utils
+
+namespace Solutions {
+namespace NoSpace {
+
+    constexpr size_t dirSizeLimit = 100000;
+    constexpr size_t availableSpaceOnFilesystem = 70000000;
+    constexpr size_t spaceOnFilesystemRequired = 30000000;
+
+    constexpr auto RootName = "/";
+} // namespace NoSpace
+
+namespace SupplyStacks {
+    constexpr size_t numStacksInDataSet = 9UL;
+    constexpr size_t numStacksInTestDataSet = 3UL;
+} // namespace SupplyStacks
+
+namespace CheckRuckSacks {
+    constexpr size_t numRucksacksInGroup = 3;
+} // namespace CheckRuckSacks
+
+namespace TreetopTreeHouse {
+    constexpr size_t NumTreeRowsInTest = 5;
+    constexpr size_t NumTreeColumnsInTest = 5;
+
+    constexpr size_t NumTreeRows = 99;
+    constexpr size_t NumTreeColumns = 99;
+} // namespace TreetopTreeHouse
+
+} // namespace Solutions
 
 #endif

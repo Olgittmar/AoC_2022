@@ -2,17 +2,18 @@
 #define UTILS_RUNSOLUTION_RUNSOLUTION_HPP
 
 // utils
+#include <Definitions.hpp>
 #include <Utils.hpp>
 
 // Internal
-#include "CampCleanup.hpp"
-#include "ElfCalories.hpp"
-#include "NoSpace.hpp"
-#include "RockPaperScissors.hpp"
-#include "RuckSack.hpp"
-#include "SupplyStacks.hpp"
-#include "TreetopTreeHouse.hpp"
-#include "TuningTrouble.hpp"
+#include "CampCleanup/CampCleanup.hpp"
+#include "ElfCalories/ElfCalories.hpp"
+#include "NoSpace/NoSpace.hpp"
+#include "RockPaperScissors/RockPaperScissors.hpp"
+#include "RuckSack/CheckRuckSacks.hpp"
+#include "SupplyStacks/SupplyStacks.hpp"
+#include "TreetopTreeHouse/TreetopTreeHouse.hpp"
+#include "TuningTrouble/TuningTrouble.hpp"
 
 // Std
 #include <iostream>
@@ -85,11 +86,13 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
 			    if constexpr (testRun)
 				{
 				    result =
-				      GetCratesAtTopOfStacksAfterMoveOperations<numStacksInTestDataSet>(input, success);
+				      GetCratesAtTopOfStacksAfterMoveOperations<SupplyStacks::numStacksInTestDataSet>(
+					input, success);
 			    } else
 				{
 				    result =
-				      GetCratesAtTopOfStacksAfterMoveOperations<numStacksInDataSet>(input, success);
+				      GetCratesAtTopOfStacksAfterMoveOperations<SupplyStacks::numStacksInDataSet>(
+					input, success);
 				}
 			    break;
 			}
@@ -99,12 +102,11 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
 			    if constexpr (testRun)
 				{
 				    result = GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane<
-				      numStacksInTestDataSet>(input, success);
+				      SupplyStacks::numStacksInTestDataSet>(input, success);
 			    } else
 				{
-				    result =
-				      GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane<numStacksInDataSet>(
-					input, success);
+				    result = GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane<
+				      SupplyStacks::numStacksInDataSet>(input, success);
 				}
 			    break;
 			}
@@ -123,15 +125,15 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
 		    case NoSpace:
 			{
 			    const auto totalSize =
-			      GetTotalSizeOfDirectories<size_t, Solutions::dirSizeLimit>(input, success);
+			      GetTotalSizeOfDirectories<size_t, NoSpace::dirSizeLimit>(input, success);
 			    result = std::to_string(totalSize);
 			    break;
 			}
 		    case YesSpace:
 			{
 			    const auto sizeOfDirToDelete =
-			      GetSizeOfDirectoryToDelete<size_t, availableSpaceOnFilesystem, spaceOnFilesystemRequired>(
-				input, success);
+			      GetSizeOfDirectoryToDelete<size_t, NoSpace::availableSpaceOnFilesystem,
+							 NoSpace::spaceOnFilesystemRequired>(input, success);
 			    result = std::to_string(sizeOfDirToDelete);
 			    break;
 			}
@@ -140,15 +142,17 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
 			    if constexpr (testRun)
 				{
 				    const auto numTreesVisible =
-				      GetNumTreesVisibleFromOutsideForest<size_t, NumTreeRowsInTest,
-									  NumTreeColumnsInTest>(input, success);
+				      GetNumTreesVisibleFromOutsideForest<size_t, TreetopTreeHouse::NumTreeRowsInTest,
+									  TreetopTreeHouse::NumTreeColumnsInTest>(
+					input, success);
 
 				    result = std::to_string(numTreesVisible);
 			    } else
 				{
 				    const auto numTreesVisible =
-				      GetNumTreesVisibleFromOutsideForest<size_t, NumTreeRows, NumTreeColumns>(input,
-													       success);
+				      GetNumTreesVisibleFromOutsideForest<size_t, TreetopTreeHouse::NumTreeRows,
+									  TreetopTreeHouse::NumTreeColumns>(input,
+													    success);
 
 				    result = std::to_string(numTreesVisible);
 				}

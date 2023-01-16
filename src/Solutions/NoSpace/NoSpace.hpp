@@ -1,14 +1,17 @@
-#ifndef SOLUTIONS_NOSPACE_HPP
-#define SOLUTIONS_NOSPACE_HPP
+#ifndef SOLUTIONS_NOSPACE_NOSPACE_HPP
+#define SOLUTIONS_NOSPACE_NOSPACE_HPP
 
+// std
 #include <cstddef>
 #include <string_view>
 
-namespace Solutions {
+// internal
+#include "ChangeDir.hpp"
+#include "Directory.hpp"
+#include "File.hpp"
+#include "List.hpp"
 
-constexpr size_t dirSizeLimit = 100000;
-constexpr size_t availableSpaceOnFilesystem = 70000000;
-constexpr size_t spaceOnFilesystemRequired = 30000000;
+namespace Solutions {
 
 template<typename SizeType, SizeType MaxDirSize>
 auto GetTotalSizeOfDirectories(const std::string_view& input, bool& success) -> std::uint64_t;

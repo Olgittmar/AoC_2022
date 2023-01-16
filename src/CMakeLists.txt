@@ -1,23 +1,9 @@
 # Maybe move Solutions CMakeLists.txt to Solutions folder?
 set(SOLUTIONS_LIB_SOURCES
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/ElfCalories.hpp>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/ElfCalories.cpp>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/RockPaperScissors.hpp>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/RockPaperScissors.cpp>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/RuckSack.hpp>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/RuckSack.cpp>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/CampCleanup.hpp>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/CampCleanup.cpp>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/SupplyStacks.hpp>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/SupplyStacks.cpp>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/TuningTrouble.hpp>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/TuningTrouble.cpp>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/NoSpace.hpp>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/NoSpace.cpp>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/TreetopTreeHouse.hpp>"
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/TreetopTreeHouse.cpp>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Solutions/RunSolution.hpp>"
 )
+
+add_subdirectory(Solutions)
 
 add_library(Solutions
 	STATIC ${SOLUTIONS_LIB_SOURCES}
