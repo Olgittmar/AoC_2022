@@ -1,4 +1,6 @@
 // Internal utils
+#include "PrettyPrint/PrettyPrint.hpp"
+
 #include <Utils.hpp>
 
 // Internal Solutions
@@ -7,6 +9,7 @@
 // Std
 #include <cstdlib>
 #include <exception>
+#include <experimental/source_location>
 #include <iostream>
 #include <span>
 #include <stdexcept>
@@ -19,6 +22,8 @@ using utils::SelectSolutionData;
 auto
 main(int argCount, char* argv[]) -> int
 {
+    using source_location = std::experimental::source_location;
+
     const auto args = std::span(argv, size_t(argCount));
     if (args.size() < 3)
 	{
@@ -45,8 +50,8 @@ main(int argCount, char* argv[]) -> int
 	    const auto solutionId = SelectSolution(day, problem);
 	    if (solutionId == utils::SolutionId::Invalid)
 		{
-		    std::cout << "Invalid solution id: " << uint32_t(solutionId) << " from day: " << day
-			      << " and problem: " << problem << std::endl;
+		    utils::log_error(source_location::current(), "Invalid solution id: ", uint32_t(solutionId),
+				     " from day: ", day, " and problem: ", problem);
 		    return EXIT_FAILURE;
 	    }
 
@@ -62,29 +67,29 @@ main(int argCount, char* argv[]) -> int
 		    std::cout << result << std::endl;
 	    } else
 		{
-		    std::cout << "Something went wrong!" << std::endl;
+		    utils::log_error(source_location::current(), "Something went wrong!");
 		    return EXIT_FAILURE;
 		}
 
     } catch (const std::invalid_argument& err)
 	{
-	    std::cout << "Invalid argument: " << err.what() << std::endl;
+	    utils::log_error(source_location::current(), "Invalid argument: ", err.what());
 	    return EXIT_FAILURE;
     } catch (const std::out_of_range& err)
 	{
-	    std::cout << "Out of range exception: " << err.what() << std::endl;
+	    utils::log_error(source_location::current(), "Out of range exception: ", err.what());
 	    return EXIT_FAILURE;
     } catch (const std::filesystem::filesystem_error& err)
 	{
-	    std::cout << "Filesystem exception: " << err.what() << std::endl;
+	    utils::log_error(source_location::current(), "Filesystem exception: ", err.what());
 	    return EXIT_FAILURE;
     } catch (const std::exception& err)
 	{
-	    std::cout << "Unknown exception: " << err.what() << std::endl;
+	    utils::log_error(source_location::current(), "Unknown exception: ", err.what());
 	    return EXIT_FAILURE;
     } catch (...)
 	{
-	    std::cout << "Unhandled exception!" << std::endl;
+	    utils::log_error(source_location::current(), "Unhandled exception!");
 	    return EXIT_FAILURE;
     }
 

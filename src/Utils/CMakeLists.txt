@@ -1,7 +1,11 @@
 configure_file(Utils.pc.in Utils.pc @ONLY)
 
 # Add sources as needed
-set(UTILS_LIB_PCH "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Definitions.hpp>")
+set(UTILS_LIB_PCH 
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Definitions.hpp>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Coordinates/Coordinates2D.hpp>"
+)
+
 set(UTILS_LIB_SOURCES
 	# TODO: Definitions should be included as a precompiled header for utils
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Definitions.hpp>"

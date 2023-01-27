@@ -9,6 +9,7 @@
 #include "CampCleanup/CampCleanup.hpp"
 #include "ElfCalories/ElfCalories.hpp"
 #include "NoSpace/NoSpace.hpp"
+#include "PrettyPrint/PrettyPrint.hpp"
 #include "RockPaperScissors/RockPaperScissors.hpp"
 #include "RuckSack/CheckRuckSacks.hpp"
 #include "SupplyStacks/SupplyStacks.hpp"
@@ -141,18 +142,16 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
 			{
 			    if constexpr (testRun)
 				{
-				    const auto numTreesVisible =
-				      GetNumTreesVisibleFromOutsideForest<size_t, TreetopTreeHouse::NumTreeRowsInTest,
-									  TreetopTreeHouse::NumTreeColumnsInTest>(
-					input, success);
+				    const auto numTreesVisible = GetNumTreesVisibleFromOutsideForest<
+				      size_t, utils::index_t{TreetopTreeHouse::NumTreeRowsInTest,
+							     TreetopTreeHouse::NumTreeColumnsInTest}>(input, success);
 
 				    result = std::to_string(numTreesVisible);
 			    } else
 				{
-				    const auto numTreesVisible =
-				      GetNumTreesVisibleFromOutsideForest<size_t, TreetopTreeHouse::NumTreeRows,
-									  TreetopTreeHouse::NumTreeColumns>(input,
-													    success);
+				    const auto numTreesVisible = GetNumTreesVisibleFromOutsideForest<
+				      size_t, utils::index_t{TreetopTreeHouse::NumTreeRows,
+							     TreetopTreeHouse::NumTreeColumns}>(input, success);
 
 				    result = std::to_string(numTreesVisible);
 				}
@@ -168,11 +167,11 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
     } catch (const std::exception& err)
 	{
 	    // TODO: add proper exception handling
-	    std::cout << err.what() << std::endl;
+	    utils::log_error(std::experimental::source_location::current(), err.what());
 	    result = "runSolution(): Encountered exception: " + std::string(err.what());
     } catch (...)
 	{
-	    std::cout << "Unhandled exception!" << std::endl;
+	    utils::log_error(std::experimental::source_location::current(), "Unhandled exception");
 	    result = "runSolution(): Encountered unhandled exception!";
     }
 

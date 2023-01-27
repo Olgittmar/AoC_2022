@@ -1,29 +1,30 @@
 #include "Forest.hpp"
 
 #include "Definitions.hpp"
+#include "PrettyPrint/PrettyPrint.hpp"
 
 // Std
+#include <array>
 #include <cstddef>
+#include <cstdlib>
+#include <experimental/source_location>
 #include <iostream>
 #include <unordered_set>
 
-// namespace {
-
-// }
+using source_location = std::experimental::source_location;
 
 namespace Solutions::TreetopTreeHouse {
 
-template<typename HeightType, size_t NumRows, size_t NumColumns>
-[[nodiscard]] auto
-Forest<HeightType, NumRows, NumColumns>::StringViewToTrees(const std::string_view& input)
-  -> std::array<std::array<HeightType, Depth>, Width>
+template<typename HeightType, utils::index_t Size>
+auto
+Forest<HeightType, Size>::StringViewToTrees(const std::string_view& input) -> TreeMap_t
 {
     constexpr auto lineDelimiter = '\n';
 
-    std::array<std::array<HeightType, Depth>, Width> initList{{}};
+    TreeMap_t initList{{}};
 
     size_t strPos = 0;
-    for (size_t row = 1; row < Depth - 1 && strPos < input.size(); ++row)
+    for (size_t row = 0; row < Size.row && strPos < input.size(); ++row)
 	{
 	    const auto rowEnd = input.find(lineDelimiter, strPos);
 	    const auto line = input.substr(strPos, rowEnd - strPos);
@@ -35,156 +36,100 @@ Forest<HeightType, NumRows, NumColumns>::StringViewToTrees(const std::string_vie
     return initList;
 }
 
-template<typename HeightType, size_t NumRows, size_t NumColumns>
-[[nodiscard]] auto
-Forest<HeightType, NumRows, NumColumns>::getTreesVisibleFrom(size_t row, size_t column) const
-  -> std::vector<std::pair<size_t, size_t>>
+template<typename HeightType, utils::index_t Size>
+auto
+Forest<HeightType, Size>::heightAt(utils::index_t index) -> HeightType&
 {
-    std::vector<std::pair<size_t, size_t>> _ret;
-    // Debug print
-    auto dirToString = [](const Direction& dir) constexpr->const char*
-    {
-	switch (dir)
-	    {
-		case Direction::North:
-		    return "north";
-		case Direction::South:
-		    return "south";
-		case Direction::East:
-		    return "east";
-		case Direction::West:
-		    return "west";
-	    }
-    };
-
-    const auto visibleDirections = getDirectionsVisibleFrom(row, column);
-    std::cout << "row: " << row << " col: " << column << std::endl;
-
-    for (Direction dir : visibleDirections)
+    if (0 > index.column || Size.column < index.column)
 	{
-	    std::cout << "I can see " << dirToString(dir) << std::endl;
-	    std::vector<std::pair<size_t, size_t>> _tmp;
-
-	    switch (dir)
-		{
-		    case Direction::North:
-			{
-			    _tmp = getTreesVisibleNorthOf(row, column);
-			    break;
-			}
-		    case Direction::South:
-			{
-			    _tmp = getTreesVisibleSouthOf(row, column);
-			    break;
-			}
-		    case Direction::East:
-			{
-			    _tmp = getTreesVisibleEastOf(row, column);
-			    break;
-			}
-		    case Direction::West:
-			{
-			    _tmp = getTreesVisibleWestOf(row, column);
-			    break;
-			}
-		}
-
-	    _ret.insert(_ret.end(), _tmp.cbegin(), _tmp.cend());
-	}
-
-    return {};
-}
-
-template<typename HeightType, size_t NumRows, size_t NumColumns>
-[[nodiscard]] auto
-Forest<HeightType, NumRows, NumColumns>::heightAt(size_t row, size_t column) -> HeightType&
-{
-    if (1 > column || Depth + 1 < column)
-	{
+	    utils::log(std::experimental::source_location::current(), "out of range");
 	    throw std::out_of_range("column out of range");
     }
 
-    if (1 > row || Width + 1 < row)
+    if (0 > index.row || Size.row < index.row)
 	{
+	    utils::log(std::experimental::source_location::current(), "out of range");
 	    throw std::out_of_range("row out of range");
     }
 
-    auto& treeRow = trees.at(row);
-    return treeRow.at(column);
+    auto& treeRow = trees.at(index.row);
+    return treeRow.at(index.column);
 }
 
-template<typename HeightType, size_t NumRows, size_t NumColumns>
-[[nodiscard]] auto
-Forest<HeightType, NumRows, NumColumns>::getDirectionsVisibleFrom(size_t row, size_t col) const
+template<typename HeightType, utils::index_t Size>
+void
+Forest<HeightType, Size>::setTreesVisibleFromEdge()
 {
-    std::unordered_set<Direction> visibleDirections;
-    if (!(1 > row) && (col > 0 && col < Width))
+    using enum Forest<HeightType, Size>::Direction;
+
+    visibleFromEdge.fill(std::array<bool, Size.column>{false});
+
+    // For each point on edge, walk in direction of opposite edge
+    // North & South
+    for (size_t col = 0; col < Size.column; ++col)
 	{
-	    visibleDirections.emplace(Direction::North);
-    }
+	    setTreesVisibleFrom<North>(utils::index_t{Size.row - 1, col});
+	    setTreesVisibleFrom<South>(utils::index_t{0, col});
+	}
 
-    if (!(Depth - 1 < row) && (col > 0 && col < Width))
+    for (size_t row = 0; row < Size.row; ++row)
 	{
-	    visibleDirections.emplace(Direction::South);
-    }
+	    setTreesVisibleFrom<East>(utils::index_t{row, 0});
+	    setTreesVisibleFrom<West>(utils::index_t{row, Size.column - 1});
+	}
+}
 
-    if (!(Width - 1 < col) && (row > 0 && row < Depth))
+template<typename HeightType, utils::index_t Size>
+template<typename Forest<HeightType, Size>::Direction Dir>
+void
+Forest<HeightType, Size>::setTreesVisibleFrom(utils::index_t index)
+{
+    using Direction = Forest<HeightType, Size>::Direction;
+    HeightType highestSeen = 0;
+    auto pos = index;
+
+    while (!isAtEdge<Dir>(pos) && !(highestSeen >= highestTreePossible))
 	{
-	    visibleDirections.emplace(Direction::East);
-    }
+	    const auto nextTreeHeight = getHeightAt(pos);
 
-    if (!(1 > col) && (row > 0 && row < Depth))
-	{
-	    visibleDirections.emplace(Direction::West);
-    }
-
-    return visibleDirections;
-}
-
-template<typename HeightType, size_t NumRows, size_t NumColumns>
-[[nodiscard]] auto
-Forest<HeightType, NumRows, NumColumns>::getTreesVisibleNorthOf(size_t row, size_t col) const
-  -> std::vector<std::pair<size_t, size_t>>
-{
-    return {};
-}
-
-template<typename HeightType, size_t NumRows, size_t NumColumns>
-[[nodiscard]] auto
-Forest<HeightType, NumRows, NumColumns>::getTreesVisibleSouthOf(size_t row, size_t col) const
-  -> std::vector<std::pair<size_t, size_t>>
-{
-    return {};
-}
-
-template<typename HeightType, size_t NumRows, size_t NumColumns>
-[[nodiscard]] auto
-Forest<HeightType, NumRows, NumColumns>::getTreesVisibleEastOf(size_t row, size_t col) const
-  -> std::vector<std::pair<size_t, size_t>>
-{
-    return {};
-}
-
-template<typename HeightType, size_t NumRows, size_t NumColumns>
-[[nodiscard]] auto
-Forest<HeightType, NumRows, NumColumns>::getTreesVisibleWestOf(size_t row, size_t col) const
-  -> std::vector<std::pair<size_t, size_t>>
-{
-    return {};
-}
-
-template<typename HeightType, size_t NumRows, size_t NumColumns>
-auto
-operator<<(std::ostream& out, const Forest<HeightType, NumRows, NumColumns>& forest) -> std::ostream&
-{
-    constexpr auto Width = NumColumns + 2;
-    constexpr auto Depth = NumRows + 2;
-
-    for (size_t row = 1; row < Depth - 1; ++row)
-	{
-	    for (size_t col = 1; col < Width - 1; ++col)
+	    if (nextTreeHeight >= highestSeen)
 		{
-		    out << forest.getHeightAt(row, col);
+		    highestSeen = nextTreeHeight + 1;
+		    auto& treeRow = visibleFromEdge.at(pos.row);
+		    treeRow.at(pos.column) = true;
+	    }
+
+	    walk<Dir>(pos);
+	}
+}
+
+template<typename HeightType, utils::index_t Size>
+auto
+operator<<(std::ostream& out, const Forest<HeightType, Size>& forest) -> std::ostream&
+{
+    // for (size_t row = 0; row < Size.row; ++row)
+    // {
+    //     for (size_t col = 0; col < Size.column; ++col)
+    // 	{
+    // 	    out << forest.getHeightAt({row, col});
+    // 	}
+
+    //     out << std::endl;
+    // }
+
+    constexpr auto greenBegin = "\x1B[320";
+    constexpr auto greenEnd = "\033[0m";
+    // out << std::endl;
+
+    for (size_t row = 0; row < Size.row; ++row)
+	{
+	    for (size_t col = 0; col < Size.column; ++col)
+		{
+		    const auto pos = utils::index_t{row, col};
+		    // Print with colour
+		    out << (forest.isVisibleFromEdge(pos) ? greenBegin : "");
+		    out << forest.getHeightAt(pos);
+		    out << (forest.isVisibleFromEdge(pos) ? greenEnd : "");
 		}
 
 	    out << std::endl;
@@ -192,10 +137,12 @@ operator<<(std::ostream& out, const Forest<HeightType, NumRows, NumColumns>& for
     return out;
 }
 
-template class Forest<size_t, NumTreeRows, NumTreeColumns>;
-template class Forest<size_t, NumTreeRowsInTest, NumTreeColumnsInTest>;
+template class Forest<size_t, utils::index_t{NumTreeRows, NumTreeColumns}>;
+template class Forest<size_t, utils::index_t{NumTreeRowsInTest, NumTreeColumnsInTest}>;
 
-template auto operator<<(std::ostream& out, const Forest<size_t, NumTreeRows, NumTreeColumns>& forest) -> std::ostream&;
-template auto operator<<(std::ostream& out, const Forest<size_t, NumTreeRowsInTest, NumTreeColumnsInTest>& forest)
+template auto operator<<(std::ostream& out, const Forest<size_t, utils::index_t{NumTreeRows, NumTreeColumns}>& forest)
+  -> std::ostream&;
+template auto operator<<(std::ostream& out,
+			 const Forest<size_t, utils::index_t{NumTreeRowsInTest, NumTreeColumnsInTest}>& forest)
   -> std::ostream&;
 } // namespace Solutions::TreetopTreeHouse

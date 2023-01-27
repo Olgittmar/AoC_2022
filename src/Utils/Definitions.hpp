@@ -2,13 +2,20 @@
 #define DEFINITIONS_HPP
 
 // Project wide definitions
+#include <cstddef>
 #include <cstdint>
 #include <ranges>
 #include <string_view>
 
+// Project internal
+#include "Coordinates/Coordinates2D.hpp"
+
 namespace utils {
 
+using index_t = utils::Index2D<size_t>;
+
 constexpr ulong uintWidth = 32;
+
 enum class SolutionId : ulong;
 
 // Is this safe?
@@ -184,6 +191,8 @@ namespace TreetopTreeHouse {
 
     constexpr size_t NumTreeRows = 99;
     constexpr size_t NumTreeColumns = 99;
+
+    constexpr size_t highestTreePossible = 9;
 } // namespace TreetopTreeHouse
 
 } // namespace Solutions
