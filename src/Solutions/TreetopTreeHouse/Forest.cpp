@@ -88,7 +88,7 @@ Forest<HeightType, Size>::setTreesVisibleFrom(utils::index_t index)
     HeightType highestSeen = 0;
     auto pos = index;
 
-    while (!isAtEdge<Dir>(pos) && !(highestSeen >= highestTreePossible))
+    while (!isAtEdge<Dir>(pos) && !(highestSeen > highestTreePossible))
 	{
 	    const auto nextTreeHeight = getHeightAt(pos);
 
@@ -107,29 +107,24 @@ template<typename HeightType, utils::index_t Size>
 auto
 operator<<(std::ostream& out, const Forest<HeightType, Size>& forest) -> std::ostream&
 {
-    // for (size_t row = 0; row < Size.row; ++row)
-    // {
-    //     for (size_t col = 0; col < Size.column; ++col)
-    // 	{
-    // 	    out << forest.getHeightAt({row, col});
-    // 	}
+    using utils::Color::Foreground::GREEN;
+    using utils::Color::Foreground::RED;
 
-    //     out << std::endl;
-    // }
-
-    constexpr auto greenBegin = "\x1B[320";
-    constexpr auto greenEnd = "\033[0m";
-    // out << std::endl;
+    using utils::Color::RESET;
 
     for (size_t row = 0; row < Size.row; ++row)
 	{
 	    for (size_t col = 0; col < Size.column; ++col)
 		{
 		    const auto pos = utils::index_t{row, col};
-		    // Print with colour
-		    out << (forest.isVisibleFromEdge(pos) ? greenBegin : "");
-		    out << forest.getHeightAt(pos);
-		    out << (forest.isVisibleFromEdge(pos) ? greenEnd : "");
+		    if (forest.isVisibleFromEdge(pos))
+			{
+			    // Print with colour
+			    out << GREEN << forest.getHeightAt(pos) << RESET;
+		    } else
+			{
+			    out << RED << forest.getHeightAt(pos) << RESET;
+			}
 		}
 
 	    out << std::endl;
