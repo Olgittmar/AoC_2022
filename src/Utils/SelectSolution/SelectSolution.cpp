@@ -58,7 +58,7 @@ SelectSolutionData(SolutionId solutionId) -> SolutionId
 		    return NoSpace;
 		}
 	    case TreetopTreeHouse:
-		// case TreetopTreeHoush:
+	    case TreetopTreeHouseDist:
 		{
 		    return TreetopTreeHouse;
 		}

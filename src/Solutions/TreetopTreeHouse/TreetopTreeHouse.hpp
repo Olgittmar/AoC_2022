@@ -10,8 +10,8 @@ namespace Solutions {
 template<typename HeightType, utils::index_t Size>
 auto GetNumTreesVisibleFromOutsideForest(const std::string_view& input, bool& success) -> HeightType;
 
-// template<typename SizeType, SizeType Rows, SizeType Columns>
-// auto GetNumTreesVisibleFromOutsideForest(const std::string_view& input, bool& success) -> std::uint64_t;
+template<typename HeightType, utils::index_t Size>
+auto GetVisibilityScoreOfHighestScoringTree(const std::string_view& input, bool& success) -> HeightType;
 
 } // namespace Solutions
 #endif

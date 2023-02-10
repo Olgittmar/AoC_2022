@@ -2,6 +2,7 @@
 #define SOLUTIONS_TREETOPTREEHOUSE_FOREST_HPP
 
 // Std
+#include <algorithm>
 #include <array>
 #include <cstddef>
 #include <experimental/source_location>
@@ -13,14 +14,15 @@
 // Internal
 #include "Coordinates/Coordinates2D.hpp"
 #include "Definitions.hpp"
+#include "PrettyPrint/PrettyPrint.hpp"
 #include "Utils.hpp"
 
 namespace Solutions::TreetopTreeHouse {
 
 template<typename HeightType, utils::index_t Size> class Forest
 {
-	using TreeMap_t = std::array<std::array<HeightType, Size.column>, Size.row>;
-	using VisibilityMap_t = std::array<std::array<bool, Size.column>, Size.row>;
+	using TreeMap_t = std::array<HeightType, size_t(Size.row* Size.column)>;
+	using VisibilityMap_t = std::array<bool, size_t(Size.row* Size.column)>;
 
 	enum class Direction
 	{
@@ -109,16 +111,37 @@ template<typename HeightType, utils::index_t Size> class Forest
 	    setTreesVisibleFromEdge();
 	}
 
+	inline void
+	updateVisibilityScore()
+	{
+	    calculateVisibilityScores();
+	}
+
+	[[nodiscard]] auto getVisibleDistanceScoreMap() const -> TreeMap_t;
+
+	[[nodiscard]] auto
+	getHighestVisibilityScore() const -> HeightType
+	{
+	    const auto visibilityScores = getVisibleDistanceScoreMap();
+	    return std::ranges::max(visibilityScores);
+	}
+
+	[[nodiscard]] constexpr auto
+	getVisibleDistances() const
+	{
+	    return std::array<TreeMap_t, 4>{
+	      visibleDistanceNorth,
+	      visibleDistanceSouth,
+	      visibleDistanceEast,
+	      visibleDistanceWest,
+	    };
+	}
+
 	[[nodiscard]] auto
 	getNumTreesVisibleFromEdge() const -> size_t
 	{
-	    auto countVisibleInRow = [](size_t sum, const std::array<bool, Size.column>& visibleRow)
-	    {
-		return std::accumulate(visibleRow.cbegin(), visibleRow.cend(), sum,
-				       [](size_t subSum, bool isVisible) { return subSum + size_t(isVisible); });
-	    };
-
-	    return std::accumulate(visibleFromEdge.cbegin(), visibleFromEdge.cend(), 0, countVisibleInRow);
+	    return std::accumulate(visibleFromEdge.cbegin(), visibleFromEdge.cend(), 0,
+				   [](size_t subSum, bool isVisible) { return subSum + size_t(isVisible); });
 	}
 
 	[[nodiscard]] constexpr auto
@@ -136,8 +159,7 @@ template<typename HeightType, utils::index_t Size> class Forest
 		    throw std::out_of_range("row out of range");
 	    }
 
-	    const auto treeRow = trees.at(index.row);
-	    return treeRow.at(index.column);
+	    return trees.at(index.row * Size.column + index.column);
 	}
 
 	[[nodiscard]] constexpr auto
@@ -155,18 +177,36 @@ template<typename HeightType, utils::index_t Size> class Forest
 		    throw std::out_of_range("row out of range");
 	    }
 
-	    const auto visibleRow = visibleFromEdge.at(index.row);
-	    return visibleRow.at(index.column);
+	    return visibleFromEdge.at(index.row * Size.column + index.column);
 	}
 
     protected:
     private:
 
 	void setTreesVisibleFromEdge();
+	void calculateVisibilityScores();
 
 	template<Direction Dir> void setTreesVisibleFrom(utils::index_t index);
 
-	[[nodiscard]] auto heightAt(utils::index_t index) -> HeightType&;
+	template<Direction Dir> void setVisibleDistance(utils::index_t index);
+
+	[[nodiscard]] auto
+	heightAt(utils::index_t index) -> HeightType&
+	{
+	    if (0 > index.column || Size.column < index.column)
+		{
+		    utils::log(std::experimental::source_location::current(), "out of range");
+		    throw std::out_of_range("column out of range");
+	    }
+
+	    if (0 > index.row || Size.row < index.row)
+		{
+		    utils::log(std::experimental::source_location::current(), "out of range");
+		    throw std::out_of_range("row out of range");
+	    }
+
+	    return trees.at(index.row * Size.column + index.column);
+	}
 
 	[[nodiscard]] static constexpr auto
 	CharToHeightType(char character) -> HeightType
@@ -176,21 +216,13 @@ template<typename HeightType, utils::index_t Size> class Forest
 	    return _tmp;
 	}
 
-	[[nodiscard]] static constexpr auto
-	LineToHeights(const std::string_view& line) -> std::array<HeightType, Size.column>
-	{
-	    std::array<HeightType, Size.column> _ret{};
-
-	    for (size_t pos = 0; pos < line.size() && pos < Size.column; ++pos)
-		{
-		    _ret.at(pos) = CharToHeightType(line.at(pos));
-		}
-
-	    return _ret;
-	}
-
 	TreeMap_t trees;
 	VisibilityMap_t visibleFromEdge;
+
+	TreeMap_t visibleDistanceNorth;
+	TreeMap_t visibleDistanceSouth;
+	TreeMap_t visibleDistanceEast;
+	TreeMap_t visibleDistanceWest;
 };
 
 template<typename HeightType, utils::index_t Size>

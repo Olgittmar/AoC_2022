@@ -1,6 +1,7 @@
 #ifndef UTILS_COORDINATES_COORDINATES2D_HPP
 #define UTILS_COORDINATES_COORDINATES2D_HPP
 
+#include <array>
 #include <concepts>
 #include <type_traits>
 #include <utility>
@@ -11,6 +12,7 @@ namespace utils {
 template<typename SizeType>
 concept TrivialSizeType = requires(SizeType&& sizeType)
 {
+    // TODO: only literal sizeTypes allowed, just check against list?
     true;
 };
 

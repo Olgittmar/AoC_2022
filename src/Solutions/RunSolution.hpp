@@ -157,6 +157,25 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
 				}
 			    break;
 			}
+		    case TreetopTreeHouseDist:
+			{
+			    if constexpr (testRun)
+				{
+				    const auto visibilityScore = GetVisibilityScoreOfHighestScoringTree<
+				      size_t, utils::index_t{TreetopTreeHouse::NumTreeRowsInTest,
+							     TreetopTreeHouse::NumTreeColumnsInTest}>(input, success);
+
+				    result = std::to_string(visibilityScore);
+			    } else
+				{
+				    const auto visibilityScore = GetVisibilityScoreOfHighestScoringTree<
+				      size_t, utils::index_t{TreetopTreeHouse::NumTreeRows,
+							     TreetopTreeHouse::NumTreeColumns}>(input, success);
+
+				    result = std::to_string(visibilityScore);
+				}
+			    break;
+			}
 		    case Invalid:
 			{
 			    result = "runSolution(): Invalid solutionId";
