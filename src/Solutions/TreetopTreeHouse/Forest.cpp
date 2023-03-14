@@ -6,11 +6,13 @@
 // Std
 #include <algorithm>
 #include <array>
+#include <bits/ranges_util.h>
 #include <cstddef>
 #include <cstdlib>
 #include <experimental/source_location>
 #include <iostream>
 #include <memory>
+#include <span>
 #include <stdexcept>
 #include <unordered_set>
 
@@ -141,13 +143,11 @@ Forest<HeightType, Size>::setVisibleDistance(utils::index_t index)
     while (!isAtEdge<Dir>(index))
 	{
 	    const auto treeHeight = getHeightAt(index);
+	    const auto blockingHeightDistances =
+	      std::span(std::next(distSinceLastSeen.cbegin(), treeHeight), distSinceLastSeen.cend());
+	    const auto distToLastBlockingTree = std::ranges::min(blockingHeightDistances);
 
-	    // TODO: What is going on here?
-	    const auto* const distToLastBlockingTree =
-	      std::ranges::min_element(std::next(distSinceLastSeen.cbegin(), treeHeight), distSinceLastSeen.cend());
-
-	    visibleDistanceInDir.at(index.row * Size.column + index.column) = *distToLastBlockingTree;
-
+	    visibleDistanceInDir.at(index.row * Size.column + index.column) = distToLastBlockingTree;
 	    distSinceLastSeen.at(treeHeight) = 0;
 
 	    walk<Dir>(index);
