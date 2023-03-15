@@ -63,6 +63,7 @@ enum class SolutionId : ulong
     TreetopTreeHouse = dayAndProblemToComposite(8, 1),
     TreetopTreeHouseDist = dayAndProblemToComposite(8, 2),
     RopeBridge = dayAndProblemToComposite(9, 1),
+    RopeBridgeWithLongRopes = dayAndProblemToComposite(9, 2),
     Invalid = 0
 };
 
@@ -73,7 +74,7 @@ using IsValidSolution =
 		  SolutionId::RearrangeSupplyStacks, SolutionId::RearrangeSupplyStacksWithAdvancedCrane,
 		  SolutionId::TuningTrouble, SolutionId::MessageTuningTrouble, SolutionId::NoSpace,
 		  SolutionId::YesSpace, SolutionId::TreetopTreeHouse, SolutionId::TreetopTreeHouseDist,
-		  SolutionId::RopeBridge>;
+		  SolutionId::RopeBridge, SolutionId::RopeBridgeWithLongRopes>;
 
 namespace SolutionIdStrings {
     constexpr auto FattestElfCalories = "FattestElfCalories";
@@ -93,6 +94,7 @@ namespace SolutionIdStrings {
     constexpr auto TreetopTreeHouse = "TreetopTreeHouse";
     constexpr auto TreetopTreeHouseDist = "TreetopTreeHouseDist";
     constexpr auto RopeBridge = "RopeBridge";
+    constexpr auto RopeBridgeWithLongRopes = "RopeBridgeWithLongRopes";
     constexpr auto Invalid = "InvalidSolutionId";
 } // namespace SolutionIdStrings
 
@@ -169,6 +171,10 @@ SolutionIdToString(SolutionId solutionId) noexcept -> const char*
 	    case RopeBridge:
 		{
 		    return SolutionIdStrings::RopeBridge;
+		}
+	    case RopeBridgeWithLongRopes:
+		{
+		    return SolutionIdStrings::RopeBridgeWithLongRopes;
 		}
 	    case Invalid:
 		{

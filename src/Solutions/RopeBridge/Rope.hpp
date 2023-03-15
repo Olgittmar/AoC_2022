@@ -29,7 +29,6 @@ template<utils::TrivialSizeType LengthType, utils::TrivialSizeType DistType, siz
 
 	// If only 2 position values are given, assume that Head should overlap Tail
 	constexpr Rope() = default;
-	constexpr Rope(LengthType row, LengthType col) : m_knots{Position_t{row, col}} {}
 
 	auto
 	getHeadPos() const -> Position_t
@@ -73,9 +72,8 @@ template<utils::TrivialSizeType LengthType, utils::TrivialSizeType DistType, siz
 	}
 
 	void updateKnotPositions(Direction dir);
-	void follow(Position_t leader, Position_t& follower, Direction dir);
 
-	std::array<Position_t, RopeLength> m_knots;
+	std::array<Position_t, RopeLength> m_knots{Position_t{0, 0}};
 };
 
 } // namespace Solutions::RopeBridge

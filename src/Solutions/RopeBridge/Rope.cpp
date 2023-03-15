@@ -1,6 +1,7 @@
 #include "Rope.hpp"
 
 #include "Definitions.hpp"
+#include "PrettyPrint/PrettyPrint.hpp"
 
 #include <cmath>
 #include <string>
@@ -57,85 +58,36 @@ Rope<LengthType, DistType, RopeLength>::makeMotion(std::string_view line) -> Mot
 
 template<utils::TrivialSizeType LengthType, utils::TrivialSizeType DistType, size_t RopeLength>
 void
-Rope<LengthType, DistType, RopeLength>::follow(Position_t leader, Position_t& follower, Direction dir)
-{
-    using enum Direction;
-
-    switch (dir)
-	{
-	    case Up:
-		{
-		    if (leader.y > follower.y)
-			{
-			    follower.x = leader.x;
-			    if (leader.y > follower.y + 1)
-				{
-				    ++(follower.y);
-			    }
-		    }
-		    break;
-		}
-	    case Down:
-		{
-		    if (leader.y < follower.y)
-			{
-			    follower.x = leader.x;
-			    if (leader.y + 1 < follower.y)
-				{
-				    --(follower.y);
-			    }
-		    }
-		    break;
-		}
-	    case Left:
-		{
-		    if (leader.x < follower.x)
-			{
-			    follower.y = leader.y;
-			    if (leader.x + 1 < follower.x)
-				{
-				    --(follower.x);
-			    }
-		    }
-		    break;
-		}
-	    case Right:
-		{
-		    if (leader.x > follower.x)
-			{
-			    follower.y = leader.y;
-			    if (leader.x > follower.x + 1)
-				{
-				    ++(follower.x);
-			    }
-		    }
-		    break;
-		}
-	}
-}
-
-template<utils::TrivialSizeType LengthType, utils::TrivialSizeType DistType, size_t RopeLength>
-void
 Rope<LengthType, DistType, RopeLength>::updateKnotPositions(Direction dir)
 {
-    auto exceedsPlanckLength = [](Position_t lhs, Position_t rhs) -> bool
-    {
-	const auto hDiff = std::abs(lhs.x - rhs.x);
-	const auto vDiff = std::abs(lhs.y - rhs.y);
-	return (hDiff > 1 || vDiff > 1);
-    };
-
     for (size_t idx = 1; idx < m_knots.size(); ++idx)
 	{
-	    const auto predecessor = m_knots.at(idx - 1);
-	    auto& knot = m_knots.at(idx);
+	    const auto leader = m_knots.at(idx - 1);
+	    auto& follower = m_knots.at(idx);
 
-	    if (!exceedsPlanckLength(predecessor, knot))
+	    const auto vDiff = leader.y - follower.y;
+	    const auto hDiff = leader.x - follower.x;
+
+	    // TODO: Pretty sure these two can be generalized to something nicer.
+	    if (std::abs(vDiff) > 1)
 		{
+		    follower.y += static_cast<LengthType>(vDiff > 1) - static_cast<LengthType>(vDiff < -1);
+		    if (hDiff != 0)
+			{
+			    follower.x += static_cast<LengthType>(hDiff > 0) - static_cast<LengthType>(hDiff < 0);
+		    };
 		    continue;
 	    }
 
-	    follow(predecessor, knot, dir);
+	    if (std::abs(hDiff) > 1)
+		{
+		    follower.x += static_cast<LengthType>(hDiff > 1) - static_cast<LengthType>(hDiff < -1);
+		    if (vDiff != 0)
+			{
+			    follower.y += static_cast<LengthType>(vDiff > 0) - static_cast<LengthType>(vDiff < 0);
+		    };
+		    continue;
+	    }
 	}
 }
 

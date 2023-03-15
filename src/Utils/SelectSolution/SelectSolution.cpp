@@ -63,6 +63,7 @@ SelectSolutionData(SolutionId solutionId) -> SolutionId
 		    return TreetopTreeHouse;
 		}
 	    case RopeBridge:
+	    case RopeBridgeWithLongRopes:
 		{
 		    return RopeBridge;
 		}
