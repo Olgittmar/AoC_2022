@@ -10,11 +10,19 @@
 namespace utils {
 
 // Not sure how to specify requirement here
-template<typename SizeType>
-concept TrivialSizeType = requires(SizeType&& sizeType)
+template<class T, class U>
+concept SameHelper = std::is_same_v<T, U>;
+
+template<class T, class U>
+concept SameAs = SameHelper<T, U>;
+
+template<typename T, typename... U>
+concept IsSameAsAnyOf = (SameAs<T, U> || ...);
+
+template<class SizeType>
+concept TrivialSizeType = requires
 {
-    // TODO: only literal sizeTypes allowed, just check against list?
-    true;
+    IsSameAsAnyOf<SizeType, int, unsigned int, long, unsigned long, long long, unsigned long long>;
 };
 
 template<TrivialSizeType SizeType> struct Index2D

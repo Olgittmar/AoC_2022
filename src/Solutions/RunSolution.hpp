@@ -179,7 +179,7 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
 			}
 		    case RopeBridge:
 			{
-			    const auto numPositionsVisited = GetNumPositionsVisitedByTail(input, success);
+			    const auto numPositionsVisited = GetNumPositionsVisitedByTail<2>(input, success);
 
 			    result = std::to_string(numPositionsVisited);
 			    break;

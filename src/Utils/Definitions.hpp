@@ -302,6 +302,9 @@ namespace RopeBridge {
     using LengthType_t = long;
     using DistType_t = unsigned short;
     using PositionHash_t = utils::Coordinate2DHash<LengthType_t>;
+
+    constexpr size_t ShortRopeLength = 2;
+    constexpr size_t LongRopeLength = 10;
 } // namespace RopeBridge
 
 } // namespace Solutions
