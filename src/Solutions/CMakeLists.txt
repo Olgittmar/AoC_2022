@@ -6,6 +6,7 @@ add_subdirectory(RockPaperScissors)
 add_subdirectory(RuckSack)
 add_subdirectory(TuningTrouble)
 add_subdirectory(TreetopTreeHouse)
+add_subdirectory(RopeBridge)
 
 # Propagate values from subdirs to parent dir
 set(SOLUTIONS_LIB_SOURCES ${SOLUTIONS_LIB_SOURCES} PARENT_SCOPE)

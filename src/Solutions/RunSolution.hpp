@@ -11,6 +11,7 @@
 #include "NoSpace/NoSpace.hpp"
 #include "PrettyPrint/PrettyPrint.hpp"
 #include "RockPaperScissors/RockPaperScissors.hpp"
+#include "RopeBridge/RopeBridge.hpp"
 #include "RuckSack/CheckRuckSacks.hpp"
 #include "SupplyStacks/SupplyStacks.hpp"
 #include "TreetopTreeHouse/TreetopTreeHouse.hpp"
@@ -174,6 +175,13 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
 
 				    result = std::to_string(visibilityScore);
 				}
+			    break;
+			}
+		    case RopeBridge:
+			{
+			    const auto numPositionsVisited = GetNumPositionsVisitedByTail(input, success);
+
+			    result = std::to_string(numPositionsVisited);
 			    break;
 			}
 		    case Invalid:

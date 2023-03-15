@@ -62,6 +62,10 @@ SelectSolutionData(SolutionId solutionId) -> SolutionId
 		{
 		    return TreetopTreeHouse;
 		}
+	    case RopeBridge:
+		{
+		    return RopeBridge;
+		}
 	    case Invalid:
 		{
 		    return Invalid;

@@ -62,6 +62,7 @@ enum class SolutionId : ulong
     YesSpace = dayAndProblemToComposite(7, 2),
     TreetopTreeHouse = dayAndProblemToComposite(8, 1),
     TreetopTreeHouseDist = dayAndProblemToComposite(8, 2),
+    RopeBridge = dayAndProblemToComposite(9, 1),
     Invalid = 0
 };
 
@@ -71,7 +72,8 @@ using IsValidSolution =
 		  SolutionId::RucksackBadges, SolutionId::CampCleanup, SolutionId::PartialCampCleanup,
 		  SolutionId::RearrangeSupplyStacks, SolutionId::RearrangeSupplyStacksWithAdvancedCrane,
 		  SolutionId::TuningTrouble, SolutionId::MessageTuningTrouble, SolutionId::NoSpace,
-		  SolutionId::YesSpace, SolutionId::TreetopTreeHouse, SolutionId::TreetopTreeHouseDist>;
+		  SolutionId::YesSpace, SolutionId::TreetopTreeHouse, SolutionId::TreetopTreeHouseDist,
+		  SolutionId::RopeBridge>;
 
 namespace SolutionIdStrings {
     constexpr auto FattestElfCalories = "FattestElfCalories";
@@ -90,6 +92,7 @@ namespace SolutionIdStrings {
     constexpr auto YesSpace = "YesSpace";
     constexpr auto TreetopTreeHouse = "TreetopTreeHouse";
     constexpr auto TreetopTreeHouseDist = "TreetopTreeHouseDist";
+    constexpr auto RopeBridge = "RopeBridge";
     constexpr auto Invalid = "InvalidSolutionId";
 } // namespace SolutionIdStrings
 
@@ -162,6 +165,10 @@ SolutionIdToString(SolutionId solutionId) noexcept -> const char*
 	    case TreetopTreeHouseDist:
 		{
 		    return SolutionIdStrings::TreetopTreeHouseDist;
+		}
+	    case RopeBridge:
+		{
+		    return SolutionIdStrings::RopeBridge;
 		}
 	    case Invalid:
 		{
@@ -290,6 +297,12 @@ namespace TreetopTreeHouse {
 
     constexpr size_t highestTreePossible = 9;
 } // namespace TreetopTreeHouse
+
+namespace RopeBridge {
+    using LengthType_t = long;
+    using DistType_t = unsigned short;
+    using PositionHash_t = utils::Coordinate2DHash<LengthType_t>;
+} // namespace RopeBridge
 
 } // namespace Solutions
 

@@ -13,7 +13,7 @@ log(const std::experimental::source_location location, auto... vals) -> std::ost
     // Not a fan of this string usage, but it's prettier than what I had previously
     std::cout << std::filesystem::path(location.file_name()).filename().c_str() << "::" << location.line()
 	      << "::" << location.function_name() << ":\n";
-    return ((std::cout << vals), ...) << '\n';
+    return ((std::cout << vals), ...);
 }
 
 constexpr inline auto
@@ -23,7 +23,7 @@ log_error(const std::experimental::source_location location, auto... vals) -> st
     // properly log to a file
     std::cerr << std::filesystem::path(location.file_name()).filename().c_str() << "::" << location.line()
 	      << "::" << location.function_name() << ":\n";
-    return ((std::cerr << vals), ...) << '\n';
+    return ((std::cerr << vals), ...);
 }
 
 } // namespace utils
