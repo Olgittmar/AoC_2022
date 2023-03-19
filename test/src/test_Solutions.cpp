@@ -209,6 +209,11 @@ const std::array<TestParams, numTests> testParameters = {
 	     .testCase = 1,
 	     .expectedResult = "36",
 	     .name = utils::SolutionIdToString(utils::SolutionId::RopeBridgeWithLongRopes)},
+
+  //   TestParams{.solutionId = utils::SolutionId::CathodeRayTube,
+  // 	     .testCase = 0,
+  // 	     .expectedResult = "13140",
+  // 	     .name = utils::SolutionIdToString(utils::SolutionId::CathodeRayTube)},
 };
 
 INSTANTIATE_TEST_SUITE_P( // NOLINT

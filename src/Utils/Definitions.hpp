@@ -64,6 +64,7 @@ enum class SolutionId : ulong
     TreetopTreeHouseDist = dayAndProblemToComposite(8, 2),
     RopeBridge = dayAndProblemToComposite(9, 1),
     RopeBridgeWithLongRopes = dayAndProblemToComposite(9, 2),
+    CathodeRayTube = dayAndProblemToComposite(10, 1),
     Invalid = 0
 };
 
@@ -74,7 +75,7 @@ using IsValidSolution =
 		  SolutionId::RearrangeSupplyStacks, SolutionId::RearrangeSupplyStacksWithAdvancedCrane,
 		  SolutionId::TuningTrouble, SolutionId::MessageTuningTrouble, SolutionId::NoSpace,
 		  SolutionId::YesSpace, SolutionId::TreetopTreeHouse, SolutionId::TreetopTreeHouseDist,
-		  SolutionId::RopeBridge, SolutionId::RopeBridgeWithLongRopes>;
+		  SolutionId::RopeBridge, SolutionId::RopeBridgeWithLongRopes, SolutionId::CathodeRayTube>;
 
 namespace SolutionIdStrings {
     constexpr auto FattestElfCalories = "FattestElfCalories";
@@ -95,6 +96,7 @@ namespace SolutionIdStrings {
     constexpr auto TreetopTreeHouseDist = "TreetopTreeHouseDist";
     constexpr auto RopeBridge = "RopeBridge";
     constexpr auto RopeBridgeWithLongRopes = "RopeBridgeWithLongRopes";
+    constexpr auto CathodeRayTube = "CathodeRayTube";
     constexpr auto Invalid = "InvalidSolutionId";
 } // namespace SolutionIdStrings
 
@@ -175,6 +177,10 @@ SolutionIdToString(SolutionId solutionId) noexcept -> const char*
 	    case RopeBridgeWithLongRopes:
 		{
 		    return SolutionIdStrings::RopeBridgeWithLongRopes;
+		}
+	    case CathodeRayTube:
+		{
+		    return SolutionIdStrings::CathodeRayTube;
 		}
 	    case Invalid:
 		{
@@ -312,6 +318,13 @@ namespace RopeBridge {
     constexpr size_t ShortRopeLength = 2;
     constexpr size_t LongRopeLength = 10;
 } // namespace RopeBridge
+
+namespace CathodeRayTube {
+    constexpr size_t CycleOffset = 20;
+    constexpr size_t CycleStep = 40;
+    constexpr size_t CycleEnd = 220;
+
+} // namespace CathodeRayTube
 
 } // namespace Solutions
 

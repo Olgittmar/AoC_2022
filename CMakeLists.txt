@@ -24,6 +24,9 @@ set(TEST_DATA_FILES "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test/data/>")
 # Test data files are needed in build dir, I think that's the current binary dir during build time.
 set(TEST_DATA_FILES_DESTINATION "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/test/data>")
 
+set(BENCHMARK_DATA_FILES ${MAIN_DATA_FILES})
+set(BENCHMARK_DATA_FILES_DESTINATION "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/benchmark/data>")
+
 # Create main target
 add_executable(${MAIN_TARGET_NAME} ${MAIN_SOURCE_FILES})
 set(FILES_TO_TIDY ${FILES_TO_TIDY} ${MAIN_SOURCE_FILES})
@@ -36,6 +39,11 @@ add_subdirectory(src)
 # Add test target if enabled
 if(${PROJECT_NAME}_ENABLE_TESTING)
 	add_subdirectory(test)
+endif()
+
+# Add benchmark target if enabled
+if(${PROJECT_NAME}_ENABLE_BENCHMARK)
+	add_subdirectory(benchmark)
 endif()
 
 # Static analysis and formatting
@@ -57,5 +65,11 @@ install(
 install(
 	DIRECTORY ${TEST_DATA_FILES}
 	DESTINATION	${TEST_DATA_FILES_DESTINATION}
+	FILE_PERMISSIONS OWNER_READ
+)
+
+install(
+	DIRECTORY ${BENCHMARK_DATA_FILES}
+	DESTINATION	${BENCHMARK_DATA_FILES_DESTINATION}
 	FILE_PERMISSIONS OWNER_READ
 )

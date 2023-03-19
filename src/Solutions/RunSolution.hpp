@@ -7,6 +7,7 @@
 
 // Internal
 #include "CampCleanup/CampCleanup.hpp"
+#include "CathodeRayTube/CathodeRayTube.hpp"
 #include "ElfCalories/ElfCalories.hpp"
 #include "NoSpace/NoSpace.hpp"
 #include "PrettyPrint/PrettyPrint.hpp"
@@ -191,6 +192,15 @@ runSolution(utils::SolutionId solutionId, const std::string_view& input, bool& s
 			      GetNumPositionsVisitedByTail<RopeBridge::LongRopeLength>(input, success);
 
 			    result = std::to_string(numPositionsVisited);
+			    break;
+			}
+		    case CathodeRayTube:
+			{
+			    const auto totalSignalStrength =
+			      GetSumOfSignalStrengths<CathodeRayTube::CycleOffset, CathodeRayTube::CycleStep,
+						      CathodeRayTube::CycleEnd>(input, success);
+
+			    result = std::to_string(totalSignalStrength);
 			    break;
 			}
 		    case Invalid:

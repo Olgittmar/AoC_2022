@@ -67,6 +67,10 @@ SelectSolutionData(SolutionId solutionId) -> SolutionId
 		{
 		    return RopeBridge;
 		}
+	    case CathodeRayTube:
+		{
+		    return CathodeRayTube;
+		}
 	    case Invalid:
 		{
 		    return Invalid;

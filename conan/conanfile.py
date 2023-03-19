@@ -4,7 +4,7 @@ from conan.tools.cmake import CMake, CMakeToolchain, CMakeDeps
 
 class BuildWithConan(ConanFile):
 	settings = "os", "compiler", "build_type", "arch"
-	requires = "gtest/cci.20210126"
+	requires = "gtest/cci.20210126", "benchmark/1.7.0"
 	generators = "CMakeDeps", "CMakeToolchain"
 
 	def imports(self):
