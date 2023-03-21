@@ -40,6 +40,8 @@
 # Personal Preferences
 /build
 /install
+/build_release
+/install_release
 /bazel_build
 /data
 /test/data

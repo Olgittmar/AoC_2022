@@ -1,9 +1,14 @@
 #include "RuckSack.hpp"
 
+#include "PrettyPrint/PrettyPrint.hpp"
+
 // Std
 #include <algorithm>
+#include <bits/ranges_algo.h>
+#include <iterator>
 #include <numeric>
 #include <ranges>
+#include <vector>
 
 namespace Solutions::CheckRuckSacks {
 
@@ -14,11 +19,14 @@ RuckSack::calculatePriority()
     std::string compartmentA{m_ruckSackContents.substr(0, dataLength / 2)};
     std::string compartmentB{m_ruckSackContents.substr(dataLength / 2, std::string_view::npos)};
 
-    std::ranges::sort(compartmentA.begin(), compartmentA.end());
-    std::ranges::sort(compartmentB.begin(), compartmentB.end());
+    std::ranges::sort(compartmentA);
+    std::ranges::sort(compartmentB);
 
-    std::string intersection;
-    std::ranges::set_intersection(compartmentA, compartmentB, &intersection);
+    std::string intersection{};
+    std::ranges::set_intersection(compartmentA, compartmentB, std::back_inserter(intersection));
+
+    auto lastNonDuplicate = std::unique(intersection.begin(), intersection.end());
+    intersection.erase(lastNonDuplicate, intersection.end());
 
     // Accumulate by char value
     m_priority =

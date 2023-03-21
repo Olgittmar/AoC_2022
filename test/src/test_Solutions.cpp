@@ -21,6 +21,12 @@ constexpr ulong numTests = 27;
 
 struct TestParams
 {
+	constexpr TestParams(utils::SolutionId solutionIdInit, uint32_t testCaseInit, const char* expectedResultInit,
+			     const char* nameInit)
+	  : solutionId(solutionIdInit), testCase(testCaseInit), expectedResult(expectedResultInit), name(nameInit)
+	{
+	}
+
 	utils::SolutionId solutionId{};
 	uint32_t testCase{};
 	const char* const expectedResult{};
@@ -35,191 +41,116 @@ struct TestParams
 	}
 };
 
+constexpr std::array<TestParams, numTests> testParameters = {
+  TestParams{utils::SolutionId::FattestElfCalories, 0, "24000",
+	     utils::SolutionIdToString(utils::SolutionId::FattestElfCalories)},
+
+  TestParams{utils::SolutionId::TopThreeFattestElfCalories, 0, "45000",
+	     utils::SolutionIdToString(utils::SolutionId::TopThreeFattestElfCalories)},
+
+  TestParams{utils::SolutionId::RockPaperScissors, 0, "15",
+	     utils::SolutionIdToString(utils::SolutionId::RockPaperScissors)},
+
+  TestParams{utils::SolutionId::DecryptedRockPaperScissors, 0, "12",
+	     utils::SolutionIdToString(utils::SolutionId::DecryptedRockPaperScissors)},
+
+  TestParams{utils::SolutionId::RucksackReorganization, 0, "157",
+	     utils::SolutionIdToString(utils::SolutionId::RucksackReorganization)},
+
+  TestParams{utils::SolutionId::RucksackBadges, 0, "70", utils::SolutionIdToString(utils::SolutionId::RucksackBadges)},
+
+  TestParams{utils::SolutionId::CampCleanup, 0, "2", utils::SolutionIdToString(utils::SolutionId::CampCleanup)},
+
+  TestParams{utils::SolutionId::PartialCampCleanup, 0, "4",
+	     utils::SolutionIdToString(utils::SolutionId::PartialCampCleanup)},
+
+  TestParams{utils::SolutionId::RearrangeSupplyStacks, 0, "CMZ",
+	     utils::SolutionIdToString(utils::SolutionId::RearrangeSupplyStacks)},
+
+  TestParams{utils::SolutionId::RearrangeSupplyStacksWithAdvancedCrane, 0, "MCD",
+	     utils::SolutionIdToString(utils::SolutionId::RearrangeSupplyStacksWithAdvancedCrane)},
+
+  TestParams{utils::SolutionId::TuningTrouble, 0, "7", utils::SolutionIdToString(utils::SolutionId::TuningTrouble)},
+
+  TestParams{utils::SolutionId::TuningTrouble, 1, "5", utils::SolutionIdToString(utils::SolutionId::TuningTrouble)},
+
+  TestParams{utils::SolutionId::TuningTrouble, 2, "6", utils::SolutionIdToString(utils::SolutionId::TuningTrouble)},
+
+  TestParams{utils::SolutionId::TuningTrouble, 3, "10", utils::SolutionIdToString(utils::SolutionId::TuningTrouble)},
+
+  TestParams{utils::SolutionId::TuningTrouble, 4, "11", utils::SolutionIdToString(utils::SolutionId::TuningTrouble)},
+
+  TestParams{utils::SolutionId::MessageTuningTrouble, 0, "19",
+	     utils::SolutionIdToString(utils::SolutionId::MessageTuningTrouble)},
+
+  TestParams{utils::SolutionId::MessageTuningTrouble, 1, "23",
+	     utils::SolutionIdToString(utils::SolutionId::MessageTuningTrouble)},
+
+  TestParams{utils::SolutionId::MessageTuningTrouble, 2, "23",
+	     utils::SolutionIdToString(utils::SolutionId::MessageTuningTrouble)},
+
+  TestParams{utils::SolutionId::MessageTuningTrouble, 3, "29",
+	     utils::SolutionIdToString(utils::SolutionId::MessageTuningTrouble)},
+
+  TestParams{utils::SolutionId::MessageTuningTrouble, 4, "26",
+	     utils::SolutionIdToString(utils::SolutionId::MessageTuningTrouble)},
+
+  TestParams{utils::SolutionId::NoSpace, 0, "95437", utils::SolutionIdToString(utils::SolutionId::NoSpace)},
+
+  TestParams{utils::SolutionId::YesSpace, 0, "24933642", utils::SolutionIdToString(utils::SolutionId::YesSpace)},
+
+  TestParams{utils::SolutionId::TreetopTreeHouse, 0, "21",
+	     utils::SolutionIdToString(utils::SolutionId::TreetopTreeHouse)},
+
+  TestParams{utils::SolutionId::TreetopTreeHouseDist, 0, "8",
+	     utils::SolutionIdToString(utils::SolutionId::TreetopTreeHouseDist)},
+
+  TestParams{utils::SolutionId::RopeBridge, 0, "13", utils::SolutionIdToString(utils::SolutionId::RopeBridge)},
+
+  TestParams{utils::SolutionId::RopeBridgeWithLongRopes, 0, "1",
+	     utils::SolutionIdToString(utils::SolutionId::RopeBridgeWithLongRopes)},
+
+  TestParams{utils::SolutionId::RopeBridgeWithLongRopes, 1, "36",
+	     utils::SolutionIdToString(utils::SolutionId::RopeBridgeWithLongRopes)},
+};
+
 class SolutionTestFixture : public ::testing::TestWithParam<TestParams>
 {
-    protected:
+    public:
 
-	SolutionTestFixture()
-	{
-	    const auto params = GetParam();
-	    m_solutionId = params.solutionId;
-	    m_testCase = params.testCase;
-	    m_expectedResult = params.expectedResult;
-	}
+	SolutionTestFixture() = default;
 
 	void
 	SetUp() override
 	{
-	    const auto solutionDataId = utils::SelectSolutionData(m_solutionId);
-	    m_data = utils::DataBroker::getSolutionTestData(solutionDataId, m_testCase);
+	    const auto params = testing::TestWithParam<TestParams>::GetParam();
+	    const auto solutionDataId = utils::SelectSolutionData(params.solutionId);
+	    m_data = utils::DataBroker::getSolutionTestData(solutionDataId, params.testCase);
 	}
 
-	utils::SolutionId m_solutionId; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
-	uint32_t m_testCase;            // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
-	std::string m_data;             // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
-	std::string m_expectedResult;   // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
-
-	struct
-	{
-		std::string resultValue;
-		bool success = false;
-	} m_result{}; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
+	std::string m_data; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 };
+
+auto
+TestNameGenerator(const testing::TestParamInfo<SolutionTestFixture::ParamType>& info) -> std::string
+{
+    auto testName = std::string{"SolutionsTest"} + info.param.name + std::to_string(info.index);
+    return testName;
+}
 
 TEST_P(SolutionTestFixture, TestSolution) // NOLINT
 {
-    m_result.resultValue = Solutions::runSolution<true>(m_solutionId, m_data, m_result.success);
+    const auto params = testing::TestWithParam<TestParams>::GetParam();
+    bool success = false;
+    const std::string expectedResult{params.expectedResult};
 
-    ASSERT_TRUE(m_result.success);
-    ASSERT_EQ(m_result.resultValue, m_expectedResult);
+    const auto result = Solutions::runSolution<true>(params.solutionId, m_data, success);
+
+    ASSERT_TRUE(success);
+    ASSERT_EQ(result, expectedResult);
 }
 
-const std::array<TestParams, numTests> testParameters = {
-  TestParams{.solutionId = utils::SolutionId::FattestElfCalories,
-	     .testCase = 0,
-	     .expectedResult = "24000",
-	     .name = utils::SolutionIdToString(utils::SolutionId::FattestElfCalories)},
-
-  TestParams{.solutionId = utils::SolutionId::TopThreeFattestElfCalories,
-	     .testCase = 0,
-	     .expectedResult = "45000",
-	     .name = utils::SolutionIdToString(utils::SolutionId::TopThreeFattestElfCalories)},
-
-  TestParams{.solutionId = utils::SolutionId::RockPaperScissors,
-	     .testCase = 0,
-	     .expectedResult = "15",
-	     .name = utils::SolutionIdToString(utils::SolutionId::RockPaperScissors)},
-
-  TestParams{.solutionId = utils::SolutionId::DecryptedRockPaperScissors,
-	     .testCase = 0,
-	     .expectedResult = "12",
-	     .name = utils::SolutionIdToString(utils::SolutionId::DecryptedRockPaperScissors)},
-
-  TestParams{.solutionId = utils::SolutionId::RucksackReorganization,
-	     .testCase = 0,
-	     .expectedResult = "157",
-	     .name = utils::SolutionIdToString(utils::SolutionId::RucksackReorganization)},
-
-  TestParams{.solutionId = utils::SolutionId::RucksackBadges,
-	     .testCase = 0,
-	     .expectedResult = "70",
-	     .name = utils::SolutionIdToString(utils::SolutionId::RucksackBadges)},
-
-  TestParams{.solutionId = utils::SolutionId::CampCleanup,
-	     .testCase = 0,
-	     .expectedResult = "2",
-	     .name = utils::SolutionIdToString(utils::SolutionId::CampCleanup)},
-
-  TestParams{.solutionId = utils::SolutionId::PartialCampCleanup,
-	     .testCase = 0,
-	     .expectedResult = "4",
-	     .name = utils::SolutionIdToString(utils::SolutionId::PartialCampCleanup)},
-
-  TestParams{.solutionId = utils::SolutionId::RearrangeSupplyStacks,
-	     .testCase = 0,
-	     .expectedResult = "CMZ",
-	     .name = utils::SolutionIdToString(utils::SolutionId::RearrangeSupplyStacks)},
-
-  TestParams{.solutionId = utils::SolutionId::RearrangeSupplyStacksWithAdvancedCrane,
-	     .testCase = 0,
-	     .expectedResult = "MCD",
-	     .name = utils::SolutionIdToString(utils::SolutionId::RearrangeSupplyStacksWithAdvancedCrane)},
-
-  TestParams{.solutionId = utils::SolutionId::TuningTrouble,
-	     .testCase = 0,
-	     .expectedResult = "7",
-	     .name = utils::SolutionIdToString(utils::SolutionId::TuningTrouble)},
-
-  TestParams{.solutionId = utils::SolutionId::TuningTrouble,
-	     .testCase = 1,
-	     .expectedResult = "5",
-	     .name = utils::SolutionIdToString(utils::SolutionId::TuningTrouble)},
-
-  TestParams{.solutionId = utils::SolutionId::TuningTrouble,
-	     .testCase = 2,
-	     .expectedResult = "6",
-	     .name = utils::SolutionIdToString(utils::SolutionId::TuningTrouble)},
-
-  TestParams{.solutionId = utils::SolutionId::TuningTrouble,
-	     .testCase = 3,
-	     .expectedResult = "10",
-	     .name = utils::SolutionIdToString(utils::SolutionId::TuningTrouble)},
-
-  TestParams{.solutionId = utils::SolutionId::TuningTrouble,
-	     .testCase = 4,
-	     .expectedResult = "11",
-	     .name = utils::SolutionIdToString(utils::SolutionId::TuningTrouble)},
-
-  TestParams{.solutionId = utils::SolutionId::MessageTuningTrouble,
-	     .testCase = 0,
-	     .expectedResult = "19",
-	     .name = utils::SolutionIdToString(utils::SolutionId::MessageTuningTrouble)},
-
-  TestParams{.solutionId = utils::SolutionId::MessageTuningTrouble,
-	     .testCase = 1,
-	     .expectedResult = "23",
-	     .name = utils::SolutionIdToString(utils::SolutionId::MessageTuningTrouble)},
-
-  TestParams{.solutionId = utils::SolutionId::MessageTuningTrouble,
-	     .testCase = 2,
-	     .expectedResult = "23",
-	     .name = utils::SolutionIdToString(utils::SolutionId::MessageTuningTrouble)},
-
-  TestParams{.solutionId = utils::SolutionId::MessageTuningTrouble,
-	     .testCase = 3,
-	     .expectedResult = "29",
-	     .name = utils::SolutionIdToString(utils::SolutionId::MessageTuningTrouble)},
-
-  TestParams{.solutionId = utils::SolutionId::MessageTuningTrouble,
-	     .testCase = 4,
-	     .expectedResult = "26",
-	     .name = utils::SolutionIdToString(utils::SolutionId::MessageTuningTrouble)},
-
-  TestParams{.solutionId = utils::SolutionId::NoSpace,
-	     .testCase = 0,
-	     .expectedResult = "95437",
-	     .name = utils::SolutionIdToString(utils::SolutionId::NoSpace)},
-
-  TestParams{.solutionId = utils::SolutionId::YesSpace,
-	     .testCase = 0,
-	     .expectedResult = "24933642",
-	     .name = utils::SolutionIdToString(utils::SolutionId::YesSpace)},
-
-  TestParams{.solutionId = utils::SolutionId::TreetopTreeHouse,
-	     .testCase = 0,
-	     .expectedResult = "21",
-	     .name = utils::SolutionIdToString(utils::SolutionId::TreetopTreeHouse)},
-
-  TestParams{.solutionId = utils::SolutionId::TreetopTreeHouseDist,
-	     .testCase = 0,
-	     .expectedResult = "8",
-	     .name = utils::SolutionIdToString(utils::SolutionId::TreetopTreeHouseDist)},
-
-  TestParams{.solutionId = utils::SolutionId::RopeBridge,
-	     .testCase = 0,
-	     .expectedResult = "13",
-	     .name = utils::SolutionIdToString(utils::SolutionId::RopeBridge)},
-
-  TestParams{.solutionId = utils::SolutionId::RopeBridgeWithLongRopes,
-	     .testCase = 0,
-	     .expectedResult = "1",
-	     .name = utils::SolutionIdToString(utils::SolutionId::RopeBridgeWithLongRopes)},
-
-  TestParams{.solutionId = utils::SolutionId::RopeBridgeWithLongRopes,
-	     .testCase = 1,
-	     .expectedResult = "36",
-	     .name = utils::SolutionIdToString(utils::SolutionId::RopeBridgeWithLongRopes)},
-
-  //   TestParams{.solutionId = utils::SolutionId::CathodeRayTube,
-  // 	     .testCase = 0,
-  // 	     .expectedResult = "13140",
-  // 	     .name = utils::SolutionIdToString(utils::SolutionId::CathodeRayTube)},
-};
-
-INSTANTIATE_TEST_SUITE_P( // NOLINT
-  AoC2022, SolutionTestFixture, testing::ValuesIn(testParameters),
-  [](const testing::TestParamInfo<SolutionTestFixture::ParamType>& info)
-  { return std::string(info.param.name) + "_" + std::to_string(info.index); });
+INSTANTIATE_TEST_SUITE_P(AoC_2022, SolutionTestFixture, testing::ValuesIn(testParameters), TestNameGenerator); // NOLINT
 
 } // namespace SolutionTests
 

@@ -14,8 +14,6 @@ namespace utils {
 
 using index_t = utils::Index2D<size_t>;
 
-constexpr ulong uintWidth = 32;
-
 enum class SolutionId : ulong;
 
 // Is this safe?
@@ -39,9 +37,10 @@ template<SolutionId V, SolutionId... Next> class SolutionIdCheck<V, Next...> : p
 };
 
 constexpr auto
-dayAndProblemToComposite(uint32_t day, uint32_t problem) -> ulong
+dayAndProblemToComposite(ushort day, ushort problem) -> ulong
 {
-    return (ulong(day) << uintWidth) + ulong(problem);
+    constexpr auto bitsInByte = 8;
+    return (ulong(day) << (sizeof(ushort) * bitsInByte)) + ulong(problem);
 }
 
 enum class SolutionId : ulong

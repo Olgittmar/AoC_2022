@@ -7,12 +7,9 @@ compiler=clang
 compiler.version=14
 compiler.libcxx=libstdc++
 compiler.cppstd=20
-build_type=Debug
+build_type=RelWithDebInfo
 
 [env]
 LDFLAGS=-fuse-ld=lld
 CC=clang
 CXX=clang++
-
-[conf]
-tools.build:cxxflags=["-fsanitize=memory", "-fno-omit-frame-pointer", "-fno-optimize-sibling-calls", "-fsanitize-memory-track-origins"]

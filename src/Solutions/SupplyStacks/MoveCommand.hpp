@@ -39,11 +39,6 @@ class MoveCommand
 
     private:
 
-	// Commands have the format 'move X from p to q'
-	static constexpr auto _move = "move ";
-	static constexpr auto _from = " from ";
-	static constexpr auto _to = " to ";
-
 	long m_numCrates = 0;
 	size_t m_from = 0;
 	size_t m_to = 0;

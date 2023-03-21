@@ -51,4 +51,6 @@ endforeach()
 add_custom_target(
 	run_tests
 	COMMAND ${TEST_COMMANDS}
+	COMMAND ctest --force-new-ctest-process --test-action memcheck
+	WORKING_DIRECTORY "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
 )

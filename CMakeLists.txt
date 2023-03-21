@@ -24,7 +24,7 @@ set(TEST_DATA_FILES "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test/data/>")
 # Test data files are needed in build dir, I think that's the current binary dir during build time.
 set(TEST_DATA_FILES_DESTINATION "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/test/data>")
 
-set(BENCHMARK_DATA_FILES ${MAIN_DATA_FILES})
+set(BENCHMARK_DATA_FILES ${MAIN_DATA_FILES} ${TEST_DATA_FILES})
 set(BENCHMARK_DATA_FILES_DESTINATION "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/benchmark/data>")
 
 # Create main target
