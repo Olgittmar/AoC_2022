@@ -1,0 +1,13 @@
+[settings]
+os=Linux
+arch=x86_64
+compiler=clang
+compiler.version=14
+compiler.libcxx=libstdc++
+compiler.cppstd=20
+build_type=RelWithDebInfo
+
+[buildenv]
+LDFLAGS=-fuse-ld=lld
+CC=clang
+CXX=clang++

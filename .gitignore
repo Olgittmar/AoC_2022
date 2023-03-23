@@ -42,6 +42,8 @@
 /install
 /build_release
 /install_release
+/build_benchmark
+/install_benchmark
 /bazel_build
 /data
 /test/data
