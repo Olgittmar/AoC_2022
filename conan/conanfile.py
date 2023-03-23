@@ -1,19 +1,15 @@
 from importlib.resources import path
-from conans import ConanFile
+from conan import ConanFile
 from conan.tools.cmake import CMake, CMakeToolchain, CMakeDeps
 
 class BuildWithConan(ConanFile):
 	settings = "os", "compiler", "build_type", "arch"
 	requires = "gtest/cci.20210126", "benchmark/1.7.0"
-	generators = "CMakeDeps", "CMakeToolchain"
 
-	def imports(self):
-		self.copy("*.dll", dst="bin", src="bin") # From bin to bin
-		self.copy("*.dylib*", dst="bin", src="lib") # From lib to bin
-	
+
 	def generate(self):
 		tc = CMakeToolchain(self)
-		tc.generator = "Ninja"
+		tc.variables["generator"] = "Ninja"
 		tc.generate()
 		deps = CMakeDeps(self)
 		deps.generate()
