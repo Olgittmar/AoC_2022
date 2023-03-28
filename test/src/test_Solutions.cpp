@@ -134,7 +134,7 @@ class SolutionTestFixture : public ::testing::TestWithParam<TestParams>
 auto
 TestNameGenerator(const testing::TestParamInfo<SolutionTestFixture::ParamType>& info) -> std::string
 {
-    auto testName = std::string{"SolutionsTest"} + info.param.name + std::to_string(info.index);
+    auto testName = std::string{"SolutionsTest"} + "/" + info.param.name + "/" + std::to_string(info.index);
     return testName;
 }
 

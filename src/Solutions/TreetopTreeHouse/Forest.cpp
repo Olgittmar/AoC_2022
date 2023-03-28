@@ -122,7 +122,7 @@ Forest<HeightType, Size>::setVisibleDistance(utils::index_t index)
 {
     using Direction = Forest<HeightType, Size>::Direction;
 
-    auto& visibleDistanceInDir = [this]() constexpr->TreeMap_t&
+    auto& visibleDistanceInDir = [this]() constexpr -> TreeMap_t&
     {
 	switch (Dir)
 	    {
@@ -135,8 +135,7 @@ Forest<HeightType, Size>::setVisibleDistance(utils::index_t index)
 		case Direction::West:
 		    return visibleDistanceWest;
 	    }
-    }
-    ();
+    }();
 
     std::array<size_t, highestTreePossible + 1> distSinceLastSeen{0};
 

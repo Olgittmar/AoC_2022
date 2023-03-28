@@ -17,7 +17,7 @@ set(INFRASTRUCTURE_CHECK_COMMAND
 
 set(STATIC_ANALYSIS_COMMAND
 	clang-tidy
-	--config-file=${PROJECT_BINARY_DIR}/../.clang-tidy
+	--config-file=${PROJECT_SOURCE_DIR}/.clang-tidy
 	--fix-notes
 	--format-style=file
 	--use-color

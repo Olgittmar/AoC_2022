@@ -139,9 +139,9 @@ GetSizeOfDirectoryToDelete(const std::string_view& input, bool& success) -> std:
 	    return _ret;
     }
 
-    auto smallestDir = std::ranges::min_element(
-      gatheredDirs.cbegin(), gatheredDirs.cend(),
-      [](const auto& dir1, const auto& dir2) constexpr { return dir1->getSize() < dir2->getSize(); });
+    auto smallestDir = std::ranges::min_element(gatheredDirs.cbegin(), gatheredDirs.cend(),
+						[](const auto& dir1, const auto& dir2) constexpr
+						{ return dir1->getSize() < dir2->getSize(); });
 
     _ret = (*smallestDir)->getSize(); // ew
 
