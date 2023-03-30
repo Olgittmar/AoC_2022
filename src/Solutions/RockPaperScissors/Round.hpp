@@ -1,6 +1,7 @@
 #ifndef SOLUTIONS_ROCKPAPERSCISSORS_ROUND_HPP
 #define SOLUTIONS_ROCKPAPERSCISSORS_ROUND_HPP
 
+#include <cstdint>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -25,29 +26,22 @@ charToShape(char shapeChar) -> Shape
 	{
 	    case 'A':
 	    case 'X':
-	    case 'a':
-	    case 'x':
 		{
 		    return Rock;
 		}
 	    case 'B':
 	    case 'Y':
-	    case 'b':
-	    case 'y':
 		{
 		    return Paper;
 		}
 	    case 'C':
 	    case 'Z':
-	    case 'c':
-	    case 'z':
 		{
 		    return Scissors;
 		}
 	    default:
 		{
-		    throw std::invalid_argument(std::string("No known conversion rule from ") + shapeChar +
-						" to Shape.");
+		    throw std::invalid_argument(std::string("No known conversion rule from ") + shapeChar + " to Shape.");
 		}
 	}
 };
@@ -55,7 +49,7 @@ charToShape(char shapeChar) -> Shape
 // --------------------------------------------------------------------
 // Outcome
 // --------------------------------------------------------------------
-enum class Outcome : uint32_t
+enum class Outcome : int32_t
 {
     Loss = 0,
     Draw = 3,
@@ -70,24 +64,20 @@ charToOutcome(char outcomeChar) -> Outcome
     switch (outcomeChar)
 	{
 	    case 'X':
-	    case 'x':
 		{
 		    return Loss;
 		}
 	    case 'Y':
-	    case 'y':
 		{
 		    return Draw;
 		}
 	    case 'Z':
-	    case 'z':
 		{
 		    return Win;
 		}
 	    default:
 		{
-		    throw std::invalid_argument(std::string("No known conversion rule from ") + outcomeChar +
-						" to Outcome.");
+		    throw std::invalid_argument(std::string("No known conversion rule from ") + outcomeChar + " to Outcome.");
 		}
 	}
 };
@@ -99,56 +89,63 @@ class Round
 {
     public:
 
-	explicit Round(Shape opponentShape, Outcome outcome);
-	explicit Round(Shape playerShape, Shape opponentShape);
-
-	[[nodiscard]] inline auto
-	getOutcome() const -> Outcome
+	explicit constexpr Round(Shape playerShape, Shape opponentShape)
+	  : m_playerShape(playerShape), m_opponentShape(opponentShape), m_outcome(Outcome::Unknown)
 	{
-	    return m_outcome;
+	}
+
+	explicit constexpr Round(Shape opponentShape, Outcome outcome)
+	  : m_opponentShape(opponentShape), m_outcome(outcome), m_playerShape(Shape::Unknown)
+	{
 	}
 
 	[[nodiscard]] inline auto
-	getScore() const -> uint32_t
+	getScore() const -> int32_t
 	{
-	    return uint32_t(m_outcome) + uint32_t(m_playerShape);
+	    return static_cast<int32_t>(m_outcome) + static_cast<int32_t>(m_playerShape);
 	}
 
-	inline void
-	setPlayerShape(Shape playerShape)
-	{
-	    m_playerShape = playerShape;
-	}
-
-	inline void
-	setOpponentShape(Shape opponentShape)
-	{
-	    m_opponentShape = opponentShape;
-	}
-
-	inline void
-	setOutcome(Outcome outcome)
-	{
-	    m_outcome = outcome;
-	}
+	void updateOutcome();
+	void updatePlayerhand();
 
     private:
 
-	void updateOutcome();
+	static constexpr int64_t intWidth = 32;
 
-	void updatePlayerhand();
+	static constexpr inline auto
+	roundHash(int64_t lhs, int64_t rhs) -> int64_t
+	{
+	    return (lhs << intWidth) + rhs;
+	}
 
-	Shape m_playerShape = Shape::Unknown;
-	Shape m_opponentShape = Shape::Unknown;
-	Outcome m_outcome = Outcome::Unknown;
+	static constexpr inline auto
+	roundHash(Shape lhs, Shape rhs) -> int64_t
+	{
+	    return roundHash(static_cast<int64_t>(lhs), static_cast<int64_t>(rhs));
+	}
+
+	static constexpr inline auto
+	roundHash(Shape lhs, Outcome rhs) -> int64_t
+	{
+	    return roundHash(static_cast<int64_t>(lhs), static_cast<int64_t>(rhs));
+	}
+
+	Shape m_playerShape;
+	Shape m_opponentShape;
+	Outcome m_outcome;
+};
+
+// Parser scenarios
+enum Scenario
+{
+    UnknownOutcome,
+    UnknownPlayerShape
 };
 
 // Parsers
-template<class Scenario> [[nodiscard]] auto stringToRounds(const std::string_view& input) -> std::vector<Round>;
-
-// Parser scenarios
-struct UnknownOutcome;
-struct UnknownPlayerShape;
+template<Scenario scenario> [[nodiscard]] auto stringToRounds(std::string_view input) -> std::vector<Round>;
+template<> [[nodiscard]] auto stringToRounds<UnknownOutcome>(std::string_view input) -> std::vector<Round>;
+template<> [[nodiscard]] auto stringToRounds<UnknownPlayerShape>(std::string_view input) -> std::vector<Round>;
 
 } // namespace Solutions::RockPaperScissors
 #endif

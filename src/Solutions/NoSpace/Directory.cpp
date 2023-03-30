@@ -31,8 +31,7 @@ Directory<SizeType>::getSize() -> SizeType
 
 template<typename SizeType>
 void
-Directory<SizeType>::gatherDirsIf(std::deque<std::shared_ptr<Directory>>& dirsToCheck,
-				  std::vector<std::shared_ptr<Directory>>& gatheredDirs,
+Directory<SizeType>::gatherDirsIf(std::deque<std::shared_ptr<Directory>>& dirsToCheck, std::vector<std::shared_ptr<Directory>>& gatheredDirs,
 				  std::function<SizeType(SizeType)> compare)
 {
     // Condition isApplicable;

@@ -26,7 +26,7 @@ struct AssignmentPair
 	CleanupSection second;
 };
 
-auto stringToAssignmentPairs(const std::string_view& input) -> std::vector<AssignmentPair>;
+auto stringToAssignmentPairs(std::string_view input) -> std::vector<AssignmentPair>;
 
 } // namespace Solutions::CampCleanup
 #endif

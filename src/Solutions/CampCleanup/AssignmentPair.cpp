@@ -9,7 +9,7 @@ using CleanupSection = Solutions::CampCleanup::CleanupSection;
 using AssignmentPair = Solutions::CampCleanup::AssignmentPair;
 
 [[nodiscard]] auto
-stringToCleanupSection(const std::string_view& data) -> CleanupSection
+stringToCleanupSection(std::string_view data) -> CleanupSection
 {
     constexpr auto delimiter = '-';
     const auto midPos = data.find(delimiter);
@@ -24,7 +24,7 @@ stringToCleanupSection(const std::string_view& data) -> CleanupSection
 }
 
 [[nodiscard]] auto
-stringToAssignmentPair(const std::string_view& data) -> AssignmentPair
+stringToAssignmentPair(std::string_view data) -> AssignmentPair
 {
     constexpr auto delimiter = ',';
     const auto midPos = data.find(delimiter);
@@ -51,18 +51,15 @@ AssignmentPair::fullyOverlaps() const -> bool
 AssignmentPair::partiallyOverlaps() const -> bool
 {
     // Optimize with some boolean magic
-    const auto firstContainsStartOfSecond =
-      first.range.start <= second.range.start && first.range.end >= second.range.start;
+    const auto firstContainsStartOfSecond = first.range.start <= second.range.start && first.range.end >= second.range.start;
     const auto firstContainsEndOfSecond = first.range.start <= second.range.end && first.range.end >= second.range.end;
-    const auto secondContainsStartOfFirst =
-      second.range.start <= first.range.start && second.range.end >= first.range.start;
+    const auto secondContainsStartOfFirst = second.range.start <= first.range.start && second.range.end >= first.range.start;
     const auto secondContainsEndOfFirst = second.range.start <= first.range.end && second.range.end >= first.range.end;
-    return firstContainsStartOfSecond || firstContainsEndOfSecond || secondContainsStartOfFirst ||
-	   secondContainsEndOfFirst;
+    return firstContainsStartOfSecond || firstContainsEndOfSecond || secondContainsStartOfFirst || secondContainsEndOfFirst;
 }
 
 auto
-stringToAssignmentPairs(const std::string_view& input) -> std::vector<AssignmentPair>
+stringToAssignmentPairs(std::string_view input) -> std::vector<AssignmentPair>
 {
     std::vector<AssignmentPair> _ret;
     constexpr auto delimiter = '\n';

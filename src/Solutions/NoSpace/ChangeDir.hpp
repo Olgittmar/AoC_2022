@@ -10,7 +10,7 @@ template<typename SizeType> class ChangeDirectory : public Command<SizeType>
 {
     public:
 
-	ChangeDirectory(const std::string_view& data) : m_destinationName{data} {}
+	ChangeDirectory(std::string_view data) : m_destinationName{data} {}
 
 	ChangeDirectory(const ChangeDirectory& other) = default;
 	ChangeDirectory(ChangeDirectory&& other) noexcept = default;

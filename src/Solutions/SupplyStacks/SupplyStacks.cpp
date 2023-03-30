@@ -14,7 +14,7 @@ namespace {
 
 template<size_t MaxNumStacks>
 [[nodiscard]] auto
-parseInput(const std::string_view& data)
+parseInput(std::string_view data)
 {
     constexpr auto endOfSupplyStackDelimiter = "\n\n";
 
@@ -27,8 +27,8 @@ parseInput(const std::string_view& data)
 
     struct
     {
-	    const Solutions::SupplyStacks::SupplyStack<MaxNumStacks> supplyStackInitialState;
-	    const std::vector<Solutions::SupplyStacks::MoveCommand> moveCommands;
+	    Solutions::SupplyStacks::SupplyStack<MaxNumStacks> supplyStackInitialState;
+	    std::vector<Solutions::SupplyStacks::MoveCommand> moveCommands;
     } _ret{// Force Linebreak
 	   Solutions::SupplyStacks::parseSupplyStackInitialState<MaxNumStacks>(supplyStackStr),
 	   Solutions::SupplyStacks::parseRearrangeCommands(moveCommandsStr)};
@@ -42,7 +42,7 @@ namespace Solutions {
 
 template<size_t NumStacksInSupply>
 auto
-GetCratesAtTopOfStacksAfterMoveOperations(const std::string_view& input, bool& success) -> std::string
+GetCratesAtTopOfStacksAfterMoveOperations(std::string_view input, bool& success) -> std::string
 {
     std::string _ret;
 
@@ -73,7 +73,7 @@ GetCratesAtTopOfStacksAfterMoveOperations(const std::string_view& input, bool& s
 
 template<size_t NumStacksInSupply>
 auto
-GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane(const std::string_view& input, bool& success) -> std::string
+GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane(std::string_view input, bool& success) -> std::string
 {
     std::string _ret;
 
@@ -99,16 +99,13 @@ GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane(const std::string_vie
 }
 
 // Template instantiations
-template auto GetCratesAtTopOfStacksAfterMoveOperations<SupplyStacks::numStacksInDataSet>(const std::string_view& input,
-											  bool& success) -> std::string;
-template auto
-GetCratesAtTopOfStacksAfterMoveOperations<SupplyStacks::numStacksInTestDataSet>(const std::string_view& input,
-										bool& success) -> std::string;
+template auto GetCratesAtTopOfStacksAfterMoveOperations<SupplyStacks::numStacksInDataSet>(std::string_view input, bool& success) -> std::string;
+template auto GetCratesAtTopOfStacksAfterMoveOperations<SupplyStacks::numStacksInTestDataSet>(std::string_view input, bool& success) -> std::string;
 
-template auto GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane<SupplyStacks::numStacksInTestDataSet>(
-  const std::string_view& input, bool& success) -> std::string;
+template auto GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane<SupplyStacks::numStacksInTestDataSet>(std::string_view input, bool& success)
+  -> std::string;
 
-template auto GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane<SupplyStacks::numStacksInDataSet>(
-  const std::string_view& input, bool& success) -> std::string;
+template auto GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane<SupplyStacks::numStacksInDataSet>(std::string_view input, bool& success)
+  -> std::string;
 
 } // namespace Solutions

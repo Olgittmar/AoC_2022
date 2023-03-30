@@ -5,8 +5,8 @@
 
 namespace Solutions {
 
-auto GetNumRedundantAssignmentPairs(const std::string_view& input, bool& success) -> std::uint32_t;
-auto GetNumPartiallyRedundantAssignmentPairs(const std::string_view& input, bool& success) -> std::uint32_t;
+auto GetNumRedundantAssignmentPairs(std::string_view input, bool& success) -> std::uint32_t;
+auto GetNumPartiallyRedundantAssignmentPairs(std::string_view input, bool& success) -> std::uint32_t;
 
 } // namespace Solutions
 #endif

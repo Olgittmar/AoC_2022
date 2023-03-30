@@ -16,8 +16,7 @@ template<size_t NumSacksInGroup> class RuckSackGroup
     public:
 
 	// Use range as parameter instead?
-	explicit RuckSackGroup(const std::vector<RuckSack>::const_iterator& start,
-			       const std::vector<RuckSack>::const_iterator& stop);
+	explicit RuckSackGroup(const std::vector<RuckSack>::const_iterator& start, const std::vector<RuckSack>::const_iterator& stop);
 
 	[[nodiscard]] auto getPriorityOfAuthenticityBadge() const -> uint32_t;
 
@@ -27,8 +26,7 @@ template<size_t NumSacksInGroup> class RuckSackGroup
 	std::vector<std::string> m_contents{};
 };
 
-template<size_t NumSacksInGroup>
-auto stringToRuckSackGroups(const std::string_view& input) -> std::vector<RuckSackGroup<NumSacksInGroup>>;
+template<size_t NumSacksInGroup> auto stringToRuckSackGroups(std::string_view input) -> std::vector<RuckSackGroup<NumSacksInGroup>>;
 
 } // namespace Solutions::CheckRuckSacks
 #endif

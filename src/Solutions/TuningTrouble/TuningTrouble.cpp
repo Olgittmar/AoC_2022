@@ -9,27 +9,28 @@
 #include <iostream>
 #include <iterator>
 #include <ranges>
+#include <set>
 #include <string_view>
 
 namespace {
 template<size_t SizeOfMarker>
 auto
-getMarkerEndPos(const std::string_view& data) -> std::uint32_t
+getMarkerEndPos(std::string_view data) -> std::uint32_t
 {
-    constexpr auto duplicateCharsFound = [](const std::string_view& subStr) -> bool
+    constexpr auto duplicateCharsFound = [](std::string_view subStr) -> bool
     {
-	// There is probably a more efficient way to do this
-	const auto numDuplicates = std::ranges::count_if(subStr, [&subStr](char character)
-							 { return !(1 == std::ranges::count(subStr, character)); });
-
-	return (0 < numDuplicates);
+	std::string tmp(subStr);
+	std::ranges::sort(tmp);
+	const auto [first, last] = std::ranges::unique(tmp);
+	tmp.erase(first, last);
+	return subStr.size() > tmp.size();
     };
 
     uint32_t beforeSequencePos = SizeOfMarker;
 
     while (beforeSequencePos < data.size())
 	{
-	    // take a span of SizeOfMarker chars from the buffer
+	    // slide_view in c++23
 	    const auto sequence = data.substr(beforeSequencePos - SizeOfMarker, SizeOfMarker);
 
 	    if (!duplicateCharsFound(sequence))
@@ -48,12 +49,10 @@ getMarkerEndPos(const std::string_view& data) -> std::uint32_t
 namespace Solutions {
 
 auto
-GetNumCharactersBeforeStartOfPacket(const std::string_view& input, bool& success) -> std::uint32_t
+GetNumCharactersBeforeStartOfPacket(std::string_view input, bool& success) -> std::uint32_t
 {
     constexpr size_t numCharsInStartOfPacketMarker = 4UL; // TODO: Move to template arg
-    uint32_t _ret = 0;
-
-    _ret = getMarkerEndPos<numCharsInStartOfPacketMarker>(input);
+    const auto _ret = getMarkerEndPos<numCharsInStartOfPacketMarker>(input);
 
     success = (_ret != input.size());
 
@@ -61,12 +60,10 @@ GetNumCharactersBeforeStartOfPacket(const std::string_view& input, bool& success
 }
 
 auto
-GetNumCharactersBeforeStartOfMessage(const std::string_view& input, bool& success) -> std::uint32_t
+GetNumCharactersBeforeStartOfMessage(std::string_view input, bool& success) -> std::uint32_t
 {
     constexpr size_t numCharsInStartOfMessageMarker = 14UL; // TODO: Same as above
-    uint32_t _ret = 0;
-
-    _ret = getMarkerEndPos<numCharsInStartOfMessageMarker>(input);
+    const auto _ret = getMarkerEndPos<numCharsInStartOfMessageMarker>(input);
 
     success = (_ret != input.size());
 

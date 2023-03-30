@@ -15,7 +15,7 @@ class MoveCommand
 	{
 	}
 
-	[[nodiscard]] static auto makeMoveCommand(const std::string_view& line) -> MoveCommand;
+	[[nodiscard]] static auto makeMoveCommand(std::string_view line) -> MoveCommand;
 
 	[[nodiscard]] inline auto
 	getNumCrates() const -> long
@@ -44,8 +44,7 @@ class MoveCommand
 	size_t m_to = 0;
 };
 
-[[nodiscard]] auto parseRearrangeCommands(const std::string_view& data)
-  -> std::vector<Solutions::SupplyStacks::MoveCommand>;
+[[nodiscard]] auto parseRearrangeCommands(std::string_view data) -> std::vector<Solutions::SupplyStacks::MoveCommand>;
 
 auto operator<<(std::ostream& out, const MoveCommand& command) -> std::ostream&;
 

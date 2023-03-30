@@ -65,8 +65,7 @@ template<utils::TrivialSizeType LengthType, utils::TrivialSizeType DistType, siz
 			return Right;
 		    default:
 			{
-			    throw std::invalid_argument(std::string("No known conversion rule from ") + dirChar +
-							" to Rope::Direction.");
+			    throw std::invalid_argument(std::string("No known conversion rule from ") + dirChar + " to Rope::Direction.");
 			}
 		}
 	}

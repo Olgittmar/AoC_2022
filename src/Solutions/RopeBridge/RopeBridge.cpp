@@ -12,7 +12,7 @@ namespace Solutions {
 
 template<size_t RopeLength>
 auto
-GetNumPositionsVisitedByTail(const std::string_view& input, bool& success) -> size_t
+GetNumPositionsVisitedByTail(std::string_view input, bool& success) -> size_t
 {
     using Rope_t = RopeBridge::Rope<RopeBridge::LengthType_t, RopeBridge::DistType_t, RopeLength>;
 
@@ -45,10 +45,8 @@ GetNumPositionsVisitedByTail(const std::string_view& input, bool& success) -> si
 }
 
 // Solution template instantiations
-template auto GetNumPositionsVisitedByTail<RopeBridge::ShortRopeLength>(const std::string_view& input, bool& success)
-  -> size_t;
+template auto GetNumPositionsVisitedByTail<RopeBridge::ShortRopeLength>(std::string_view input, bool& success) -> size_t;
 
-template auto GetNumPositionsVisitedByTail<RopeBridge::LongRopeLength>(const std::string_view& input, bool& success)
-  -> size_t;
+template auto GetNumPositionsVisitedByTail<RopeBridge::LongRopeLength>(std::string_view input, bool& success) -> size_t;
 
 } // namespace Solutions

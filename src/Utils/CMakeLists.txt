@@ -11,6 +11,8 @@ set(UTILS_LIB_SOURCES
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Definitions.hpp>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/DataBroker/DataBroker.hpp>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/DataBroker/DataBroker.cpp>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/DataBroker/TestDataGenerator.hpp>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/DataBroker/TestDataGenerator.cpp>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/SelectSolution/SelectSolution.hpp>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/SelectSolution/SelectSolution.cpp>"
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/PrettyPrint/PrettyPrint.hpp>"

@@ -12,7 +12,7 @@ constexpr auto _to = " to ";
 namespace Solutions::SupplyStacks {
 
 [[nodiscard]] auto
-MoveCommand::makeMoveCommand(const std::string_view& line) -> MoveCommand
+MoveCommand::makeMoveCommand(std::string_view line) -> MoveCommand
 {
     const auto afterMove = line.find_first_not_of(_move);
 
@@ -31,12 +31,11 @@ MoveCommand::makeMoveCommand(const std::string_view& line) -> MoveCommand
     const size_t from = std::stoul(fromStr);
     const size_t to = std::stoul(toStr); // NOLINT(readability-identifier-length)
 
-    return MoveCommand{numCrates, from - static_cast<unsigned long>(from != 0),
-		       to - static_cast<unsigned long>(from != 0)};
+    return MoveCommand{numCrates, from - static_cast<unsigned long>(from != 0), to - static_cast<unsigned long>(from != 0)};
 }
 
 [[nodiscard]] auto
-parseRearrangeCommands(const std::string_view& data) -> std::vector<MoveCommand>
+parseRearrangeCommands(std::string_view data) -> std::vector<MoveCommand>
 {
     std::vector<MoveCommand> _ret;
     constexpr auto lineDelimiter = '\n';

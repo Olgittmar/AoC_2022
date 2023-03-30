@@ -98,8 +98,7 @@ SupplyStack<MaxNumStacks>::pushToFrontOf(char crateId, size_t index)
 template<size_t MaxNumStacks>
 template<size_t OtherSize>
 auto
-SupplyStack<MaxNumStacks>::takeNFrom(SupplyStack<OtherSize>& other, size_t fromIndex, size_t toIndex,
-				     long numItemsToTake) -> bool
+SupplyStack<MaxNumStacks>::takeNFrom(SupplyStack<OtherSize>& other, size_t fromIndex, size_t toIndex, long numItemsToTake) -> bool
 {
     try
 	{
@@ -108,8 +107,7 @@ SupplyStack<MaxNumStacks>::takeNFrom(SupplyStack<OtherSize>& other, size_t fromI
 
 	    if (numItemsToTake > fromStack.size())
 		{
-		    throw std::invalid_argument("NumItemsToTake is larger than source stack size: " +
-						std::to_string(numItemsToTake));
+		    throw std::invalid_argument("NumItemsToTake is larger than source stack size: " + std::to_string(numItemsToTake));
 	    }
 
 	    const auto pos = std::prev(fromStack.end(), numItemsToTake);
@@ -128,7 +126,7 @@ SupplyStack<MaxNumStacks>::takeNFrom(SupplyStack<OtherSize>& other, size_t fromI
 
 template<size_t MaxNumStacks>
 void
-parseLine(Solutions::SupplyStacks::SupplyStack<MaxNumStacks>& _ret, const std::string_view& line)
+parseLine(Solutions::SupplyStacks::SupplyStack<MaxNumStacks>& _ret, std::string_view line)
 {
     constexpr auto crateBegin = '[';
     constexpr auto crateEnd = ']';
@@ -165,7 +163,7 @@ parseLine(Solutions::SupplyStacks::SupplyStack<MaxNumStacks>& _ret, const std::s
 
 template<size_t MaxNumStacks>
 [[nodiscard]] auto
-parseSupplyStackInitialState(const std::string_view& data) -> Solutions::SupplyStacks::SupplyStack<MaxNumStacks>
+parseSupplyStackInitialState(std::string_view data) -> Solutions::SupplyStacks::SupplyStack<MaxNumStacks>
 {
     Solutions::SupplyStacks::SupplyStack<MaxNumStacks> _ret;
     constexpr auto lineDelimiter = '\n';
@@ -204,9 +202,9 @@ operator<<(std::ostream& out, const SupplyStack<MaxNumStacks>& supplyStack) -> s
 template struct SupplyStack<SupplyStacks::numStacksInDataSet>;
 template struct SupplyStack<SupplyStacks::numStacksInTestDataSet>;
 
-template auto parseSupplyStackInitialState<SupplyStacks::numStacksInTestDataSet>(const std::string_view& data)
+template auto parseSupplyStackInitialState<SupplyStacks::numStacksInTestDataSet>(std::string_view data)
   -> Solutions::SupplyStacks::SupplyStack<SupplyStacks::numStacksInTestDataSet>;
 
-template auto parseSupplyStackInitialState<SupplyStacks::numStacksInDataSet>(const std::string_view& data)
+template auto parseSupplyStackInitialState<SupplyStacks::numStacksInDataSet>(std::string_view data)
   -> Solutions::SupplyStacks::SupplyStack<SupplyStacks::numStacksInDataSet>;
 } // namespace Solutions::SupplyStacks

@@ -12,31 +12,34 @@
 #include <cstdint>
 #include <iostream>
 #include <numeric>
+#include <ranges>
 #include <string>
 #include <string_view>
 #include <vector>
 
 namespace {
 auto
-parseInput(const std::string_view& input) -> std::vector<Solutions::ElfCalories::ElfInventory>
+parseInput(std::string_view input) -> std::vector<Solutions::ElfCalories::ElfInventory>
 {
     std::vector<Solutions::ElfCalories::ElfInventory> _ret;
-    size_t pos = 0;
-    const std::string delimiter = "\n\n";
+    constexpr std::string_view delimiter = "\n\n";
 
-    while (pos < input.size())
-	{
-	    const auto nextPos = input.find(delimiter, pos);
-	    const auto inventoryStr = input.substr(pos, nextPos - pos);
-	    pos = nextPos + size_t(nextPos != std::string_view::npos) * delimiter.size();
+    auto emplaceInventory = [&](const auto line) { _ret.emplace_back(line); };
+    std::ranges::for_each(std::views::split(input, delimiter), emplaceInventory);
 
-	    if (inventoryStr.empty())
-		{
-		    continue;
-	    }
+    // while (pos < input.size())
+    // {
+    //     const auto nextPos = input.find(delimiter, pos);
+    //     const auto inventoryStr = input.substr(pos, nextPos - pos);
+    //     pos = nextPos + size_t(nextPos != std::string_view::npos) * std::string{delimiter}.size();
 
-	    _ret.emplace_back(inventoryStr);
-	}
+    //     if (inventoryStr.empty())
+    // 	{
+    // 	    continue;
+    //     }
+
+    //     _ret.emplace_back(inventoryStr);
+    // }
 
     return _ret;
 }
@@ -46,7 +49,7 @@ parseInput(const std::string_view& input) -> std::vector<Solutions::ElfCalories:
 namespace Solutions {
 
 auto
-GetCaloriesOfElfWithMostCalories(const std::string_view& input, bool& success) -> std::uint32_t
+GetCaloriesOfElfWithMostCalories(std::string_view input, bool& success) -> std::uint32_t
 {
     uint32_t _ret = 0;
     const auto inventories = parseInput(input);
@@ -65,7 +68,7 @@ GetCaloriesOfElfWithMostCalories(const std::string_view& input, bool& success) -
 }
 
 auto
-GetCaloriesOfTopThreeElvesWithMostCalories(const std::string_view& input, bool& success) -> std::uint32_t
+GetCaloriesOfTopThreeElvesWithMostCalories(std::string_view input, bool& success) -> std::uint32_t
 {
     uint32_t _ret = 0;
 
@@ -78,8 +81,7 @@ GetCaloriesOfTopThreeElvesWithMostCalories(const std::string_view& input, bool& 
 
     const auto sumOfTopThreeCaloriesCount = std::accumulate(
       std::next(inventories.begin()), std::next(inventories.begin(), 3), inventories.front().getTotalCalories(),
-      [](uint32_t Sum, const Solutions::ElfCalories::ElfInventory& inventory)
-      { return Sum + inventory.getTotalCalories(); });
+      [](uint32_t Sum, const Solutions::ElfCalories::ElfInventory& inventory) { return Sum + inventory.getTotalCalories(); });
 
     success = true;
     _ret = sumOfTopThreeCaloriesCount;

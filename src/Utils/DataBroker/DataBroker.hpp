@@ -4,6 +4,8 @@
 #include <Definitions.hpp>
 #include <cstdint>
 #include <filesystem>
+#include <functional>
+#include <map>
 #include <string>
 #include <unordered_map>
 
@@ -15,6 +17,7 @@ class DataBroker
 
 	static auto getSolutionData(SolutionId solutionId) -> std::string;
 	static auto getSolutionTestData(SolutionId solutionId, uint32_t testCase) -> std::string;
+	static auto getSolutionBenchmarkDataGenerator(SolutionId solutionId) -> std::function<std::string()>;
 
     private:
 

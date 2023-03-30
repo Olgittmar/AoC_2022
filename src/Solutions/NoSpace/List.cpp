@@ -26,8 +26,7 @@ List<SizeType>::execute(std::shared_ptr<Directory<SizeType>>& currentWorkingDire
 
 template<typename SizeType>
 void
-List<SizeType>::parseDir(const std::string_view& line,
-			 const std::shared_ptr<Directory<SizeType>>& currentWorkingDirectory)
+List<SizeType>::parseDir(std::string_view line, const std::shared_ptr<Directory<SizeType>>& currentWorkingDirectory)
 {
     const auto dirName = std::string{line.substr(strlen(dirIdentifier))};
     m_dirsToAdd.push_back(std::make_shared<Directory<SizeType>>(dirName, currentWorkingDirectory));
@@ -35,8 +34,7 @@ List<SizeType>::parseDir(const std::string_view& line,
 
 template<typename SizeType>
 void
-List<SizeType>::parseRegularFile(const std::string_view& line,
-				 const std::shared_ptr<Directory<SizeType>>& currentWorkingDirectory)
+List<SizeType>::parseRegularFile(std::string_view line, const std::shared_ptr<Directory<SizeType>>& currentWorkingDirectory)
 {
     const auto nameStart = line.rfind(argDelimiter);
     const auto filename = std::string(line.substr(nameStart + 1));

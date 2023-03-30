@@ -7,12 +7,9 @@
 
 namespace Solutions {
 
-template<size_t NumStacksInSupply>
-auto GetCratesAtTopOfStacksAfterMoveOperations(const std::string_view& input, bool& success) -> std::string;
+template<size_t NumStacksInSupply> auto GetCratesAtTopOfStacksAfterMoveOperations(std::string_view input, bool& success) -> std::string;
 
-template<size_t NumStacksInSupply>
-auto GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane(const std::string_view& input, bool& success)
-  -> std::string;
+template<size_t NumStacksInSupply> auto GetCratesAtTopOfStacksAfterMoveOperationsWithAdvancedCrane(std::string_view input, bool& success) -> std::string;
 
 } // namespace Solutions
 #endif

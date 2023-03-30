@@ -11,8 +11,7 @@
 namespace Solutions::CheckRuckSacks {
 
 template<size_t NumSacksInGroup>
-RuckSackGroup<NumSacksInGroup>::RuckSackGroup(const std::vector<RuckSack>::const_iterator& start,
-					      const std::vector<RuckSack>::const_iterator& stop)
+RuckSackGroup<NumSacksInGroup>::RuckSackGroup(const std::vector<RuckSack>::const_iterator& start, const std::vector<RuckSack>::const_iterator& stop)
 {
     m_contents.reserve(NumSacksInGroup);
     std::ranges::for_each(start, stop,
@@ -35,8 +34,7 @@ RuckSackGroup<NumSacksInGroup>::getPriorityOfAuthenticityBadge() const -> uint32
 			  [&from_intersection](const std::string& nextContents)
 			  {
 			      std::string to_intersection;
-			      std::ranges::set_intersection(from_intersection, nextContents,
-							    std::back_inserter(to_intersection));
+			      std::ranges::set_intersection(from_intersection, nextContents, std::back_inserter(to_intersection));
 			      from_intersection = to_intersection;
 			  });
 
@@ -50,7 +48,7 @@ RuckSackGroup<NumSacksInGroup>::getPriorityOfAuthenticityBadge() const -> uint32
 
 template<size_t NumSacksInGroup>
 auto
-stringToRuckSackGroups(const std::string_view& input) -> std::vector<RuckSackGroup<NumSacksInGroup>>
+stringToRuckSackGroups(std::string_view input) -> std::vector<RuckSackGroup<NumSacksInGroup>>
 {
     std::vector<RuckSackGroup<NumSacksInGroup>> _ret;
     const auto ruckSacks = stringToRuckSacks(input);
@@ -68,7 +66,7 @@ stringToRuckSackGroups(const std::string_view& input) -> std::vector<RuckSackGro
 
 template class RuckSackGroup<CheckRuckSacks::numRucksacksInGroup>;
 
-template auto stringToRuckSackGroups<CheckRuckSacks::numRucksacksInGroup>(const std::string_view& input)
+template auto stringToRuckSackGroups<CheckRuckSacks::numRucksacksInGroup>(std::string_view input)
   -> std::vector<RuckSackGroup<CheckRuckSacks::numRucksacksInGroup>>;
 
 } // namespace Solutions::CheckRuckSacks

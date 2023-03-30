@@ -23,8 +23,7 @@ template<size_t MaxNumStacks> class SupplyStack
 	void pushToBackOf(char crateId, size_t index);
 	void pushToFrontOf(char crateId, size_t index);
 
-	template<size_t OtherSize>
-	auto takeNFrom(SupplyStack<OtherSize>& other, size_t fromIndex, size_t toIndex, long numItemsToTake) -> bool;
+	template<size_t OtherSize> auto takeNFrom(SupplyStack<OtherSize>& other, size_t fromIndex, size_t toIndex, long numItemsToTake) -> bool;
 
 	constexpr auto
 	moveN(size_t fromIndex, size_t toIndex, long numItemsToTake) -> bool
@@ -32,8 +31,7 @@ template<size_t MaxNumStacks> class SupplyStack
 	    return takeNFrom<MaxNumStacks>(*this, fromIndex, toIndex, numItemsToTake);
 	}
 
-	template<size_t SupplyStackSize>
-	friend auto operator<<(std::ostream& out, const SupplyStack<SupplyStackSize>& supplyStack) -> std::ostream&;
+	template<size_t SupplyStackSize> friend auto operator<<(std::ostream& out, const SupplyStack<SupplyStackSize>& supplyStack) -> std::ostream&;
 
     private:
 
@@ -41,15 +39,11 @@ template<size_t MaxNumStacks> class SupplyStack
 	std::array<MyStack_t, MaxNumStacks> m_stacks; // misnomer?
 };
 
-template<size_t MaxNumStacks>
-auto operator<<(std::ostream& out, const SupplyStack<MaxNumStacks>& supplyStack) -> std::ostream&;
+template<size_t MaxNumStacks> auto operator<<(std::ostream& out, const SupplyStack<MaxNumStacks>& supplyStack) -> std::ostream&;
 
-template<size_t MaxNumStacks>
-void parseLine(Solutions::SupplyStacks::SupplyStack<MaxNumStacks>& _ret, const std::string_view& line);
+template<size_t MaxNumStacks> void parseLine(Solutions::SupplyStacks::SupplyStack<MaxNumStacks>& _ret, std::string_view line);
 
-template<size_t MaxNumStacks>
-[[nodiscard]] auto parseSupplyStackInitialState(const std::string_view& data)
-  -> Solutions::SupplyStacks::SupplyStack<MaxNumStacks>;
+template<size_t MaxNumStacks> [[nodiscard]] auto parseSupplyStackInitialState(std::string_view data) -> Solutions::SupplyStacks::SupplyStack<MaxNumStacks>;
 
 } // namespace Solutions::SupplyStacks
 #endif

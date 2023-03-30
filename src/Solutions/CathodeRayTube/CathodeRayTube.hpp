@@ -8,8 +8,7 @@
 
 namespace Solutions {
 
-template<size_t CycleOffset, size_t CycleStep, size_t CycleEnd>
-auto GetSumOfSignalStrengths(const std::string_view& input, bool& success) -> long;
+template<size_t CycleOffset, size_t CycleStep, size_t CycleEnd> auto GetSumOfSignalStrengths(std::string_view input, bool& success) -> long;
 
 } // namespace Solutions
 #endif

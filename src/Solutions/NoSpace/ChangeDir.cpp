@@ -21,9 +21,8 @@ ChangeDirectory<SizeType>::execute(std::shared_ptr<Directory<SizeType>>& current
 	    return true;
     }
 
-    auto destination =
-      std::ranges::find_if(currentWorkingDirectory->dirs, [this](const std::shared_ptr<Directory<SizeType>>& file)
-			   { return m_destinationName == file->getName(); });
+    auto destination = std::ranges::find_if(currentWorkingDirectory->dirs,
+					    [this](const std::shared_ptr<Directory<SizeType>>& file) { return m_destinationName == file->getName(); });
 
     if (currentWorkingDirectory->dirs.end() != destination)
 	{

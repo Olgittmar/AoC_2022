@@ -8,7 +8,7 @@ class BuildWithConan(ConanFile):
 	requires = "gtest/cci.20210126", "benchmark/1.7.0"
 
 	def layout(self):
-		self.folders.root = ".."
+		self.folders.root = "../build"
 		self.folders.source = "."
 		self.folders.build = "build"
 		current_layout = cmake_layout(self)

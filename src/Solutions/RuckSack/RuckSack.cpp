@@ -30,12 +30,11 @@ RuckSack::calculatePriority()
 
     // Accumulate by char value
     m_priority =
-      std::accumulate(intersection.cbegin(), intersection.cend(), 0U,
-		      [](uint32_t sum, char character) -> uint32_t { return sum + charToPriority(character); });
+      std::accumulate(intersection.cbegin(), intersection.cend(), 0U, [](uint32_t sum, char character) -> uint32_t { return sum + charToPriority(character); });
 }
 
 [[nodiscard]] auto
-stringToRuckSacks(const std::string_view& input) -> std::vector<RuckSack>
+stringToRuckSacks(std::string_view input) -> std::vector<RuckSack>
 {
     std::vector<RuckSack> _ret;
     constexpr auto delimiter = '\n';

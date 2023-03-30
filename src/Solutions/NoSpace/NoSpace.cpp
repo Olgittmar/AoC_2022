@@ -13,8 +13,7 @@ namespace {
 
 template<typename SizeType>
 void
-executeCommand(const std::string_view& line,
-	       std::shared_ptr<Solutions::NoSpace::Directory<SizeType>>& currentWorkingDirectory)
+executeCommand(std::string_view line, std::shared_ptr<Solutions::NoSpace::Directory<SizeType>>& currentWorkingDirectory)
 {
     constexpr auto changeDirIdentifier = "cd ";
     constexpr auto listIdentifier = "ls\n";
@@ -49,12 +48,12 @@ template<typename SizeType> struct Root : public Solutions::NoSpace::Directory<S
 	static constexpr auto name = Solutions::NoSpace::RootName;
 	Root() : Solutions::NoSpace::Directory<SizeType>(name, nullptr) {}
 
-	[[nodiscard]] static auto makeRoot(const std::string_view& input) -> std::shared_ptr<Root>;
+	[[nodiscard]] static auto makeRoot(std::string_view input) -> std::shared_ptr<Root>;
 };
 
 template<typename SizeType>
 [[nodiscard]] auto
-Root<SizeType>::makeRoot(const std::string_view& input) -> std::shared_ptr<Root<SizeType>>
+Root<SizeType>::makeRoot(std::string_view input) -> std::shared_ptr<Root<SizeType>>
 {
     using Command = Solutions::NoSpace::Command<SizeType>;
     using Directory = Solutions::NoSpace::Directory<SizeType>;
@@ -86,7 +85,7 @@ namespace Solutions {
 
 template<typename SizeType, SizeType MaxDirSize>
 auto
-GetTotalSizeOfDirectories(const std::string_view& input, bool& success) -> std::uint64_t
+GetTotalSizeOfDirectories(std::string_view input, bool& success) -> std::uint64_t
 {
     std::uint64_t _ret = 0;
     auto isSmallEnough = [](SizeType dirSize) -> bool { return dirSize <= MaxDirSize; };
@@ -112,7 +111,7 @@ GetTotalSizeOfDirectories(const std::string_view& input, bool& success) -> std::
 
 template<typename SizeType, SizeType TotalDiskSize, SizeType DiskSpaceNeeded>
 auto
-GetSizeOfDirectoryToDelete(const std::string_view& input, bool& success) -> std::uint64_t
+GetSizeOfDirectoryToDelete(std::string_view input, bool& success) -> std::uint64_t
 {
     std::uint64_t _ret = 0;
 
@@ -140,8 +139,7 @@ GetSizeOfDirectoryToDelete(const std::string_view& input, bool& success) -> std:
     }
 
     auto smallestDir = std::ranges::min_element(gatheredDirs.cbegin(), gatheredDirs.cend(),
-						[](const auto& dir1, const auto& dir2) constexpr
-						{ return dir1->getSize() < dir2->getSize(); });
+						[](const auto& dir1, const auto& dir2) constexpr { return dir1->getSize() < dir2->getSize(); });
 
     _ret = (*smallestDir)->getSize(); // ew
 
@@ -149,11 +147,9 @@ GetSizeOfDirectoryToDelete(const std::string_view& input, bool& success) -> std:
     return _ret;
 }
 
-template auto GetTotalSizeOfDirectories<size_t, NoSpace::dirSizeLimit>(const std::string_view& input, bool& success)
-  -> std::uint64_t;
+template auto GetTotalSizeOfDirectories<size_t, NoSpace::dirSizeLimit>(std::string_view input, bool& success) -> std::uint64_t;
 
-template auto
-GetSizeOfDirectoryToDelete<size_t, NoSpace::availableSpaceOnFilesystem, NoSpace::spaceOnFilesystemRequired>(
-  const std::string_view& input, bool& success) -> std::uint64_t;
+template auto GetSizeOfDirectoryToDelete<size_t, NoSpace::availableSpaceOnFilesystem, NoSpace::spaceOnFilesystemRequired>(std::string_view input, bool& success)
+  -> std::uint64_t;
 
 } // namespace Solutions

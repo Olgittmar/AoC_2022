@@ -12,7 +12,7 @@ class ElfInventory
 {
     public:
 
-	explicit ElfInventory(const std::string_view& inventoryStr);
+	explicit ElfInventory(std::string_view inventoryStr);
 
 	ElfInventory(const ElfInventory& other) = default;
 	ElfInventory(ElfInventory&& other) = default;

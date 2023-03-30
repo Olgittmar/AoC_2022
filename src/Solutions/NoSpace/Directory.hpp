@@ -12,14 +12,11 @@ namespace Solutions::NoSpace {
 
 template<typename SizeType> struct Directory : public File<SizeType>
 {
-	Directory(const std::string& name, const std::shared_ptr<Directory>& parent) : File<SizeType>(name, 0UL, parent)
-	{
-	}
+	Directory(const std::string& name, const std::shared_ptr<Directory>& parent) : File<SizeType>(name, 0UL, parent) {}
 
 	[[nodiscard]] auto getSize() -> SizeType;
 
-	static void gatherDirsIf(std::deque<std::shared_ptr<Directory>>& dirsToCheck,
-				 std::vector<std::shared_ptr<Directory>>& gatheredDirs,
+	static void gatherDirsIf(std::deque<std::shared_ptr<Directory>>& dirsToCheck, std::vector<std::shared_ptr<Directory>>& gatheredDirs,
 				 std::function<SizeType(SizeType)> compare);
 
 	std::vector<File<SizeType>> files = {};

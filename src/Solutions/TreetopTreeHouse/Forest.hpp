@@ -97,7 +97,7 @@ template<typename HeightType, utils::index_t Size> class Forest
 	constexpr Forest() = default;
 	constexpr Forest(const TreeMap_t& heights) : trees(heights) {}
 
-	[[nodiscard]] static auto StringViewToTrees(const std::string_view& input) -> TreeMap_t;
+	[[nodiscard]] static auto StringViewToTrees(std::string_view input) -> TreeMap_t;
 
 	[[nodiscard]] auto
 	getTreesVisibleFromEdge() const -> VisibilityMap_t
@@ -225,8 +225,7 @@ template<typename HeightType, utils::index_t Size> class Forest
 	TreeMap_t visibleDistanceWest;
 };
 
-template<typename HeightType, utils::index_t Size>
-auto operator<<(std::ostream& out, const Forest<HeightType, Size>& forest) -> std::ostream&;
+template<typename HeightType, utils::index_t Size> auto operator<<(std::ostream& out, const Forest<HeightType, Size>& forest) -> std::ostream&;
 
 } // namespace Solutions::TreetopTreeHouse
 #endif

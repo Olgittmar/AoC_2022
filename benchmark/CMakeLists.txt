@@ -31,5 +31,5 @@ target_include_directories(benchmark_Solutions
 
 add_custom_target(
 	run_benchmark
-	COMMAND benchmark_Solutions
+	COMMAND valgrind --tool=callgrind ./benchmark_Solutions
 )

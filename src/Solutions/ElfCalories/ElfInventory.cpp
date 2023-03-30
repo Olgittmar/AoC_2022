@@ -9,24 +9,23 @@
 
 namespace Solutions::ElfCalories {
 
-ElfInventory::ElfInventory(const std::string_view& inventoryStr)
+ElfInventory::ElfInventory(std::string_view inventoryStr)
 {
     size_t pos = 0;
     uint32_t caloriesCount = 0;
+    constexpr auto lineDelim = '\n';
 
     while (pos < inventoryStr.size())
 	{
-	    const auto nextPos = inventoryStr.find('\n', pos);
+	    const auto nextPos = inventoryStr.find(lineDelim, pos);
 	    const auto caloriesStr = inventoryStr.substr(pos, nextPos - pos);
 
 	    pos = nextPos + size_t(nextPos != std::string_view::npos);
 
-	    const auto conversionResult =
-	      std::from_chars(caloriesStr.data(), caloriesStr.data() + caloriesStr.size(), caloriesCount);
+	    const auto conversionResult = std::from_chars(caloriesStr.data(), caloriesStr.data() + caloriesStr.size(), caloriesCount);
 	    if (conversionResult.ec == std::errc::invalid_argument)
 		{
-		    std::cout << "WARNING: unable to convert " << caloriesStr << " to caloriesCount (uint32_t)."
-			      << std::endl;
+		    std::cout << "WARNING: unable to convert " << caloriesStr << " to caloriesCount (uint32_t)." << std::endl;
 		    continue;
 	    }
 

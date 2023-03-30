@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <exception>
 #include <iostream>
+#include <numeric>
 #include <stdexcept>
 #include <string_view>
 #include <vector>
@@ -14,15 +15,11 @@
 namespace Solutions {
 
 auto
-GetScoreOfStrategyGuide(const std::string_view& input, bool& success) -> uint32_t
+GetScoreOfStrategyGuide(std::string_view input, bool& success) -> int32_t
 {
-    uint32_t totalScore = 0;
-
     const auto rounds = RockPaperScissors::stringToRounds<RockPaperScissors::UnknownOutcome>(input);
-    for (const auto& round : rounds)
-	{
-	    totalScore += round.getScore();
-	}
+    const auto totalScore = std::accumulate(rounds.cbegin(), rounds.cend(), 0,
+					    [](int32_t sum, const RockPaperScissors::Round& round) { return sum + round.getScore(); });
 
     success = true;
 
@@ -30,15 +27,11 @@ GetScoreOfStrategyGuide(const std::string_view& input, bool& success) -> uint32_
 }
 
 auto
-GetScoreOfDecryptedStrategyGuide(const std::string_view& input, bool& success) -> uint32_t
+GetScoreOfDecryptedStrategyGuide(std::string_view input, bool& success) -> uint32_t
 {
-    uint32_t totalScore = 0;
-
     const auto rounds = RockPaperScissors::stringToRounds<RockPaperScissors::UnknownPlayerShape>(input);
-    for (const auto& round : rounds)
-	{
-	    totalScore += round.getScore();
-	}
+    const auto totalScore = std::accumulate(rounds.cbegin(), rounds.cend(), 0U,
+					    [](uint32_t sum, const RockPaperScissors::Round& round) { return sum + round.getScore(); });
 
     success = true;
 

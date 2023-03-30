@@ -50,8 +50,7 @@ main(int argCount, char* argv[]) -> int
 	    const auto solutionId = SelectSolution(day, problem);
 	    if (solutionId == utils::SolutionId::Invalid)
 		{
-		    utils::log_error(source_location::current(), "Invalid solution id: ", uint32_t(solutionId),
-				     " from day: ", day, " and problem: ", problem);
+		    utils::log_error(source_location::current(), "Invalid solution id: ", uint32_t(solutionId), " from day: ", day, " and problem: ", problem);
 		    return EXIT_FAILURE;
 	    }
 

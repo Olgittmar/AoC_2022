@@ -8,7 +8,7 @@
 
 namespace Solutions {
 
-template<size_t RopeLength> auto GetNumPositionsVisitedByTail(const std::string_view& input, bool& success) -> size_t;
+template<size_t RopeLength> auto GetNumPositionsVisitedByTail(std::string_view input, bool& success) -> size_t;
 
 } // namespace Solutions
 #endif

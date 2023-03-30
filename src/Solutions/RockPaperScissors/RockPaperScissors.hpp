@@ -5,8 +5,8 @@
 
 namespace Solutions {
 
-auto GetScoreOfStrategyGuide(const std::string_view& input, bool& success) -> uint32_t;
-auto GetScoreOfDecryptedStrategyGuide(const std::string_view& input, bool& success) -> uint32_t;
+auto GetScoreOfStrategyGuide(std::string_view input, bool& success) -> int32_t;
+auto GetScoreOfDecryptedStrategyGuide(std::string_view input, bool& success) -> uint32_t;
 
 } // namespace Solutions
 #endif

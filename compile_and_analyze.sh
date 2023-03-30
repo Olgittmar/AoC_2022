@@ -12,6 +12,9 @@ cmake ..\
  -S../../..\
  -B.\
  &&
+ninja format_project &&
 ninja install &&
-ninja run_tests
+ninja run_tests &&
+ninja run_clang_tidy &&
+ninja run_cppcheck
 cd -

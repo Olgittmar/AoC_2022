@@ -1,113 +1,104 @@
 #include "Round.hpp"
 
 // Std
-
+#include <algorithm>
+#include <iterator>
+#include <ranges>
 // Internal
 
 namespace Solutions::RockPaperScissors {
-
-Round::Round(Shape opponentShape, Outcome outcome) // NOLINT(bugprone-easily-swappable-parameters)
-  : m_opponentShape(opponentShape), m_outcome(outcome)
-{
-    updatePlayerhand();
-}
-
-Round::Round(Shape playerShape, Shape opponentShape) // NOLINT(bugprone-easily-swappable-parameters)
-  : m_playerShape(playerShape), m_opponentShape(opponentShape)
-{
-    updateOutcome();
-}
 
 void
 Round::updateOutcome()
 {
     using enum Outcome;
 
-    const auto difference = int32_t(m_playerShape) - int32_t(m_opponentShape);
-
-    if (difference == 0)
+    const auto difference = static_cast<int32_t>(m_playerShape) - static_cast<int32_t>(m_opponentShape);
+    switch (difference)
 	{
-	    m_outcome = Draw;
-	    return;
-    }
-
-    if (difference == -1 || difference == 2)
-	{
-	    m_outcome = Loss;
-	    return;
-    }
-
-    if (difference == 1 || difference == -2)
-	{
-	    m_outcome = Win;
-	    return;
-    }
+	    case 0:
+		{
+		    m_outcome = Draw;
+		    return;
+		}
+	    case -1:
+	    case 2:
+		{
+		    m_outcome = Loss;
+		    return;
+		}
+	    case 1:
+	    case -2:
+		{
+		    m_outcome = Win;
+		    return;
+		}
+	}
 }
 
 void
 Round::updatePlayerhand()
 {
-    // How to do this nicer? Unique sum?
-    if ((m_opponentShape == Shape::Rock && m_outcome == Outcome::Loss) ||
-	(m_opponentShape == Shape::Paper && m_outcome == Outcome::Win) ||
-	(m_opponentShape == Shape::Scissors && m_outcome == Outcome::Draw))
-	{
-	    // Sum 1, 8, 6
-	    m_playerShape = Shape::Scissors;
-	    return;
-    }
+    const auto identifier = roundHash(m_opponentShape, m_outcome);
 
-    if ((m_opponentShape == Shape::Rock && m_outcome == Outcome::Draw) ||
-	(m_opponentShape == Shape::Paper && m_outcome == Outcome::Loss) ||
-	(m_opponentShape == Shape::Scissors && m_outcome == Outcome::Win))
+    switch (identifier)
 	{
-	    // Sum 4, 2, 9
-	    m_playerShape = Shape::Rock;
-	    return;
-    }
-
-    if ((m_opponentShape == Shape::Rock && m_outcome == Outcome::Win) ||
-	(m_opponentShape == Shape::Paper && m_outcome == Outcome::Draw) ||
-	(m_opponentShape == Shape::Scissors && m_outcome == Outcome::Loss))
-	{
-	    // Sum 7, 5, 3
-	    m_playerShape = Shape::Paper;
-	    return;
-    }
+	    case roundHash(Shape::Rock, Outcome::Loss):
+	    case roundHash(Shape::Paper, Outcome::Win):
+	    case roundHash(Shape::Scissors, Outcome::Draw):
+		{
+		    m_playerShape = Shape::Scissors;
+		    return;
+		}
+	    case roundHash(Shape::Rock, Outcome::Draw):
+	    case roundHash(Shape::Paper, Outcome::Loss):
+	    case roundHash(Shape::Scissors, Outcome::Win):
+		{
+		    m_playerShape = Shape::Rock;
+		    return;
+		}
+	    case roundHash(Shape::Rock, Outcome::Win):
+	    case roundHash(Shape::Paper, Outcome::Draw):
+	    case roundHash(Shape::Scissors, Outcome::Loss):
+		{
+		    m_playerShape = Shape::Paper;
+		    return;
+		}
+	}
 }
 
 template<>
 [[nodiscard]] auto
-stringToRounds<UnknownOutcome>(const std::string_view& input) -> std::vector<Round>
+stringToRounds<UnknownOutcome>(std::string_view input) -> std::vector<Round>
 {
     constexpr auto delimiter = '\n';
-    const auto numLines = std::count(input.cbegin(), input.cend(), delimiter) + 1;
+    const auto numLines = std::ranges::count(input, delimiter) + 1;
     std::vector<Round> _ret;
     _ret.reserve(numLines);
-    size_t pos = 0;
 
-    while (pos < input.size())
-	{
-	    const auto nextPos = input.find(delimiter, pos);
-	    const auto roundStr = input.substr(pos, nextPos - pos);
-	    pos = nextPos + size_t(nextPos != std::string_view::npos);
+    auto lineToRound = [&](const auto line)
+    {
+	const auto opponentShape = charToShape(line.front());
+	// drop_view ?
+	const auto opponentPart = std::ranges::subrange(std::next(line.begin(), 2), line.end());
+	const auto playerShape = charToShape(opponentPart.front());
 
-	    const auto opponentShape = charToShape(roundStr.front());
-	    const auto playerShape = charToShape(roundStr.back());
+	_ret.emplace_back(playerShape, opponentShape).updateOutcome();
+    };
 
-	    _ret.emplace_back(playerShape, opponentShape);
-	}
+    std::ranges::for_each(std::views::split(input, delimiter), lineToRound);
 
     return _ret;
 }
 
 template<>
 [[nodiscard]] auto
-stringToRounds<UnknownPlayerShape>(const std::string_view& input) -> std::vector<Round>
+stringToRounds<UnknownPlayerShape>(std::string_view input) -> std::vector<Round>
 {
     constexpr auto delimiter = '\n';
-    const auto numLines = std::count(input.cbegin(), input.cend(), delimiter) + 1;
-    std::vector<Round> _ret{};
+    const auto numLines = std::ranges::count(input, delimiter) + 1;
+
+    std::vector<Round> _ret;
     _ret.reserve(numLines);
     size_t pos = 0;
 
@@ -120,7 +111,8 @@ stringToRounds<UnknownPlayerShape>(const std::string_view& input) -> std::vector
 	    const auto opponentShape = charToShape(roundStr.front());
 	    const auto outcome = charToOutcome(roundStr.back());
 
-	    _ret.emplace_back(opponentShape, outcome);
+	    auto& round = _ret.emplace_back(opponentShape, outcome);
+	    round.updatePlayerhand();
 	}
 
     return _ret;

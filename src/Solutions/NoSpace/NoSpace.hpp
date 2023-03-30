@@ -13,11 +13,10 @@
 
 namespace Solutions {
 
-template<typename SizeType, SizeType MaxDirSize>
-auto GetTotalSizeOfDirectories(const std::string_view& input, bool& success) -> std::uint64_t;
+template<typename SizeType, SizeType MaxDirSize> auto GetTotalSizeOfDirectories(std::string_view input, bool& success) -> std::uint64_t;
 
 template<typename SizeType, SizeType TotalDiskSize, SizeType DiskSpaceNeeded>
-auto GetSizeOfDirectoryToDelete(const std::string_view& input, bool& success) -> std::uint64_t;
+auto GetSizeOfDirectoryToDelete(std::string_view input, bool& success) -> std::uint64_t;
 
 } // namespace Solutions
 #endif

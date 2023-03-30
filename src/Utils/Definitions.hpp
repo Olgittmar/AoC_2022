@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <ranges>
 #include <string_view>
+#include <variant>
 
 // Project internal
 #include "Coordinates/Coordinates2D.hpp"
@@ -69,11 +70,10 @@ enum class SolutionId : ulong
 
 using IsValidSolution =
   SolutionIdCheck<SolutionId::FattestElfCalories, SolutionId::TopThreeFattestElfCalories, SolutionId::RockPaperScissors,
-		  SolutionId::DecryptedRockPaperScissors, SolutionId::RucksackReorganization,
-		  SolutionId::RucksackBadges, SolutionId::CampCleanup, SolutionId::PartialCampCleanup,
-		  SolutionId::RearrangeSupplyStacks, SolutionId::RearrangeSupplyStacksWithAdvancedCrane,
-		  SolutionId::TuningTrouble, SolutionId::MessageTuningTrouble, SolutionId::NoSpace,
-		  SolutionId::YesSpace, SolutionId::TreetopTreeHouse, SolutionId::TreetopTreeHouseDist,
+		  SolutionId::DecryptedRockPaperScissors, SolutionId::RucksackReorganization, SolutionId::RucksackBadges,
+		  SolutionId::CampCleanup, SolutionId::PartialCampCleanup, SolutionId::RearrangeSupplyStacks,
+		  SolutionId::RearrangeSupplyStacksWithAdvancedCrane, SolutionId::TuningTrouble, SolutionId::MessageTuningTrouble,
+		  SolutionId::NoSpace, SolutionId::YesSpace, SolutionId::TreetopTreeHouse, SolutionId::TreetopTreeHouseDist,
 		  SolutionId::RopeBridge, SolutionId::RopeBridgeWithLongRopes, SolutionId::CathodeRayTube>;
 
 namespace SolutionIdStrings {
@@ -245,8 +245,8 @@ namespace Color {
 	    constexpr auto CYAN_BOLD_BRIGHT = "\033[1;96m";   // CYAN
 	    constexpr auto WHITE_BOLD_BRIGHT = "\033[1;97m";  // WHITE
 
-	} // namespace HighIntensity
-    }     // namespace Foreground
+	}                                                     // namespace HighIntensity
+    }                                                         // namespace Foreground
 
     namespace Background {
 
@@ -272,11 +272,15 @@ namespace Color {
 	    constexpr auto CYAN_BACKGROUND_BRIGHT = "\033[0;106m";   // CYAN
 	    constexpr auto WHITE_BACKGROUND_BRIGHT = "\033[0;107m";  // WHITE
 
-	} // namespace HighIntensity
+	}                                                            // namespace HighIntensity
 
-    } // namespace Background
+    }                                                                // namespace Background
 
 } // namespace Color
+
+namespace BenchmarkSolutions {
+    constexpr size_t BenchCaseSeverity = 10UL;
+} // namespace BenchmarkSolutions
 
 } // namespace utils
 

@@ -22,14 +22,14 @@ namespace Solutions::TreetopTreeHouse {
 
 template<typename HeightType, utils::index_t Size>
 auto
-Forest<HeightType, Size>::StringViewToTrees(const std::string_view& input) -> TreeMap_t
+Forest<HeightType, Size>::StringViewToTrees(std::string_view input) -> TreeMap_t
 {
     constexpr auto lineDelimiter = '\n';
 
     TreeMap_t initList{{}};
 
     size_t strPos = 0;
-    for (size_t row = 0; row < Size.row && strPos < input.size(); ++row)
+    for (size_t row = 0; (row < Size.row) && (strPos < input.size()); ++row)
 	{
 	    const auto rowEnd = input.find(lineDelimiter, strPos);
 	    const auto line = input.substr(strPos, rowEnd - strPos);
@@ -142,8 +142,7 @@ Forest<HeightType, Size>::setVisibleDistance(utils::index_t index)
     while (!isAtEdge<Dir>(index))
 	{
 	    const auto treeHeight = getHeightAt(index);
-	    const auto blockingHeightDistances =
-	      std::span(std::next(distSinceLastSeen.cbegin(), treeHeight), distSinceLastSeen.cend());
+	    const auto blockingHeightDistances = std::span(std::next(distSinceLastSeen.cbegin(), treeHeight), distSinceLastSeen.cend());
 	    const auto distToLastBlockingTree = std::ranges::min(blockingHeightDistances);
 
 	    visibleDistanceInDir.at(index.row * Size.column + index.column) = distToLastBlockingTree;
@@ -164,8 +163,7 @@ Forest<HeightType, Size>::getVisibleDistanceScoreMap() const -> TreeMap_t
     TreeMap_t _ret;
     for (size_t idx = 0UL; idx < Size.row * Size.column; ++idx)
 	{
-	    _ret.at(idx) = (visibleDistanceNorth.at(idx) * visibleDistanceSouth.at(idx) * visibleDistanceEast.at(idx) *
-			    visibleDistanceWest.at(idx));
+	    _ret.at(idx) = (visibleDistanceNorth.at(idx) * visibleDistanceSouth.at(idx) * visibleDistanceEast.at(idx) * visibleDistanceWest.at(idx));
 	}
     return _ret;
 }
@@ -230,9 +228,6 @@ operator<<(std::ostream& out, const Forest<HeightType, Size>& forest) -> std::os
 template class Forest<size_t, utils::index_t{NumTreeRows, NumTreeColumns}>;
 template class Forest<size_t, utils::index_t{NumTreeRowsInTest, NumTreeColumnsInTest}>;
 
-template auto operator<<(std::ostream& out, const Forest<size_t, utils::index_t{NumTreeRows, NumTreeColumns}>& forest)
-  -> std::ostream&;
-template auto operator<<(std::ostream& out,
-			 const Forest<size_t, utils::index_t{NumTreeRowsInTest, NumTreeColumnsInTest}>& forest)
-  -> std::ostream&;
+template auto operator<<(std::ostream& out, const Forest<size_t, utils::index_t{NumTreeRows, NumTreeColumns}>& forest) -> std::ostream&;
+template auto operator<<(std::ostream& out, const Forest<size_t, utils::index_t{NumTreeRowsInTest, NumTreeColumnsInTest}>& forest) -> std::ostream&;
 } // namespace Solutions::TreetopTreeHouse
