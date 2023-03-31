@@ -17,42 +17,14 @@
 #include <string_view>
 #include <vector>
 
-namespace {
-auto
-parseInput(std::string_view input) -> std::vector<Solutions::ElfCalories::ElfInventory>
-{
-    std::vector<Solutions::ElfCalories::ElfInventory> _ret;
-    constexpr std::string_view delimiter = "\n\n";
-
-    auto emplaceInventory = [&](const auto line) { _ret.emplace_back(line); };
-    std::ranges::for_each(std::views::split(input, delimiter), emplaceInventory);
-
-    // while (pos < input.size())
-    // {
-    //     const auto nextPos = input.find(delimiter, pos);
-    //     const auto inventoryStr = input.substr(pos, nextPos - pos);
-    //     pos = nextPos + size_t(nextPos != std::string_view::npos) * std::string{delimiter}.size();
-
-    //     if (inventoryStr.empty())
-    // 	{
-    // 	    continue;
-    //     }
-
-    //     _ret.emplace_back(inventoryStr);
-    // }
-
-    return _ret;
-}
-
-} // namespace
-
 namespace Solutions {
 
 auto
 GetCaloriesOfElfWithMostCalories(std::string_view input, bool& success) -> std::uint32_t
 {
+    using Inventory_t = ElfCalories::ElfInventory;
     uint32_t _ret = 0;
-    const auto inventories = parseInput(input);
+    const auto inventories = Inventory_t::strViewToInventory(input);
     uint32_t highestCaloriesCount = 0;
 
     for (const auto& inventory : inventories)
@@ -70,18 +42,18 @@ GetCaloriesOfElfWithMostCalories(std::string_view input, bool& success) -> std::
 auto
 GetCaloriesOfTopThreeElvesWithMostCalories(std::string_view input, bool& success) -> std::uint32_t
 {
+    using Inventory_t = ElfCalories::ElfInventory;
     uint32_t _ret = 0;
 
-    auto hasHigherCalorieCount = [](const Solutions::ElfCalories::ElfInventory& first,
-				    const Solutions::ElfCalories::ElfInventory& second) -> bool
+    auto hasHigherCalorieCount = [](const Inventory_t& first, const Inventory_t& second) constexpr -> bool
     { return first.getTotalCalories() > second.getTotalCalories(); };
 
-    auto inventories = parseInput(input);
+    auto inventories = Inventory_t::strViewToInventory(input);
     std::sort(inventories.begin(), inventories.end(), hasHigherCalorieCount);
 
-    const auto sumOfTopThreeCaloriesCount = std::accumulate(
-      std::next(inventories.begin()), std::next(inventories.begin(), 3), inventories.front().getTotalCalories(),
-      [](uint32_t Sum, const Solutions::ElfCalories::ElfInventory& inventory) { return Sum + inventory.getTotalCalories(); });
+    const auto sumOfTopThreeCaloriesCount =
+      std::accumulate(std::next(inventories.begin()), std::next(inventories.begin(), 3), inventories.front().getTotalCalories(),
+		      [](uint32_t Sum, const Inventory_t& inventory) { return Sum + inventory.getTotalCalories(); });
 
     success = true;
     _ret = sumOfTopThreeCaloriesCount;

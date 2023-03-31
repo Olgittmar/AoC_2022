@@ -1,9 +1,17 @@
 #include "ElfInventory.hpp"
 
+#include "PrettyPrint/PrettyPrint.hpp"
+
 // Std
+#include <algorithm>
 #include <charconv>
 #include <iostream>
 #include <numeric>
+#include <ranges>
+#include <source_location>
+#include <string>
+#include <string_view>
+#include <vector>
 
 // Internal
 
@@ -11,39 +19,36 @@ namespace Solutions::ElfCalories {
 
 ElfInventory::ElfInventory(std::string_view inventoryStr)
 {
-    size_t pos = 0;
-    uint32_t caloriesCount = 0;
-    constexpr auto lineDelim = '\n';
+    constexpr std::string_view lineDelim{"\n"};
 
-    while (pos < inventoryStr.size())
-	{
-	    const auto nextPos = inventoryStr.find(lineDelim, pos);
-	    const auto caloriesStr = inventoryStr.substr(pos, nextPos - pos);
+    const auto lines = std::views::split(inventoryStr, lineDelim);
 
-	    pos = nextPos + size_t(nextPos != std::string_view::npos);
+    auto subRangeToCaloryCount = [](auto&& subRange) -> uint32_t
+    {
+	const uint32_t caloriesCount = std::stoul(std::string(&*(subRange.begin()), std::ranges::distance(subRange)));
+	return caloriesCount;
+    };
 
-	    const auto conversionResult = std::from_chars(caloriesStr.data(), caloriesStr.data() + caloriesStr.size(), caloriesCount);
-	    if (conversionResult.ec == std::errc::invalid_argument)
-		{
-		    std::cout << "WARNING: unable to convert " << caloriesStr << " to caloriesCount (uint32_t)." << std::endl;
-		    continue;
-	    }
-
-	    m_calories.emplace_back(caloriesCount);
-	}
-    m_totalCalories = std::accumulate(std::next(m_calories.cbegin()), m_calories.cend(), m_calories.front());
+    m_totalCalories = std::transform_reduce(lines.begin(), lines.end(), 0U, std::plus{}, subRangeToCaloryCount);
 }
 
-[[nodiscard]] auto
-ElfInventory::getTotalCalories() const -> uint32_t
+auto
+ElfInventory::strViewToInventory(std::string_view input) -> std::vector<ElfInventory>
 {
-    return m_totalCalories;
-}
+    constexpr std::string_view delimiter{"\n\n"};
+    std::vector<ElfInventory> _ret;
 
-void
-ElfInventory::addItemCalories(uint32_t cals)
-{
-    m_calories.emplace_back(cals);
+    const auto inventoryBlocks = std::views::split(input, delimiter);
+
+    auto inventoryBlockToInventory = [&_ret](auto&& subRange) constexpr
+    {
+	const std::string_view tmp(&*(subRange.begin()), std::ranges::distance(subRange));
+	_ret.emplace_back(tmp);
+    };
+
+    std::ranges::for_each(inventoryBlocks, inventoryBlockToInventory);
+
+    return _ret;
 }
 
 } // namespace Solutions::ElfCalories

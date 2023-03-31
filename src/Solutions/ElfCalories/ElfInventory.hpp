@@ -2,6 +2,10 @@
 #define SOLUTIONS_ELFCALORIES_ELFINVENTORY_HPP
 
 // std
+#include <algorithm>
+#include <cstddef>
+#include <iterator>
+#include <ranges>
 #include <vector>
 
 // internal
@@ -14,19 +18,17 @@ class ElfInventory
 
 	explicit ElfInventory(std::string_view inventoryStr);
 
-	ElfInventory(const ElfInventory& other) = default;
-	ElfInventory(ElfInventory&& other) = default;
-	auto operator=(const ElfInventory& other) -> ElfInventory& = default;
-	auto operator=(ElfInventory&& other) -> ElfInventory& = default;
-	~ElfInventory() = default;
+	[[nodiscard]] inline auto
+	getTotalCalories() const -> uint32_t
+	{
+	    return m_totalCalories;
+	}
 
-	[[nodiscard]] auto getTotalCalories() const -> uint32_t;
-	void addItemCalories(uint32_t cals);
+	static auto strViewToInventory(std::string_view input) -> std::vector<ElfInventory>;
 
     private:
 
-	std::vector<uint32_t> m_calories = {};
-	uint32_t m_totalCalories = 0;
+	uint32_t m_totalCalories;
 };
 
 } // namespace Solutions::ElfCalories

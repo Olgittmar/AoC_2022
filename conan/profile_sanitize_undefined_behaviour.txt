@@ -4,16 +4,14 @@ os_build=Linux
 arch=x86_64
 arch_build=x86_64
 compiler=clang
-compiler.version=14
+compiler.version=17
 compiler.libcxx=libstdc++
-compiler.cppstd=20
+compiler.cppstd=23
 build_type=Debug
 
-[env]
+[buildenv]
 LDFLAGS=-fuse-ld=lld
-CC=clang
-CXX=clang++
-UBSAN_OPTIONS=print_stacktrace=1
 
 [conf]
+tools.build:compiler_executables={"c":"/home/olgittmar/GitHub/llvm_install/bin/clang", "cpp": "/home/olgittmar/GitHub/llvm_install/bin/clang++"}
 tools.build:cxxflags=["-fsanitize=undefined", "-fno-omit-frame-pointer", "-g"]

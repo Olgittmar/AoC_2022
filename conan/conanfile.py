@@ -5,7 +5,7 @@ from conan.tools.cmake import CMake, CMakeToolchain, CMakeDeps, cmake_layout
 
 class BuildWithConan(ConanFile):
 	settings = "os", "compiler", "build_type", "arch"
-	requires = "gtest/cci.20210126", "benchmark/1.7.0"
+	requires = "gtest/cci.20210126", "benchmark/1.7.1"
 
 	def layout(self):
 		self.folders.root = "../build"

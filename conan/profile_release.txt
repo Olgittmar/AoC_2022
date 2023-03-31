@@ -1,15 +1,14 @@
 [settings]
 os=Linux
-os_build=Linux
 arch=x86_64
-arch_build=x86_64
 compiler=clang
-compiler.version=14
+compiler.version=17
 compiler.libcxx=libstdc++
-compiler.cppstd=20
-build_type=RelWithDebInfo
+compiler.cppstd=23
+build_type=Release
 
-[env]
+[buildenv]
 LDFLAGS=-fuse-ld=lld
-CC=clang
-CXX=clang++
+
+[conf]
+tools.build:compiler_executables={"c":"/home/olgittmar/GitHub/llvm_install/bin/clang", "cpp": "/home/olgittmar/GitHub/llvm_install/bin/clang++"}
